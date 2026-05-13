@@ -1,0 +1,37 @@
+# Configuração local (caminho do Drive em .env não é versionado)
+.env
+
+# PDFs nunca entram no repositório (copyright; ficam na pasta Drive sincronizada)
+*.pdf
+*.PDF
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+ENV/
+
+# Caches Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Modelos spaCy baixados localmente (instalados como pacotes via pip)
+# Nada a ignorar aqui; spaCy instala em site-packages.
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Outputs intermediários grandes (versionar só o que for citável)
+outputs/figuras/**/*.svg.tmp
+outputs/**/.cache/
+
+# Jupyter
+.ipynb_checkpoints/

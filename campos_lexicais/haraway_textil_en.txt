@@ -1,0 +1,20 @@
+# Campo lexical têxtil-feminista de Haraway (inglês).
+#
+# Formato: uma linha por termo. O primeiro token da linha é a forma canônica
+# (vai para a coluna `termo_buscado` no CSV); todos os tokens da linha,
+# separados por vírgula, são variantes a casar (vão para `termo_encontrado`).
+#
+# Linhas começadas por `#` e linhas vazias são ignoradas.
+# Parênteses dentro de uma linha são comentários e são descartados pelo parser.
+# Espaços dentro de um token indicam expressão composta (será casada com \s+).
+
+string figure, string figures, cat's cradle, cats cradle
+thread, threads, threading, threaded
+weave, weaves, weaving, woven, weaver, weavers
+knot, knots, knotted, knotting
+tangle, tangles, tangled, tangling, entangle, entangled, entanglement, entanglements
+compost, composts, composting, composted
+tentacle, tentacles, tentacular, tentacularity
+sympoiesis, sympoietic, sym poiesis
+kin, kinship, kinships, kindred, kinning, make kin, making kin
+holobiont, holobionts (controle: termo biológico frequente em Haraway)
