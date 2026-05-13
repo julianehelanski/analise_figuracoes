@@ -1,17 +1,18 @@
-"""Resumo de frequências e passagens densas para a Etapa 1.
+"""Tabelas e relatórios de frequência por obra (Etapa 1).
 
-Lê todos os CSVs gerados por `02_kwic.py` em `outputs/csv/etapa1/` e produz
-o relatório `outputs/relatorios/etapa1_resumo.md` com:
+Lê `outputs/<obra_id>/csv/kwic.csv` e `corpus/qualidade_extracao.csv` e produz:
 
-- Total de ocorrências por termo, por par obra × campo.
-- As 3 passagens com maior densidade lexical (concentração de termos do
-  campo na mesma janela) por par.
-- Indicadores de qualidade: termos com zero ocorrências e termos com
-  mais de 100 ocorrências (suspeita de ruído alto).
+- `outputs/<obra_id>/csv/frequencias.csv`: contagem por grupo, com frequência
+  absoluta e relativa (ocorrências por 10 000 palavras).
+- `outputs/<obra_id>/relatorios/frequencias.md`: relatório descritivo com
+  ranking de grupos, exclusões aplicadas e exemplos da janela KWIC.
+
+Ocorrências marcadas como `descartado_por_exclusao=1` no kwic.csv são
+excluídas das frequências (contabilizadas separadamente como "excluídas").
 
 Uso:
     python scripts/03_frequencies.py
-    python scripts/03_frequencies.py --apenas haraway_2016_textil
+    python scripts/03_frequencies.py --only latour_1987
 """
 
 from __future__ import annotations
@@ -19,205 +20,155 @@ from __future__ import annotations
 import argparse
 import csv
 from collections import Counter, defaultdict
-from dataclasses import dataclass
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CSV_DIR = REPO_ROOT / "outputs" / "csv" / "etapa1"
-RELATORIO = REPO_ROOT / "outputs" / "relatorios" / "etapa1_resumo.md"
-
-# Janela em caracteres para cálculo de densidade lexical entre ocorrências.
-JANELA_DENSIDADE = 1000
+METADATA_CSV = REPO_ROOT / "corpus" / "metadata.csv"
+QUALIDADE_CSV = REPO_ROOT / "corpus" / "qualidade_extracao.csv"
+OUTPUTS_DIR = REPO_ROOT / "outputs"
 
 
-@dataclass
-class Ocorrencia:
-    obra: str
-    campo: str
-    termo_buscado: str
-    termo_encontrado: str
-    pagina: str
-    posicao: int
-    nota: bool
-    antes: str
-    central: str
-    depois: str
+def obras_em_escopo() -> list[dict[str, str]]:
+    with METADATA_CSV.open(encoding="utf-8", newline="") as f:
+        return [
+            row for row in csv.DictReader(f)
+            if row.get("escopo_etapa1", "").strip().lower() == "sim"
+        ]
 
 
-def carregar_csv(caminho: Path) -> list[Ocorrencia]:
-    ocs: list[Ocorrencia] = []
-    with caminho.open(encoding="utf-8", newline="") as f:
+def carregar_palavras_total(obra_id: str) -> int | None:
+    if not QUALIDADE_CSV.exists():
+        return None
+    with QUALIDADE_CSV.open(encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
-            try:
-                pos = int(row["posicao_no_texto"])
-            except (KeyError, ValueError):
+            if row["id"] == obra_id:
+                try:
+                    return int(row["palavras_total"])
+                except (KeyError, ValueError):
+                    return None
+    return None
+
+
+def construir_frequencias(obra_id: str) -> None:
+    kwic_path = OUTPUTS_DIR / obra_id / "csv" / "kwic.csv"
+    if not kwic_path.exists():
+        print(f"  [pular] {kwic_path} não existe; rode scripts/02_kwic.py.")
+        return
+
+    palavras_total = carregar_palavras_total(obra_id)
+    contagem: Counter[str] = Counter()
+    excluidas: Counter[str] = Counter()
+    variantes_por_grupo: dict[str, Counter[str]] = defaultdict(Counter)
+    exemplos: dict[str, list[dict[str, str]]] = defaultdict(list)
+
+    with kwic_path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            grupo = row["grupo"]
+            if row.get("descartado_por_exclusao", "0") == "1":
+                excluidas[grupo] += 1
                 continue
-            ocs.append(Ocorrencia(
-                obra=row.get("obra", ""),
-                campo=row.get("campo_lexical", ""),
-                termo_buscado=row.get("termo_buscado", ""),
-                termo_encontrado=row.get("termo_encontrado", ""),
-                pagina=row.get("pagina_aproximada", ""),
-                posicao=pos,
-                nota=row.get("provavel_nota_rodape", "0") == "1",
-                antes=row.get("contexto_antes", ""),
-                central=row.get("trecho_central", ""),
-                depois=row.get("contexto_depois", ""),
-            ))
-    return ocs
+            contagem[grupo] += 1
+            variantes_por_grupo[grupo][row["termo_encontrado"].lower()] += 1
+            if len(exemplos[grupo]) < 3:
+                exemplos[grupo].append({
+                    "pagina": row.get("pagina", ""),
+                    "antes": row.get("contexto_antes", ""),
+                    "central": row.get("trecho_central", ""),
+                    "depois": row.get("contexto_depois", ""),
+                })
 
+    # CSV de frequências --------------------------------------------------- #
+    csv_saida = OUTPUTS_DIR / obra_id / "csv" / "frequencias.csv"
+    csv_saida.parent.mkdir(parents=True, exist_ok=True)
+    with csv_saida.open("w", encoding="utf-8", newline="") as f:
+        cab = [
+            "grupo", "n_ocorrencias", "n_excluidas",
+            "frequencia_por_10k_palavras", "variantes_top",
+        ]
+        escritor = csv.DictWriter(f, fieldnames=cab)
+        escritor.writeheader()
+        for grupo, n in sorted(contagem.items(), key=lambda x: -x[1]):
+            freq = (n / palavras_total * 10000) if palavras_total else None
+            var_top = ", ".join(
+                f"{v}({k})" for v, k in variantes_por_grupo[grupo].most_common(4)
+            )
+            escritor.writerow({
+                "grupo": grupo,
+                "n_ocorrencias": n,
+                "n_excluidas": excluidas[grupo],
+                "frequencia_por_10k_palavras": f"{freq:.2f}" if freq is not None else "",
+                "variantes_top": var_top,
+            })
+        # Grupos com zero ocorrências também ficam registrados.
+        for grupo, n in excluidas.items():
+            if grupo not in contagem:
+                escritor.writerow({
+                    "grupo": grupo,
+                    "n_ocorrencias": 0,
+                    "n_excluidas": n,
+                    "frequencia_por_10k_palavras": "0.00" if palavras_total else "",
+                    "variantes_top": "",
+                })
 
-def passagens_densas(
-    ocs: list[Ocorrencia], janela: int = JANELA_DENSIDADE, top: int = 3
-) -> list[tuple[int, list[Ocorrencia]]]:
-    """Encontra agrupamentos com mais ocorrências em janela móvel de caracteres.
-
-    Retorna lista de tuplas (densidade, ocorrências_no_cluster), ordenada de
-    densidade decrescente, com no máximo `top` clusters disjuntos.
-    """
-    if not ocs:
-        return []
-    ordenadas = sorted(ocs, key=lambda o: o.posicao)
-    clusters: list[tuple[int, list[Ocorrencia]]] = []
-    n = len(ordenadas)
-    for i, oc in enumerate(ordenadas):
-        cluster = [oc]
-        for j in range(i + 1, n):
-            if ordenadas[j].posicao - oc.posicao <= janela:
-                cluster.append(ordenadas[j])
-            else:
-                break
-        clusters.append((len(cluster), cluster))
-
-    selecionados: list[tuple[int, list[Ocorrencia]]] = []
-    usados: set[int] = set()
-    for densidade, cluster in sorted(clusters, key=lambda x: -x[0]):
-        ids_cluster = {oc.posicao for oc in cluster}
-        if ids_cluster & usados:
-            continue
-        selecionados.append((densidade, cluster))
-        usados |= ids_cluster
-        if len(selecionados) >= top:
-            break
-    return selecionados
-
-
-def montar_relatorio(par_csv: dict[str, list[Ocorrencia]]) -> str:
-    """Monta o markdown do relatório-resumo."""
+    # Markdown ------------------------------------------------------------- #
+    md_saida = OUTPUTS_DIR / obra_id / "relatorios" / "frequencias.md"
+    md_saida.parent.mkdir(parents=True, exist_ok=True)
     linhas: list[str] = [
-        "# Etapa 1: resumo de frequências e densidade",
+        f"# Frequências preliminares: {obra_id}",
         "",
-        "Gerado por `scripts/03_frequencies.py` sobre os CSVs de "
-        "`outputs/csv/etapa1/`. Cada par obra × campo gera uma seção.",
+        f"Palavras totais (extração): **{palavras_total or 'n/d'}**.",
+        f"Janela KWIC: ±10 palavras. Catálogo: `campos_lexicais/catalogo_termos.yaml`.",
         "",
-        "Convenções:",
+        "## Ranking de grupos figurativos",
         "",
-        "- `n` indica ocorrências brutas, incluindo possíveis falsos positivos.",
-        "- A coluna `provavel_nota_rodape` no CSV é heurística; o resumo "
-        "abaixo conta todas as ocorrências e reporta separadamente a fração "
-        "marcada como provável nota.",
-        "- \"Densidade\" indica número de ocorrências encontradas dentro de "
-        f"uma janela de {JANELA_DENSIDADE} caracteres (cerca de 150-200 palavras).",
+        "| grupo | n | excluídas | freq./10k pal | variantes top |",
+        "|---|---:|---:|---:|---|",
+    ]
+    todos_grupos = set(contagem) | set(excluidas)
+    for grupo in sorted(todos_grupos, key=lambda g: -contagem[g]):
+        n = contagem.get(grupo, 0)
+        e = excluidas.get(grupo, 0)
+        freq = (n / palavras_total * 10000) if palavras_total else None
+        freq_s = f"{freq:.2f}" if freq is not None else "n/d"
+        var = ", ".join(
+            f"`{v}` ({k})" for v, k in variantes_por_grupo[grupo].most_common(4)
+        )
+        linhas.append(f"| {grupo} | {n} | {e} | {freq_s} | {var} |")
+
+    linhas += [
+        "",
+        "## Exemplos por grupo (top 3 ocorrências)",
         "",
     ]
+    for grupo in sorted(contagem, key=lambda g: -contagem[g]):
+        linhas.append(f"### `{grupo}` (n={contagem[grupo]})")
+        linhas.append("")
+        for ex in exemplos[grupo]:
+            trecho = f"{ex['antes']} **{ex['central']}** {ex['depois']}"
+            linhas.append(f"- p. ~{ex['pagina']}: {trecho.strip()}")
+        linhas.append("")
 
-    for nome_csv, ocs in sorted(par_csv.items()):
-        if not ocs:
-            linhas.append(f"## {nome_csv}\n\nNenhuma ocorrência registrada.\n")
-            continue
-        obras = sorted({o.obra for o in ocs})
-        campos = sorted({o.campo for o in ocs})
-        n_total = len(ocs)
-        n_nota = sum(1 for o in ocs if o.nota)
-
-        linhas += [
-            f"## {nome_csv}",
-            "",
-            f"- Obra(s): {', '.join(obras)}",
-            f"- Campo(s): {', '.join(campos)}",
-            f"- Total de ocorrências: **{n_total}**",
-            f"- Marcadas como provável nota de rodapé: {n_nota} "
-            f"({n_nota / n_total:.1%})",
-            "",
-            "### Frequência por termo canônico",
-            "",
-            "| termo_buscado | n | exemplos de variantes encontradas |",
-            "|---|---:|---|",
-        ]
-        por_termo: dict[str, list[Ocorrencia]] = defaultdict(list)
-        for oc in ocs:
-            por_termo[oc.termo_buscado].append(oc)
-        for termo, lista in sorted(por_termo.items(), key=lambda x: -len(x[1])):
-            variantes = Counter(o.termo_encontrado.lower() for o in lista)
-            exemplos = ", ".join(f"{v} ({n})" for v, n in variantes.most_common(4))
-            linhas.append(f"| {termo} | {len(lista)} | {exemplos} |")
-
-        # Termos vistos com n > 100 entram como suspeita de ruído alto.
-        # Termos com zero ocorrências exigiriam carregar o campo lexical
-        # original; reporto apenas o que aparece no CSV.
-        ruidosos = [t for t, lista in por_termo.items() if len(lista) > 100]
-        if ruidosos:
-            linhas += [
-                "",
-                "**Termos com mais de 100 ocorrências (suspeita de ruído alto, "
-                "verificar contexto na Etapa 2):** "
-                + ", ".join(f"`{t}`" for t in ruidosos),
-            ]
-
-        linhas += [
-            "",
-            "### Top 3 passagens mais densas",
-            "",
-        ]
-        for i, (densidade, cluster) in enumerate(passagens_densas(ocs), start=1):
-            primeira = cluster[0]
-            termos_no_cluster = Counter(o.termo_buscado for o in cluster)
-            resumo_termos = ", ".join(
-                f"{t} ({n})" for t, n in termos_no_cluster.most_common()
-            )
-            paginas = sorted({o.pagina for o in cluster if o.pagina})
-            faixa_paginas = (
-                f" págs. ~{paginas[0]}-{paginas[-1]}" if paginas else ""
-            )
-            trecho = " ".join([primeira.antes, primeira.central, primeira.depois])
-            trecho = trecho[:500].strip() + ("..." if len(trecho) > 500 else "")
-            linhas += [
-                f"**{i}. Densidade {densidade} ocorrências "
-                f"em ~{JANELA_DENSIDADE} caracteres{faixa_paginas}**",
-                "",
-                f"Termos: {resumo_termos}.",
-                "",
-                f"> {trecho}",
-                "",
-            ]
-
-    return "\n".join(linhas)
+    md_saida.write_text("\n".join(linhas), encoding="utf-8")
+    try:
+        rotulo_csv = csv_saida.relative_to(REPO_ROOT)
+        rotulo_md = md_saida.relative_to(REPO_ROOT)
+    except ValueError:
+        rotulo_csv, rotulo_md = csv_saida, md_saida
+    print(f"  gravado: {rotulo_csv}")
+    print(f"  gravado: {rotulo_md}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--apenas",
-        help="filtra CSVs cujo nome (sem extensão) contenha esta substring.",
-    )
+    parser.add_argument("--only", help="filtra obras por substring de id.")
     args = parser.parse_args()
 
-    if not CSV_DIR.exists():
-        raise SystemExit(
-            f"ERRO: {CSV_DIR} não existe. Rode antes scripts/02_kwic.py."
-        )
-    csvs = sorted(CSV_DIR.glob("*.csv"))
-    if args.apenas:
-        csvs = [c for c in csvs if args.apenas.lower() in c.stem.lower()]
-    if not csvs:
-        raise SystemExit("Nenhum CSV encontrado para resumir.")
-
-    par_csv = {c.stem: carregar_csv(c) for c in csvs}
-    RELATORIO.parent.mkdir(parents=True, exist_ok=True)
-    RELATORIO.write_text(montar_relatorio(par_csv), encoding="utf-8")
-    print(f"Relatório gravado em {RELATORIO.relative_to(REPO_ROOT)}")
-    for nome, ocs in par_csv.items():
-        print(f"  {nome}: {len(ocs)} ocorrências")
+    obras = obras_em_escopo()
+    if args.only:
+        obras = [o for o in obras if args.only.lower() in o["id"].lower()]
+    for obra in obras:
+        print(f"\n[{obra['id']}]")
+        construir_frequencias(obra["id"])
 
 
 if __name__ == "__main__":

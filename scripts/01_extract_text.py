@@ -1,23 +1,23 @@
-"""Extração de texto dos PDFs do corpus.
+"""Extração de texto dos PDFs do corpus, com classificação por página.
 
-Este script implementa a Etapa 0 do plano de trabalho:
+Implementa a Etapa 0 do plano, alinhada às decisões de 13/05/2026:
 
-1. Lê `CORPUS_PDF_PATH` do `.env` (pasta Drive sincronizada localmente).
-2. Valida que o caminho existe, é diretório, e é legível.
-3. Lista os PDFs presentes e cruza com a lista esperada em `corpus/README.md`.
-4. Extrai texto via `pdftotext -layout` (fallback para `pdfminer.six`).
-5. Detecta heurísticamente início e fim do corpo de texto.
-6. Conta páginas e palavras.
-7. Atualiza `corpus/metadata.csv`.
+- Lê `corpus/metadata.csv` (formato com 15 colunas), filtra por `escopo_etapa1=='sim'`.
+- Localiza cada PDF em `CORPUS_PDF_PATH` pelo nome exato do campo `arquivo_pdf`.
+- Extrai texto com `pdftotext -layout` (fallback `pdfminer.six`), preservando o
+  separador de página `\\f` para permitir análise por página.
+- Classifica cada página em uma das cinco classes da amostra estratificada
+  (decisoes_metodologicas.md, seção 5): `inicio_capitulo`, `corpo`, `notas_fim`,
+  `paratexto`, `qualidade_baixa`.
+- Salva texto integral em `corpus/txt/<id>.txt` e a tabela de páginas em
+  `corpus/paginas/<id>.csv`.
+- Atualiza `corpus/qualidade_extracao.csv` (catálogo de qualidade por obra),
+  preservando intacta a `corpus/metadata.csv` (catálogo bibliográfico).
 
 Uso:
     python scripts/01_extract_text.py
-    python scripts/01_extract_text.py --only haraway_2016
-    python scripts/01_extract_text.py --only haraway_2016 --force
-
-A correspondência de `--only` é case-insensitive por substring, então
-`--only haraway` casa qualquer PDF cuja correspondência canônica contenha
-`haraway`.
+    python scripts/01_extract_text.py --only latour_1987
+    python scripts/01_extract_text.py --force
 """
 
 from __future__ import annotations
@@ -29,94 +29,38 @@ import re
 import shutil
 import subprocess
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 
 from dotenv import load_dotenv
 
-# --------------------------------------------------------------------------- #
-# Configuração: catálogo do corpus esperado.
-# Mantém o mesmo conteúdo da tabela em corpus/README.md, para que o script
-# funcione sem depender de parser de markdown.
-# --------------------------------------------------------------------------- #
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CORPUS_TXT_DIR = REPO_ROOT / "corpus" / "txt"
 METADATA_CSV = REPO_ROOT / "corpus" / "metadata.csv"
+CORPUS_TXT_DIR = REPO_ROOT / "corpus" / "txt"
+PAGINAS_DIR = REPO_ROOT / "corpus" / "paginas"
+QUALIDADE_CSV = REPO_ROOT / "corpus" / "qualidade_extracao.csv"
 
-CABECALHOS_INICIO_CORPO = (
-    r"^\s*chapter\s+1\b",
-    r"^\s*capítulo\s+1\b",
-    r"^\s*capitulo\s+1\b",
-    r"^\s*chapitre\s+1\b",
-    r"^\s*introduction\b",
-    r"^\s*introdução\b",
+# Heurísticas de classificação de página -------------------------------------- #
+
+_RE_INICIO_CAPITULO = re.compile(
+    r"^\s*(chapter|capítulo|capitulo|chapitre|part|parte)\s+(\d+|[ivxlcdm]+)\b",
+    re.IGNORECASE | re.MULTILINE,
+)
+_RE_NOTAS_FIM = re.compile(
+    r"^\s*(notes|notas)\s*$", re.IGNORECASE | re.MULTILINE,
+)
+_RE_PARATEXTO = re.compile(
+    r"^\s*(bibliography|references|bibliografia|index|índice|indice|"
+    r"acknowledgements|acknowledgments|agradecimentos|appendix|apêndice|apendice|"
+    r"contents|sumário|sumario)\s*$",
+    re.IGNORECASE | re.MULTILINE,
 )
 
-CABECALHOS_FIM_CORPO = (
-    r"^\s*bibliography\b",
-    r"^\s*references\b",
-    r"^\s*bibliografia\b",
-    r"^\s*référence",
-    r"^\s*notes\b",
-)
-
-
-@dataclass(frozen=True)
-class ObraCatalogada:
-    """Entrada do catálogo do corpus esperado."""
-
-    id: str
-    autor: str
-    titulo: str
-    ano: int
-    idioma: str
-    edicao: str
-    prioridade: int
-
-
-CATALOGO: tuple[ObraCatalogada, ...] = (
-    ObraCatalogada("latour_1984", "Bruno Latour", "Les microbes: guerre et paix",
-                  1984, "fr", "Métailié", 2),
-    ObraCatalogada("latour_1987", "Bruno Latour", "Science in Action",
-                  1987, "en", "Harvard", 1),
-    ObraCatalogada("latour_1996_ant_clarifications", "Bruno Latour",
-                  "On actor-network theory: a few clarifications",
-                  1996, "en", "Soziale Welt", 3),
-    ObraCatalogada("latour_1999_recalling_ant", "Bruno Latour",
-                  "On recalling ANT", 1999, "en", "Sociological Review", 3),
-    ObraCatalogada("latour_1999_pandoras_hope", "Bruno Latour",
-                  "Pandora's Hope", 1999, "en", "Harvard", 2),
-    ObraCatalogada("latour_2005_reassembling", "Bruno Latour",
-                  "Reassembling the Social", 2005, "en", "Oxford", 2),
-    ObraCatalogada("haraway_1985_cyborg", "Donna Haraway",
-                  "A Cyborg Manifesto", 1985, "en", "Socialist Review", 2),
-    ObraCatalogada("haraway_1988_situated", "Donna Haraway",
-                  "Situated Knowledges", 1988, "en", "Feminist Studies", 2),
-    ObraCatalogada("haraway_1992_monsters", "Donna Haraway",
-                  "The Promises of Monsters", 1992, "en", "Routledge", 3),
-    ObraCatalogada("haraway_1997_modest_witness", "Donna Haraway",
-                  "Modest_Witness@Second_Millennium", 1997, "en", "Routledge", 3),
-    ObraCatalogada("haraway_2003_companion_species", "Donna Haraway",
-                  "The Companion Species Manifesto", 2003, "en", "Prickly Paradigm", 3),
-    ObraCatalogada("haraway_2008_when_species_meet", "Donna Haraway",
-                  "When Species Meet", 2008, "en", "Minnesota", 2),
-    ObraCatalogada("haraway_2016_staying_with_the_trouble", "Donna Haraway",
-                  "Staying with the Trouble", 2016, "en", "Duke", 1),
-)
-
-
-# --------------------------------------------------------------------------- #
-# Funções auxiliares.
-# --------------------------------------------------------------------------- #
+# Set persistente entre páginas: uma vez que entramos em "notas_fim" ou
+# "paratexto", as páginas seguintes herdam essa classificação até nova mudança.
+_ESTADO_INICIAL = "corpo"
 
 
 def carregar_corpus_pdf_path() -> Path:
-    """Carrega `CORPUS_PDF_PATH` do `.env`, valida, e retorna como `Path`.
-
-    Aborta o script com mensagem clara em qualquer falha (variável ausente,
-    pasta inexistente, sem permissão), conforme `CLAUDE.md`.
-    """
     load_dotenv(dotenv_path=REPO_ROOT / ".env")
     valor = os.getenv("CORPUS_PDF_PATH")
     if not valor:
@@ -129,8 +73,8 @@ def carregar_corpus_pdf_path() -> Path:
     if not caminho.exists():
         sys.exit(
             f"ERRO: o caminho {caminho} não existe.\n"
-            "Causas prováveis: Google Drive não está sincronizado, sync foi "
-            "pausado, ou o caminho em .env aponta para a pasta errada."
+            "Verifique se o Google Drive for Desktop está sincronizado e se o "
+            "caminho em .env aponta para a pasta correta."
         )
     if not caminho.is_dir():
         sys.exit(f"ERRO: {caminho} não é um diretório.")
@@ -139,137 +83,86 @@ def carregar_corpus_pdf_path() -> Path:
     return caminho
 
 
-def listar_pdfs(pdf_dir: Path) -> list[Path]:
-    """Lista todos os PDFs presentes na pasta Drive (case-insensitive)."""
-    return sorted(
-        p for p in pdf_dir.iterdir()
-        if p.is_file() and p.suffix.lower() == ".pdf"
-    )
+def ler_obras_em_escopo() -> list[dict[str, str]]:
+    """Lê metadata.csv e retorna as linhas com escopo_etapa1 == 'sim'."""
+    if not METADATA_CSV.exists():
+        sys.exit(f"ERRO: {METADATA_CSV} não existe.")
+    with METADATA_CSV.open(encoding="utf-8", newline="") as f:
+        linhas = [row for row in csv.DictReader(f)]
+    em_escopo = [row for row in linhas if row.get("escopo_etapa1", "").strip().lower() == "sim"]
+    if not em_escopo:
+        sys.exit("ERRO: nenhuma obra com escopo_etapa1 == 'sim' em metadata.csv.")
+    return em_escopo
 
 
-def casar_pdf_ao_catalogo(pdf: Path) -> ObraCatalogada | None:
-    """Tenta identificar a entrada do catálogo correspondente a um PDF.
+def validar_presenca_pdfs(pdf_dir: Path, obras: list[dict[str, str]]) -> list[tuple[dict[str, str], Path]]:
+    """Confere que cada obra em escopo tem PDF presente em CORPUS_PDF_PATH.
 
-    A correspondência é case-insensitive por substring sobre o nome do
-    arquivo, exigindo que apareçam pelo menos o sobrenome do autor e o ano.
+    A correspondência é por nome exato do campo `arquivo_pdf` (case-insensitive
+    no nome do arquivo, como tolerância para sistemas de arquivos case-insensitive).
     """
-    nome = pdf.stem.lower()
-    for obra in CATALOGO:
-        sobrenome = obra.autor.split()[-1].lower()
-        if sobrenome in nome and str(obra.ano) in nome:
-            return obra
-    return None
-
-
-def cruzar_catalogo(pdfs: list[Path]) -> tuple[
-    dict[ObraCatalogada, Path], list[Path], list[ObraCatalogada]
-]:
-    """Cruza PDFs presentes com catálogo esperado.
-
-    Retorna:
-        - dicionário obra -> PDF correspondente,
-        - lista de PDFs sem correspondência (nomenclatura fora do padrão),
-        - lista de obras esperadas que estão faltando (prioridade 1 ou 2).
-    """
-    pares: dict[ObraCatalogada, Path] = {}
-    nao_casados: list[Path] = []
-    for pdf in pdfs:
-        obra = casar_pdf_ao_catalogo(pdf)
-        if obra is None:
-            nao_casados.append(pdf)
+    nomes_dir = {p.name: p for p in pdf_dir.iterdir() if p.is_file()}
+    nomes_dir_ci = {p.name.lower(): p for p in nomes_dir.values()}
+    encontradas: list[tuple[dict[str, str], Path]] = []
+    faltando: list[dict[str, str]] = []
+    for obra in obras:
+        alvo = (obra.get("arquivo_pdf") or "").strip()
+        if not alvo:
+            faltando.append(obra)
+            continue
+        pdf = nomes_dir.get(alvo) or nomes_dir_ci.get(alvo.lower())
+        if pdf is None:
+            faltando.append(obra)
         else:
-            pares[obra] = pdf
-    faltando = [o for o in CATALOGO if o not in pares and o.prioridade <= 2]
-    return pares, nao_casados, faltando
-
-
-def extrair_texto_pdftotext(pdf: Path, saida: Path) -> bool:
-    """Extrai texto com `pdftotext -layout`. Retorna True se bem-sucedido."""
-    if shutil.which("pdftotext") is None:
-        return False
-    saida.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        subprocess.run(
-            ["pdftotext", "-layout", str(pdf), str(saida)],
-            check=True,
-            capture_output=True,
+            encontradas.append((obra, pdf))
+    if faltando:
+        print("ERRO: PDFs faltando em CORPUS_PDF_PATH:")
+        for obra in faltando:
+            print(f"  - id={obra['id']}, esperado={obra.get('arquivo_pdf')}")
+        sys.exit(
+            "Pare e me avise antes de prosseguir. Verifique o Drive sincronizado "
+            "e os nomes exatos dos arquivos."
         )
-        return saida.exists() and saida.stat().st_size > 0
-    except subprocess.CalledProcessError as exc:
-        print(f"  pdftotext falhou: {exc.stderr.decode(errors='ignore')[:200]}")
-        return False
+    return encontradas
 
 
-def extrair_texto_pdfminer(pdf: Path, saida: Path) -> bool:
-    """Extrai texto com pdfminer.six como fallback. Retorna True se bem-sucedido."""
+def extrair_texto(pdf: Path, saida: Path) -> bool:
+    """Extrai texto preservando `\\f` entre páginas. Retorna True se OK."""
+    saida.parent.mkdir(parents=True, exist_ok=True)
+    if shutil.which("pdftotext"):
+        try:
+            subprocess.run(
+                ["pdftotext", "-layout", str(pdf), str(saida)],
+                check=True, capture_output=True,
+            )
+            if saida.exists() and saida.stat().st_size > 0:
+                return True
+        except subprocess.CalledProcessError as exc:
+            print(f"  pdftotext falhou: {exc.stderr.decode(errors='ignore')[:200]}")
+    # Fallback: pdfminer.six (não preserva \f tão bem; inserimos manualmente
+    # entre páginas).
     try:
-        from pdfminer.high_level import extract_text
+        from pdfminer.high_level import extract_pages
+        from pdfminer.layout import LTTextContainer
     except ImportError:
         return False
-    saida.parent.mkdir(parents=True, exist_ok=True)
     try:
-        texto = extract_text(str(pdf))
-        saida.write_text(texto, encoding="utf-8")
+        partes: list[str] = []
+        for layout in extract_pages(str(pdf)):
+            texto_pagina = "".join(
+                el.get_text() for el in layout if isinstance(el, LTTextContainer)
+            )
+            partes.append(texto_pagina)
+        saida.write_text("\f".join(partes), encoding="utf-8")
         return saida.stat().st_size > 0
     except Exception as exc:  # noqa: BLE001
         print(f"  pdfminer falhou: {exc}")
         return False
 
 
-def contar_paginas(pdf: Path) -> int | None:
-    """Conta páginas via `pdfinfo` se disponível; senão retorna None."""
-    if shutil.which("pdfinfo") is None:
-        return None
-    try:
-        saida = subprocess.run(
-            ["pdfinfo", str(pdf)], check=True, capture_output=True, text=True
-        ).stdout
-        for linha in saida.splitlines():
-            if linha.startswith("Pages:"):
-                return int(linha.split(":", 1)[1].strip())
-    except (subprocess.CalledProcessError, ValueError):
-        pass
-    return None
-
-
-def detectar_corpo(texto: str) -> tuple[int | None, int | None]:
-    """Detecta posições aproximadas (em caracteres) de início e fim do corpo.
-
-    Heurística simples: procura primeira linha que case com um cabeçalho de
-    início (Chapter 1, Introduction, etc.) e primeira linha pós-início que
-    case com cabeçalho de fim (Bibliography, References, Notes).
-    """
-    inicio: int | None = None
-    fim: int | None = None
-    linhas = texto.splitlines(keepends=True)
-    offset = 0
-    for linha in linhas:
-        linha_norm = linha.strip().lower()
-        if inicio is None and any(
-            re.match(p, linha_norm) for p in CABECALHOS_INICIO_CORPO
-        ):
-            inicio = offset
-        elif inicio is not None and any(
-            re.match(p, linha_norm) for p in CABECALHOS_FIM_CORPO
-        ):
-            fim = offset
-            break
-        offset += len(linha)
-    return inicio, fim
-
-
-def contar_palavras(texto: str) -> int:
-    """Conta palavras (tokens separados por espaço, ignorando vazios)."""
-    return sum(1 for tok in re.split(r"\s+", texto) if tok)
-
-
-def avaliar_qualidade(texto: str) -> str:
-    """Avaliação heurística da qualidade da extração.
-
-    Retorna `boa`, `media` ou `baixa`, com base em proporção de caracteres
-    estranhos e linhas muito curtas ou muito longas.
-    """
-    if not texto:
+def avaliar_qualidade_pagina(texto: str) -> str:
+    """Classifica qualidade da extração da página em `boa`, `media` ou `baixa`."""
+    if not texto.strip():
         return "baixa"
     total = len(texto)
     estranhos = sum(
@@ -289,126 +182,188 @@ def avaliar_qualidade(texto: str) -> str:
     return "boa"
 
 
-def atualizar_metadata(linha: dict[str, object]) -> None:
-    """Atualiza (insere ou substitui por id) uma linha em `corpus/metadata.csv`."""
-    METADATA_CSV.parent.mkdir(parents=True, exist_ok=True)
+def classificar_paginas(texto: str) -> list[dict[str, object]]:
+    """Quebra `texto` por `\\f` e classifica cada página.
+
+    Estados:
+        inicio_capitulo  página com cabeçalho 'Chapter N' / 'Capítulo N' etc.
+        corpo            página sem marcadores especiais, antes de Notes/biblio.
+        notas_fim        a partir da primeira 'Notes' até antes de bibliografia.
+        paratexto        a partir de 'Bibliography', 'Index', 'Appendix', etc.
+        qualidade_baixa  sobrescreve qualquer outra classe se a qualidade for
+                         `baixa`. Permite que a amostra estratificada cubra essas
+                         páginas com prioridade.
+    """
+    paginas = texto.split("\f")
+    classificacao: list[dict[str, object]] = []
+    estado = _ESTADO_INICIAL
+    for numero, conteudo in enumerate(paginas, start=1):
+        qualidade = avaliar_qualidade_pagina(conteudo)
+        if qualidade == "baixa":
+            classe = "qualidade_baixa"
+        elif _RE_PARATEXTO.search(conteudo):
+            classe = "paratexto"
+            estado = "paratexto"
+        elif _RE_NOTAS_FIM.search(conteudo) and estado != "paratexto":
+            classe = "notas_fim"
+            estado = "notas_fim"
+        elif _RE_INICIO_CAPITULO.search(conteudo) and estado not in ("notas_fim", "paratexto"):
+            classe = "inicio_capitulo"
+            estado = "corpo"
+        else:
+            classe = estado if estado in ("notas_fim", "paratexto") else "corpo"
+
+        classificacao.append({
+            "pagina": numero,
+            "classe": classe,
+            "n_chars": len(conteudo),
+            "n_palavras": sum(1 for tok in re.split(r"\s+", conteudo) if tok),
+            "qualidade_pagina": qualidade,
+        })
+    return classificacao
+
+
+def salvar_paginas_csv(obra_id: str, paginas: list[dict[str, object]]) -> None:
+    PAGINAS_DIR.mkdir(parents=True, exist_ok=True)
+    saida = PAGINAS_DIR / f"{obra_id}.csv"
+    cabecalho = ["pagina", "classe", "n_chars", "n_palavras", "qualidade_pagina"]
+    with saida.open("w", encoding="utf-8", newline="") as f:
+        escritor = csv.DictWriter(f, fieldnames=cabecalho)
+        escritor.writeheader()
+        escritor.writerows(paginas)
+
+
+def atualizar_qualidade_extracao(
+    obra_id: str,
+    obra: dict[str, str],
+    paginas: list[dict[str, object]],
+) -> dict[str, object]:
+    """Atualiza `corpus/qualidade_extracao.csv` para a obra."""
+    QUALIDADE_CSV.parent.mkdir(parents=True, exist_ok=True)
     cabecalho = [
-        "id", "autor", "titulo", "ano", "idioma", "edicao",
-        "paginas_total", "pagina_inicio_corpo", "pagina_fim_corpo",
-        "palavras_corpo", "qualidade_extracao", "observacoes",
+        "id", "autor", "titulo", "ano_edicao", "idioma",
+        "paginas_total", "palavras_total",
+        "paginas_corpo", "paginas_inicio_capitulo", "paginas_notas_fim",
+        "paginas_paratexto", "paginas_qualidade_baixa",
+        "taxa_qualidade_boa", "taxa_qualidade_baixa",
+        "qualidade_global",
     ]
+    n_total = len(paginas)
+    n_palavras = sum(int(p["n_palavras"]) for p in paginas)
+    contagem_classes = {c: sum(1 for p in paginas if p["classe"] == c) for c in (
+        "corpo", "inicio_capitulo", "notas_fim", "paratexto", "qualidade_baixa",
+    )}
+    contagem_q = {q: sum(1 for p in paginas if p["qualidade_pagina"] == q) for q in (
+        "boa", "media", "baixa",
+    )}
+    taxa_boa = contagem_q["boa"] / n_total if n_total else 0
+    taxa_baixa = contagem_q["baixa"] / n_total if n_total else 0
+    qualidade_global = (
+        "boa" if taxa_boa >= 0.8 and taxa_baixa <= 0.05
+        else "media" if taxa_boa >= 0.6 and taxa_baixa <= 0.15
+        else "baixa"
+    )
+    linha = {
+        "id": obra_id,
+        "autor": obra.get("autor", ""),
+        "titulo": obra.get("titulo", ""),
+        "ano_edicao": obra.get("ano_edicao", ""),
+        "idioma": obra.get("idioma", ""),
+        "paginas_total": n_total,
+        "palavras_total": n_palavras,
+        "paginas_corpo": contagem_classes["corpo"],
+        "paginas_inicio_capitulo": contagem_classes["inicio_capitulo"],
+        "paginas_notas_fim": contagem_classes["notas_fim"],
+        "paginas_paratexto": contagem_classes["paratexto"],
+        "paginas_qualidade_baixa": contagem_classes["qualidade_baixa"],
+        "taxa_qualidade_boa": f"{taxa_boa:.3f}",
+        "taxa_qualidade_baixa": f"{taxa_baixa:.3f}",
+        "qualidade_global": qualidade_global,
+    }
     existentes: dict[str, dict[str, str]] = {}
-    if METADATA_CSV.exists():
-        with METADATA_CSV.open(encoding="utf-8", newline="") as f:
+    if QUALIDADE_CSV.exists():
+        with QUALIDADE_CSV.open(encoding="utf-8", newline="") as f:
             for row in csv.DictReader(f):
                 existentes[row["id"]] = row
-    existentes[str(linha["id"])] = {k: str(linha.get(k, "")) for k in cabecalho}
-    with METADATA_CSV.open("w", encoding="utf-8", newline="") as f:
+    existentes[obra_id] = {k: str(v) for k, v in linha.items()}
+    with QUALIDADE_CSV.open("w", encoding="utf-8", newline="") as f:
         escritor = csv.DictWriter(f, fieldnames=cabecalho)
         escritor.writeheader()
         for _, row in sorted(existentes.items()):
             escritor.writerow(row)
+    return linha
 
 
-# --------------------------------------------------------------------------- #
-# Pipeline.
-# --------------------------------------------------------------------------- #
+def processar(obra: dict[str, str], pdf: Path, *, forcar: bool) -> dict[str, object] | None:
+    obra_id = obra["id"]
+    saida_txt = CORPUS_TXT_DIR / f"{obra_id}.txt"
+    if saida_txt.exists() and not forcar:
+        print(f"  [pular] {saida_txt.relative_to(REPO_ROOT)} já existe; use --force.")
+        texto = saida_txt.read_text(encoding="utf-8", errors="replace")
+    else:
+        print(f"  extraindo {pdf.name} -> corpus/txt/{obra_id}.txt ...")
+        if not extrair_texto(pdf, saida_txt):
+            print(f"  ERRO: não consegui extrair texto de {pdf.name}.")
+            return None
+        texto = saida_txt.read_text(encoding="utf-8", errors="replace")
 
-
-def processar_obra(obra: ObraCatalogada, pdf: Path, *, forcar: bool) -> None:
-    """Extrai uma obra: gera txt, atualiza metadata, reporta qualidade."""
-    saida = CORPUS_TXT_DIR / f"{obra.id}.txt"
-    if saida.exists() and not forcar:
-        print(f"  [pular] {saida.relative_to(REPO_ROOT)} já existe; use --force.")
-        return
-
-    print(f"  extraindo {pdf.name} -> corpus/txt/{obra.id}.txt ...")
-    ok = extrair_texto_pdftotext(pdf, saida)
-    if not ok:
-        print("  pdftotext indisponível ou falhou; tentando pdfminer.six.")
-        ok = extrair_texto_pdfminer(pdf, saida)
-    if not ok:
-        print(
-            f"  ERRO: não consegui extrair texto de {pdf.name}. "
-            "Verifique se pdftotext (poppler-utils) ou pdfminer.six estão instalados."
-        )
-        return
-
-    texto = saida.read_text(encoding="utf-8", errors="replace")
-    paginas_total = contar_paginas(pdf)
-    inicio, fim = detectar_corpo(texto)
-    palavras_corpo = contar_palavras(texto[inicio:fim] if inicio is not None else texto)
-    qualidade = avaliar_qualidade(texto)
-
-    atualizar_metadata({
-        "id": obra.id,
-        "autor": obra.autor,
-        "titulo": obra.titulo,
-        "ano": obra.ano,
-        "idioma": obra.idioma,
-        "edicao": obra.edicao,
-        "paginas_total": paginas_total or "",
-        "pagina_inicio_corpo": inicio if inicio is not None else "",
-        "pagina_fim_corpo": fim if fim is not None else "",
-        "palavras_corpo": palavras_corpo,
-        "qualidade_extracao": qualidade,
-        "observacoes": "",
-    })
+    paginas = classificar_paginas(texto)
+    salvar_paginas_csv(obra_id, paginas)
+    linha_q = atualizar_qualidade_extracao(obra_id, obra, paginas)
     print(
-        f"  ok: páginas={paginas_total}, palavras_corpo={palavras_corpo}, "
-        f"qualidade={qualidade}, corpo=[{inicio}, {fim}]"
+        f"  ok: paginas={linha_q['paginas_total']}, "
+        f"palavras={linha_q['palavras_total']}, "
+        f"qualidade_global={linha_q['qualidade_global']}, "
+        f"taxa_boa={linha_q['taxa_qualidade_boa']}, "
+        f"taxa_baixa={linha_q['taxa_qualidade_baixa']}"
     )
+    return linha_q
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--only",
-        help="filtra por substring case-insensitive do id da obra (ex.: 'haraway_2016').",
-    )
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="reextrai mesmo que o txt já exista.",
-    )
+    parser.add_argument("--only", help="filtra por substring do id da obra.")
+    parser.add_argument("--force", action="store_true",
+                        help="reextrai mesmo que o txt já exista.")
     args = parser.parse_args()
 
     pdf_dir = carregar_corpus_pdf_path()
-    pdfs = listar_pdfs(pdf_dir)
+    obras = ler_obras_em_escopo()
     print(f"Pasta Drive: {pdf_dir}")
-    print(f"PDFs encontrados: {len(pdfs)}")
-    if not pdfs:
-        sys.exit(
-            "ERRO: pasta Drive está vazia. Verifique a sincronização do "
-            "Google Drive for Desktop."
-        )
+    print(f"Obras em escopo (escopo_etapa1=sim): {len(obras)}")
+    for o in obras:
+        print(f"  - {o['id']}  ({o.get('arquivo_pdf')})")
 
-    pares, nao_casados, faltando = cruzar_catalogo(pdfs)
-    print(f"PDFs identificados no catálogo: {len(pares)}")
-    for obra, pdf in pares.items():
-        print(f"  - {obra.id}  <-  {pdf.name}")
-    if nao_casados:
-        print(f"PDFs sem correspondência no catálogo: {len(nao_casados)}")
-        for pdf in nao_casados:
-            print(f"  - {pdf.name}")
-    if faltando:
-        print(f"Obras esperadas (prioridade 1-2) faltando: {len(faltando)}")
-        for obra in faltando:
-            print(f"  - {obra.id} ({obra.titulo}, {obra.ano})")
-
+    pares = validar_presenca_pdfs(pdf_dir, obras)
     if args.only:
         filtro = args.only.lower()
-        pares = {o: p for o, p in pares.items() if filtro in o.id.lower()}
-        print(f"Filtro --only='{args.only}' aplicado: {len(pares)} obra(s) a processar.")
+        pares = [(o, p) for o, p in pares if filtro in o["id"].lower()]
         if not pares:
-            sys.exit("Nenhuma obra casa com o filtro --only.")
+            sys.exit(f"Nenhuma obra em escopo casa com --only='{args.only}'.")
+    print(f"PDFs validados: {len(pares)}")
 
     CORPUS_TXT_DIR.mkdir(parents=True, exist_ok=True)
-    for obra, pdf in pares.items():
-        print(f"\n[{obra.id}]")
-        processar_obra(obra, pdf, forcar=args.force)
+    resumo: list[dict[str, object]] = []
+    for obra, pdf in pares:
+        print(f"\n[{obra['id']}]")
+        linha = processar(obra, pdf, forcar=args.force)
+        if linha:
+            resumo.append(linha)
 
-    print("\nExtração concluída. Confira corpus/metadata.csv e corpus/txt/.")
+    print("\nRelatório de extração:")
+    print(f"  {'id':<45s} {'pgs':>5s} {'palavras':>10s} {'q_boa':>7s} {'q_baixa':>8s} {'global':>8s}")
+    for linha in resumo:
+        print(
+            f"  {linha['id']:<45s} {linha['paginas_total']:>5} "
+            f"{linha['palavras_total']:>10} "
+            f"{linha['taxa_qualidade_boa']:>7} "
+            f"{linha['taxa_qualidade_baixa']:>8} "
+            f"{linha['qualidade_global']:>8}"
+        )
+    print(
+        "\nDetalhes página a página em corpus/paginas/<id>.csv. "
+        "Resumo por obra em corpus/qualidade_extracao.csv."
+    )
 
 
 if __name__ == "__main__":

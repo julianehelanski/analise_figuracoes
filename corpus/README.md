@@ -1,56 +1,28 @@
 # Corpus
 
-Esta pasta versiona apenas:
+Esta pasta versiona o catálogo bibliográfico do corpus e o texto extraído dos PDFs. Os PDFs em si ficam em pasta privada do Google Drive sincronizada localmente; o caminho está em `.env` na variável `CORPUS_PDF_PATH`.
 
-- `README.md` (este arquivo, com a lista esperada de obras),
-- `metadata.csv` (catalogação por obra),
-- `txt/` (texto extraído dos PDFs, em UTF-8, gerado pelos scripts).
+## Arquivos versionados
 
-Os **PDFs ficam fora do repositório**, em pasta privada do Google Drive sincronizada localmente. O caminho está em `.env` na variável `CORPUS_PDF_PATH`.
+- `metadata.csv`: catálogo bibliográfico (33 obras, 15 colunas). Fonte de verdade.
+- `txt/<id>.txt`: texto extraído de cada PDF processado, com `\f` entre páginas.
+- `paginas/<id>.csv`: classificação por página (`pagina`, `classe`, `n_chars`, `n_palavras`, `qualidade_pagina`), gerada por `scripts/01_extract_text.py`.
+- `qualidade_extracao.csv`: tabela-resumo por obra (páginas, palavras, taxas de qualidade), gerada por `scripts/01_extract_text.py`.
+
+## Colunas de `metadata.csv`
+
+`id, autor, titulo, ano_edicao, ano_primeira_edicao, idioma, tipo_edicao, tradutor, editora, cidade, isbn, arquivo_pdf, status_upload, escopo_etapa1, observacoes`
+
+A coluna `escopo_etapa1` controla quais obras entram na execução da Etapa 1. A pesquisadora marca `sim` ou `nao`. Os scripts respeitam esse filtro.
 
 ## Convenção de nomes dos PDFs
 
-Cada arquivo deve seguir o padrão `<autor>_<ano>_<slug_titulo>.pdf`, em letras minúsculas, sem acentos, com `_` como separador. O `<slug_titulo>` é uma versão curta do título principal. Exemplos:
+Cada arquivo segue o padrão `<autor>_<ano>_<slug_titulo>_<idioma>.pdf`, em letras minúsculas, sem acentos. O script `scripts/01_extract_text.py` localiza cada PDF pelo nome exato registrado na coluna `arquivo_pdf` da `metadata.csv`.
 
-```
-latour_1987_science_in_action.pdf
-haraway_2016_staying_with_the_trouble.pdf
-```
+## Etapa 1: obras em execução
 
-O script `scripts/01_extract_text.py` aceita também variações próximas do nome canônico (correspondência por substring case-insensitive sobre `autor + ano`).
+Marcadas com `escopo_etapa1 = sim` em `metadata.csv` (decisão de 13/05/2026, ver `docs/decisoes_metodologicas.md`):
 
-## Obras esperadas no corpus completo (Etapa 3)
-
-A Etapa 1 trabalha apenas com as duas primeiras obras de cada autor marcadas com `prioridade=1`. As outras entram a partir da Etapa 3.
-
-### Latour
-
-| id | autor | título | ano | idioma | edição | prioridade |
-|----|-------|--------|-----|--------|--------|------------|
-| latour_1984 | Bruno Latour | Les microbes: guerre et paix | 1984 | fr | Métailié | 2 |
-| latour_1987 | Bruno Latour | Science in Action | 1987 | en | Harvard | 1 |
-| latour_1996_ant_clarifications | Bruno Latour | On actor-network theory: a few clarifications | 1996 | en | Soziale Welt | 3 |
-| latour_1999_recalling_ant | Bruno Latour | On recalling ANT | 1999 | en | Sociological Review | 3 |
-| latour_1999_pandoras_hope | Bruno Latour | Pandora's Hope | 1999 | en | Harvard | 2 |
-| latour_2005_reassembling | Bruno Latour | Reassembling the Social | 2005 | en | Oxford | 2 |
-
-### Haraway
-
-| id | autor | título | ano | idioma | edição | prioridade |
-|----|-------|--------|-----|--------|--------|------------|
-| haraway_1985_cyborg | Donna Haraway | A Cyborg Manifesto | 1985 | en | Socialist Review | 2 |
-| haraway_1988_situated | Donna Haraway | Situated Knowledges | 1988 | en | Feminist Studies | 2 |
-| haraway_1992_monsters | Donna Haraway | The Promises of Monsters | 1992 | en | Routledge | 3 |
-| haraway_1997_modest_witness | Donna Haraway | Modest_Witness@Second_Millennium | 1997 | en | Routledge | 3 |
-| haraway_2003_companion_species | Donna Haraway | The Companion Species Manifesto | 2003 | en | Prickly Paradigm | 3 |
-| haraway_2008_when_species_meet | Donna Haraway | When Species Meet | 2008 | en | Minnesota | 2 |
-| haraway_2016_staying_with_the_trouble | Donna Haraway | Staying with the Trouble | 2016 | en | Duke | 1 |
-
-## Etapa 1: corpus inicial confirmado
-
-- `latour_1987_science_in_action.pdf` (sugestão do plano, pendente de confirmação da Juliane antes de extrair).
-- `haraway_2016_staying_with_the_trouble.pdf` (em execução nesta sessão).
-
-## Saída de extração
-
-Os scripts gravam o texto extraído em `corpus/txt/<id>.txt`, onde `<id>` corresponde à coluna `id` da tabela acima.
+- `latour_woolgar_1986_lab_life_en` — Latour e Woolgar, *Laboratory Life: The Construction of Scientific Facts*, Princeton University Press, 1986 (2ª edição com pós-escrito).
+- `latour_1987_science_action_en` — Bruno Latour, *Science in Action*, Harvard University Press, 1987.
+- `latour_1999_pandora_en` — Bruno Latour, *Pandora's Hope*, Harvard University Press, 1999.

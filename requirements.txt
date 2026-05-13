@@ -8,6 +8,9 @@ spacy>=3.7.0
 # Configuração via .env (caminho dos PDFs do Drive)
 python-dotenv>=1.0.0
 
+# Catálogo de termos em YAML
+PyYAML>=6.0
+
 # Modelos spaCy: baixar separadamente após instalar com pip
 # python -m spacy download en_core_web_sm
 # python -m spacy download fr_core_news_sm

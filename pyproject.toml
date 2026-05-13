@@ -17,6 +17,9 @@ dependencies = [
     # configuração via .env
     "python-dotenv>=1.0.0",
 
+    # catálogo de termos em YAML
+    "PyYAML>=6.0",
+
     # análise de dados
     "pandas>=2.2.0",
     "numpy>=1.26.0",

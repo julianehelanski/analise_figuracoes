@@ -1,85 +1,141 @@
-# Decisões metodológicas
+# Decisões metodológicas — projeto `analise_figuracoes`
 
-Este documento registra cada decisão tomada ao longo da execução do pipeline. Mantenho aqui o histórico em ordem cronológica, em primeira pessoa, com o nome de quem decidiu e a justificativa.
+Este documento registra as decisões metodológicas tomadas para cada etapa da análise computacional do corpus teórico mobilizado na tese. Cada decisão é datada, justificada e revisável. Alterações posteriores devem ser registradas em adendo, com data e razão, sem sobrescrever a decisão anterior.
 
-## Etapa 0: preparação do ambiente e do corpus
+---
 
-### Estrutura de pastas inicial
+## Etapa 1 — Análise de trajetória conceitual em três obras de Bruno Latour (1986, 1987, 1999)
 
-Quem decidiu: Juliane (autorizou a criação via instrução "execute o caminho 1" em 2026-05-13).
+Data da decisão: 13 de maio de 2026.
 
-O que decidi: criar a estrutura prevista no `README.md` (pastas `corpus/`, `campos_lexicais/`, `scripts/`, `outputs/{csv,figuras,relatorios,latex}/`, `docs/`) com `.gitkeep` nas pastas vazias. Os PDFs ficam fora do repositório, em pasta Drive sincronizada localmente, conforme o princípio do `CLAUDE.md`.
+### Objetivo analítico
 
-### `.gitignore`
+A Etapa 1 rastreia o vocabulário figurativo de Bruno Latour em três obras publicadas ao longo de duas décadas, com objetivo de mapear continuidades, deslocamentos e introduções conceituais ao longo da trajetória do autor. A escolha de três obras do mesmo autor (em vez de uma) permite análise de trajetória que análise de obra única não oferece: como conceitos como *inscription*, *black box*, *immutable mobile* aparecem, persistem ou são reformulados ao longo do tempo, e quais figurações são introduzidas em momentos específicos da obra (por exemplo, *factish* em 1999).
 
-Quem decidiu: padrão de projeto.
+A primeira obra do corpus, *Laboratory Life* (1986), tem coautoria com Steve Woolgar. Esse fato é registrado no metadata e considerado na análise: o vocabulário figurativo do livro é coautoral, e a comparação com as obras subsequentes (de Latour solo) permite observar quais figurações persistem após a parceria.
 
-O que decidi: ignorar `.env`, qualquer `*.pdf` no repositório, ambientes virtuais, caches Python, configurações de IDE e outputs intermediários grandes. Mantenho `outputs/` versionado para CSVs, figuras e relatórios citáveis.
+### 1. Corpus inicial
 
-### Catálogo do corpus dentro do script `01_extract_text.py`
+**Decisão**: a Etapa 1 processa três obras, todas em inglês:
 
-Quem decidi: Claude Code (pendente de validação por Juliane).
+- `latour_woolgar_1986_lab_life_en` — Latour e Woolgar, *Laboratory Life: The Construction of Scientific Facts*, Princeton University Press, 1986 (segunda edição).
+- `latour_1987_science_action_en` — Bruno Latour, *Science in Action: How to Follow Scientists and Engineers through Society*, Harvard University Press, 1987.
+- `latour_1999_pandora_en` — Bruno Latour, *Pandora's Hope: Essays on the Reality of Science Studies*, Harvard University Press, 1999.
 
-O que decidi: o catálogo das obras esperadas (id, autor, título, ano, idioma, edição, prioridade) está duplicado em duas representações: a tabela em `corpus/README.md` e a tupla `CATALOGO` em `scripts/01_extract_text.py`. Justificativa: evitar dependência de parser de markdown e manter o script auto-suficiente. A consistência entre os dois é responsabilidade da pesquisadora; se a tabela for atualizada, atualizar o script.
+**Justificativa**: as três obras compõem a trajetória de Latour entre o estudo etnográfico inicial do laboratório (com Woolgar), a sistematização da teoria ator-rede como programa de pesquisa, e a reflexão posterior sobre realismo científico e mediação. O vocabulário figurativo de cada obra é parcialmente herdeiro do anterior e parcialmente novo. Mapear esses três momentos permite produzir resultados que dialogam diretamente com a tese, em que Latour é mobilizado em todos os capítulos.
 
-Pendência: confirmar com Juliane se prefere centralizar o catálogo em um único arquivo (por exemplo, YAML em `corpus/catalogo.yaml`) lido por ambos.
+**Escolha da edição de *Laboratory Life***: a edição de 1986 (Princeton) substitui a de 1979 (Sage). A diferença não é trivial: a edição de 1986 remove a palavra "Social" do subtítulo (de *The Social Construction of Scientific Facts* para *The Construction of Scientific Facts*) e inclui um pós-escrito em que os autores justificam essa remoção. O pós-escrito é, ele mesmo, registro de deslocamento figurativo. A edição 1986 contém o texto da edição 1979 acrescido do pós-escrito, e é a edição mais citada na literatura subsequente.
 
-### Convenção de nomes dos PDFs
+### 2. Idioma de trabalho
 
-Quem decidiu: Claude Code, com base no padrão sugerido no plano.
+**Decisão**: inglês. Modelo spaCy a carregar: `en_core_web_sm`.
 
-O que decidi: padrão `<autor>_<ano>_<slug_titulo>.pdf`, em minúsculas, sem acentos. O script casa por substring case-insensitive sobre sobrenome do autor e ano, então tolera variações próximas. Para a Etapa 1, a obra de Haraway 2016 espera nome contendo `haraway` e `2016`.
+**Justificativa**: as três obras são originais em inglês. Latour é francês e parte da sua obra é publicada originalmente em francês, mas as três obras desta etapa foram escritas e publicadas em inglês como textos originais (não como traduções). A análise se faz na língua de publicação original. Traduções para o português entram em rodadas posteriores, com pergunta analítica distinta.
 
-### Heurística de detecção de corpo de texto
+### 3. Janela KWIC
 
-Quem decidiu: Claude Code (pendente de validação amostral pela Juliane).
+**Decisão**: janela de ±10 palavras (10 palavras antes do termo-alvo e 10 palavras depois).
 
-O que decidi: o início do corpo é a primeira linha que case com `Chapter 1`, `Introduction`, `Capítulo 1` ou `Chapitre 1`; o fim é a primeira ocorrência pós-início de `Bibliography`, `References`, `Bibliografia` ou `Notes`. Limitação declarada: livros sem cabeçalhos canônicos (por exemplo, ensaios curtos sem numeração de capítulos) podem retornar `inicio=None`. Nesses casos, a contagem de palavras cai sobre o texto inteiro.
+**Justificativa**: 5 palavras (padrão `nltk` e CLAWS) trunca a unidade argumentativa na prosa teórica densa de Latour, em que conceitos como *immutable mobile* ou *centre of calculation* costumam vir acompanhados de elaboração extensa. Janelas de 15 ou mais palavras geram contexto longo demais para leitura rápida durante validação amostral. 10 palavras é o ponto onde a unidade argumentativa fecha sem produzir excesso. A janela é parâmetro revisável: se a validação amostral mostrar que casos específicos exigem janela maior, o ajuste pode ser feito por termo, com adendo abaixo.
 
-### Avaliação heurística de qualidade da extração
+### 4. Catálogo único de termos em YAML
 
-Quem decidiu: Claude Code.
+**Decisão**: aceita. O catálogo de termos a rastrear será mantido em arquivo único `campos_lexicais/catalogo_termos.yaml`, com hierarquia autor → campo figurativo → termos, e metadados por termo (variantes, lematização, exclusões, nota analítica).
 
-O que decidi: classificação em `boa`, `media` ou `baixa` com base em duas métricas: (a) proporção de caracteres fora de alfanuméricos, espaço e pontuação corrente; (b) proporção de linhas muito curtas (< 10 caracteres). Limites: `baixa` se (a) > 5% ou (b) > 50%; `media` entre 2-5% ou 30-50%; `boa` abaixo disso. Pendência: a Juliane confere amostralmente 3 trechos por livro antes de aceitar a extração como `boa`.
+**Justificativa**: arquivo único é mais auditável que múltiplos `.txt` plano. YAML permite registrar variantes, exclusões e notas que em `.txt` virariam ruído. O catálogo torna-se artefato citável: pode integrar o apêndice metodológico da tese, documentando exatamente quais termos foram rastreados e com que critérios.
 
-### Fallback de extração
+**Estrutura inicial do catálogo para a Etapa 1 (Latour)**:
 
-Quem decidiu: Claude Code.
+```yaml
+latour:
+  inscription:
+    termos: ["inscription", "inscriptions", "inscription device", "inscription devices", "literary inscription"]
+    nota: "Conceito presente desde Laboratory Life. Verificar continuidade nas tres obras."
+  immutable_mobile:
+    termos: ["immutable mobile", "immutable mobiles"]
+    nota: "Aparece em Science in Action. Rastrear se ha precursor em Laboratory Life."
+  black_box:
+    termos: ["black box", "black-box", "black boxes", "blackbox", "blackboxing", "black-boxing"]
+    nota: "Verificar primeira ocorrencia entre as tres obras."
+  centre_of_calculation:
+    termos: ["centre of calculation", "center of calculation", "centres of calculation", "centers of calculation"]
+    nota: "Variantes ortograficas britanica e americana."
+  actor_network:
+    termos: ["actor-network", "actor network", "actant", "actants"]
+    nota: "Em Laboratory Life o termo 'actant' ja aparece. Em Science in Action a expressao actor-network se consolida."
+  translation:
+    termos: ["translation", "translations", "translate", "translates", "translated"]
+    exclusoes: ["translation of", "english translation", "french translation"]
+    nota: "Atencao a falsos positivos: 'translation' em sentido linguistico trivial precisa ser separado do sentido conceitual."
+  trial_of_strength:
+    termos: ["trial of strength", "trials of strength"]
+    nota: "Conceito de Science in Action."
+  factish:
+    termos: ["factish", "factishes"]
+    nota: "Neologismo de Pandora's Hope. Verificar se ha precursores."
+  circulating_reference:
+    termos: ["circulating reference", "circulating references"]
+    nota: "Pandora's Hope."
+  articulation:
+    termos: ["articulation", "articulations", "articulate", "articulated"]
+    nota: "Conceito reformulado em Pandora's Hope. Possivel ruido por usos triviais do termo."
+  construction:
+    termos: ["construction", "constructed", "constructing", "social construction"]
+    nota: "Conceito central em Laboratory Life. O pos-escrito de 1986 discute a polissemia do termo."
+  proposition:
+    termos: ["proposition", "propositions"]
+    nota: "Reformulacao em Pandora's Hope. Atencao a usos logicos triviais."
+  network:
+    termos: ["network", "networks", "networking"]
+    exclusoes: ["telephone network", "computer network"]
+    nota: "Termo polissemico. Validacao amostral cuidadosa."
+  agonistic:
+    termos: ["agonistic", "agonistics", "agonistic field"]
+    nota: "Science in Action."
+  enrollment:
+    termos: ["enrollment", "enrolment", "enroll", "enrol", "enrolled"]
+    nota: "Variantes ortograficas britanica e americana."
+  spokesperson:
+    termos: ["spokesperson", "spokespersons", "spokesman", "spokesmen", "spokeswoman"]
+    nota: "Traducao do frances 'porte-parole'."
+```
 
-O que decidi: tento primeiro `pdftotext -layout` (poppler-utils). Se não estiver disponível ou falhar, tento `pdfminer.six`. Se ambos falharem, paro com mensagem de erro e instruções para a Juliane. Limitação declarada: nenhum dos dois usa OCR; se um PDF for puramente raster (digitalização sem camada de texto), terei que ativar `tesseract` em etapa posterior e reportar.
+### 5. Validação amostral das heurísticas de detecção de corpo e de qualidade
 
-## Etapa 1: lexicometria mínima
+**Decisão**: validação por amostra estratificada de 15 páginas por obra (45 páginas no total para as três obras), distribuídas em cinco categorias de 3 páginas cada.
 
-### Campos lexicais iniciais
+**Justificativa**: a validação estratificada garante representatividade dos contextos onde a heurística pode falhar. A redução de 25 para 15 páginas por obra é compensada pela triplicação do número de obras: 45 páginas no total cobre proporcionalmente mais diversidade de layouts editoriais e padrões de extração do que 25 páginas de uma obra única. Se durante a revisão a taxa de erro em uma categoria ultrapassar 20%, a amostra naquela categoria é ampliada e a heurística correspondente é ajustada.
 
-Quem decidiu: Claude Code (transcrição literal do `plano_de_trabalho.md`).
+**Distribuição da amostra (por obra)**:
 
-O que decidi: gerei `campos_lexicais/haraway_textil_en.txt` e `campos_lexicais/latour_militar_en.txt` com os 10 grupos terminológicos listados no plano, mais variantes morfológicas pré-expandidas (plurais, formas verbais comuns). Cada linha tem a forma canônica como primeiro token e variantes separadas por vírgula. Termos de controle (`network` para Latour, `holobiont` para Haraway) estão presentes para servir como linha de base contra a qual interpretar a densidade dos termos figurais.
+- 3 páginas marcadas pelo algoritmo como início de capítulo
+- 3 páginas marcadas como corpo de capítulo
+- 3 páginas marcadas como notas de fim
+- 3 páginas marcadas como bibliografia, índice remissivo ou outros paratextos
+- 3 páginas com aviso automático de qualidade baixa (caracteres corrompidos, falhas de OCR, ligaduras mal extraídas)
 
-Pendência: na Etapa 2, refinarei os campos lexicais com base na validação amostral codificada pela Juliane.
+Resultado da validação fica registrado em três arquivos:
 
-### Janela KWIC
+- `outputs/latour_woolgar_1986_lab_life_en/relatorios/validacao_amostral_etapa1.md`
+- `outputs/latour_1987_science_action_en/relatorios/validacao_amostral_etapa1.md`
+- `outputs/latour_1999_pandora_en/relatorios/validacao_amostral_etapa1.md`
 
-Quem decidiu: Claude Code, seguindo a sugestão do `plano_de_trabalho.md`.
+### 6. Estrutura do relatório final da Etapa 1
 
-O que decidi: janela padrão de 50 palavras antes e 50 depois, configurável via `--janela`. Pendência: confirmar com Juliane se 50 palavras é a janela ideal para o trabalho interpretativo (registrado como decisão pendente no plano).
+**Decisão**: o relatório final da Etapa 1 é organizado em dois níveis: relatório por obra (três arquivos) e relatório de trajetória (um arquivo consolidado).
 
-### Marcação de prováveis notas de rodapé
+**Por obra**: cada obra recebe seu próprio diretório de outputs em `outputs/<id_da_obra>/`, com KWIC, tabelas de frequência, visualizações e relatório descritivo.
 
-Quem decidiu: Claude Code.
+**Trajetória consolidada**: o arquivo `outputs/trajetoria_latour_1986_1999.md` agrega resultados das três obras com foco em três perguntas:
 
-O que decidi: marco como `provavel_nota_rodape=1` cada ocorrência cuja linha de origem comece com 1 a 3 dígitos seguidos de letra. Limitação declarada: heurística captura uma fração das notas e produz falsos positivos quando o corpo do texto começa com numerais. A coluna serve como filtro indicativo, não como verdade. Na Etapa 2, refino esse critério se a taxa de falsos positivos for alta.
+1. Quais figurações aparecem em todas as três obras? Com que frequência relativa?
+2. Quais figurações são introduzidas em uma obra e desaparecem ou persistem nas seguintes?
+3. Como o vocabulário coautoral de *Laboratory Life* (Latour-Woolgar) se relaciona com o vocabulário das obras posteriores de Latour solo?
 
-### Estimativa de página
+A estrutura comparativa do relatório de trajetória é o que torna a Etapa 1 analiticamente distinta de três análises independentes empilhadas.
 
-Quem decidiu: Claude Code.
+---
 
-O que decidi: interpolação linear entre posição em caracteres e total de páginas (lido de `corpus/metadata.csv`). Limitação declarada: livros com cabeçalhos, sumários e bibliografia distorcem a interpolação; o resultado é aproximação grosseira ("pág. ~123"), suficiente para localizar passagens mas não para citação direta. Para citação na tese, a Juliane confere a página no PDF.
+## Adendos
 
-## Pendências em aberto
-
-1. Confirmar corpus inicial da Etapa 1 (Haraway 2016 já em execução; Latour 1987 ainda não autorizado).
-2. Confirmar idioma de trabalho preferencial: originais sempre, ou comparar com traduções brasileiras quando existirem?
-3. Confirmar janela KWIC de 50 palavras como padrão definitivo.
-4. Decidir se o catálogo de obras vira arquivo YAML único lido pelo script e pelo README, ou continua duplicado.
-5. Validar heurística de detecção de corpo e qualidade da extração em amostra de 3 trechos por livro.
+(reservar espaço para revisões posteriores das decisões acima, com data e justificativa)

@@ -1,0 +1,79 @@
+# Catálogo de termos figurativos a rastrear.
+#
+# Hierarquia: autor -> grupo (campo figurativo) -> metadados.
+# Metadados por grupo:
+#   termos      lista de variantes (case-insensitive, word-boundary; espaços tornam-se \s+).
+#   exclusoes   (opcional) lista de expressões que, se aparecerem no trecho central
+#               casado ou nas 5 palavras imediatamente adjacentes, descartam a ocorrência.
+#   nota        nota analítica curta, usada nos relatórios.
+#
+# A correspondência ortográfica com `docs/decisoes_metodologicas.md` (seção 4) é responsabilidade
+# da pesquisadora: este arquivo é a fonte da verdade para os scripts; o markdown é a fonte da
+# verdade para a justificativa argumentativa.
+
+latour:
+  inscription:
+    termos: ["inscription", "inscriptions", "inscription device", "inscription devices", "literary inscription"]
+    nota: "Conceito presente desde Laboratory Life. Verificar continuidade nas tres obras."
+
+  immutable_mobile:
+    termos: ["immutable mobile", "immutable mobiles"]
+    nota: "Aparece em Science in Action. Rastrear se ha precursor em Laboratory Life."
+
+  black_box:
+    termos: ["black box", "black-box", "black boxes", "blackbox", "blackboxing", "black-boxing"]
+    nota: "Verificar primeira ocorrencia entre as tres obras."
+
+  centre_of_calculation:
+    termos: ["centre of calculation", "center of calculation", "centres of calculation", "centers of calculation"]
+    nota: "Variantes ortograficas britanica e americana."
+
+  actor_network:
+    termos: ["actor-network", "actor network", "actant", "actants"]
+    nota: "Em Laboratory Life o termo 'actant' ja aparece. Em Science in Action a expressao actor-network se consolida."
+
+  translation:
+    termos: ["translation", "translations", "translate", "translates", "translated"]
+    exclusoes: ["translation of", "english translation", "french translation"]
+    nota: "Atencao a falsos positivos: 'translation' em sentido linguistico trivial precisa ser separado do sentido conceitual."
+
+  trial_of_strength:
+    termos: ["trial of strength", "trials of strength"]
+    nota: "Conceito de Science in Action."
+
+  factish:
+    termos: ["factish", "factishes"]
+    nota: "Neologismo de Pandora's Hope. Verificar se ha precursores."
+
+  circulating_reference:
+    termos: ["circulating reference", "circulating references"]
+    nota: "Pandora's Hope."
+
+  articulation:
+    termos: ["articulation", "articulations", "articulate", "articulated"]
+    nota: "Conceito reformulado em Pandora's Hope. Possivel ruido por usos triviais do termo."
+
+  construction:
+    termos: ["construction", "constructed", "constructing", "social construction"]
+    nota: "Conceito central em Laboratory Life. O pos-escrito de 1986 discute a polissemia do termo."
+
+  proposition:
+    termos: ["proposition", "propositions"]
+    nota: "Reformulacao em Pandora's Hope. Atencao a usos logicos triviais."
+
+  network:
+    termos: ["network", "networks", "networking"]
+    exclusoes: ["telephone network", "computer network"]
+    nota: "Termo polissemico. Validacao amostral cuidadosa."
+
+  agonistic:
+    termos: ["agonistic", "agonistics", "agonistic field"]
+    nota: "Science in Action."
+
+  enrollment:
+    termos: ["enrollment", "enrolment", "enroll", "enrol", "enrolled"]
+    nota: "Variantes ortograficas britanica e americana."
+
+  spokesperson:
+    termos: ["spokesperson", "spokespersons", "spokesman", "spokesmen", "spokeswoman"]
+    nota: "Traducao do frances 'porte-parole'."
