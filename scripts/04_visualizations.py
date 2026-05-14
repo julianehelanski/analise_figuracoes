@@ -73,7 +73,6 @@ def gerar_figuras(obra_id: str) -> None:
     fig, ax = plt.subplots(figsize=(8, max(3, 0.35 * len(grupos))))
     ax.barh(grupos, valores, color=cores)
     ax.set_xlabel("Ocorrências válidas (após exclusões)")
-    ax.set_title(f"Frequência por grupo figurativo: {obra_id}")
     for i, v in enumerate(valores):
         ax.text(v, i, f" {v}", va="center", fontsize=8)
     fig.tight_layout()
@@ -105,7 +104,6 @@ def gerar_figuras(obra_id: str) -> None:
     ax.hist(dados, bins=bins, stacked=True, color=cores, label=rotulos, edgecolor="white")
     ax.set_xlabel("Posição relativa no texto (0 = início, 1 = fim)")
     ax.set_ylabel("Ocorrências")
-    ax.set_title(f"Distribuição ao longo do texto: {obra_id}")
     ax.legend(loc="upper right", fontsize=7, ncol=2)
     fig.tight_layout()
     fig.savefig(fig_dir / "densidade_ao_longo_do_texto.png", dpi=300)

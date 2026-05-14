@@ -157,7 +157,6 @@ def gerar_outputs(obra_id: str, janela: int) -> None:
     nx.draw_networkx_edges(G, pos, width=larguras, alpha=0.45, ax=ax)
     nx.draw_networkx_labels(G, pos, font_size=8, ax=ax)
     ax.set_axis_off()
-    ax.set_title(f"Rede de cocorrência figural: {obra_id} (janela {janela} palavras)")
     fig.tight_layout()
     fig.savefig(fig_dir / "rede_cocorrencia.png", dpi=300)
     fig.savefig(fig_dir / "rede_cocorrencia.svg")
