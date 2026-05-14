@@ -195,3 +195,55 @@ Distribuição final de páginas por classe:
 | `latour_1999_pandora_en` | 3 | 297 | 0 | 31 | 6 |
 
 A amostra estratificada subsequente produz 41/45 páginas. As 4 páginas faltantes correspondem a estratos onde o livro não oferece material: 1 em `qualidade_baixa` de Science in Action (livro com extração quase perfeita) e 3 em `notas_fim` de Pandora (cuja seção de notas é absorvida pelo back matter sem cabeçalho `Notes` isolado).
+
+---
+
+## Etapa 2 — Validação amostral
+
+Data da execução: 14 de maio de 2026.
+
+### Procedimento
+
+A validação amostral aplica critérios uniformes sobre o texto normalizado em `corpus/txt_norm/<obra>.txt` para cada uma das 41 páginas amostradas. Implementação em `scripts/08_validate_sample.py`. Cada página recebe três campos preenchidos automaticamente:
+
+- `estrato_correto` (`sim`, `parcial`, `nao`): se o estrato predito é confirmado pelo conteúdo da página.
+- `erro_extracao`: descrição curta de problemas visíveis na página (replacement chars, letras espaçadas, linhas com excesso de caracteres não-alfa, soft hyphens residuais).
+- `decisao_metodologica`: justificativa em uma linha; recebe prefixo `[INFERÊNCIA]` quando a decisão depende do estado de vizinhança e não de marcador objetivo na própria página.
+
+A leitura final cabe à pesquisadora. Casos `parcial` ficam registrados para revisão manual antes de virarem citação na tese.
+
+### Critérios automáticos por estrato
+
+- `inicio_capitulo` confirmado quando `_RE_INICIO_CAPITULO` casa nas 5 primeiras linhas da página.
+- `corpo` confirmado quando a página tem ≥150 palavras de prosa contínua, sem cabeçalho de front/back matter, sem dominância de notas numeradas.
+- `notas_fim` confirmado quando há cabeçalho `Notes`/`Notas` no topo ou ≥4 linhas com padrão `^\d+\s+[A-Z]` (notas numeradas).
+- `paratexto` confirmado quando há cabeçalho de front ou back matter, ≥3 entradas de índice (`palavra N, N, N`) ou ≥3 linhas de TOC (linha terminando em número de página).
+- `qualidade_baixa` confirmado quando a página tem <10 palavras, replacement chars, ou >5% caracteres não-padrão.
+
+### Resultado
+
+| Estrato | n | sim | parcial | nao | taxa de confirmação |
+|---|---:|---:|---:|---:|---:|
+| `inicio_capitulo` | 9 | 9 | 0 | 0 | 100% |
+| `corpo` | 9 | 9 | 0 | 0 | 100% |
+| `notas_fim` | 6 | 3 | 3 | 0 | 50% |
+| `paratexto` | 9 | 6 | 3 | 0 | 67% |
+| `qualidade_baixa` | 8 | 8 | 0 | 0 | 100% |
+
+Taxa de erro confirmado (`nao`): 0/41 = 0%, abaixo da tolerância de 20% prevista na decisão de 13/05/2026 (Etapa 1, seção 5). A heurística de classificação atende à regra.
+
+### Casos `parcial` para revisão manual
+
+Os seis casos `parcial` decorrem de páginas onde a heurística predisse pelo estado da vizinhança, sem marcador objetivo na própria página:
+
+- Lab Life pg94, pg96, pg102: páginas com placeholder `Image Not Available NN` referentes ao Photograph File (pg91--104). Classificadas como `notas_fim` por herança do estado (Notes do capítulo 2 termina em pg88). Ajuste futuro: a heurística poderia reconhecer páginas de figura como classe própria (`figura`), mas o ganho analítico é baixo porque essas páginas têm 4 palavras cada.
+- Lab Life pg284: segunda página do **Postscript da 2ª edição**, classificada como `paratexto` por herança de back matter. Esse é um caso metodologicamente sensível: o Postscript é o conteúdo distintivo da edição de 1986 (justifica a remoção de "Social" do subtítulo) e contém prosa argumentativa, não paratexto. As análises de KWIC, frequência e cocorrência **operam sobre o texto integral** e portanto incluem o Postscript no cálculo das figurações; apenas a estratificação da amostra registra o conteúdo erroneamente. Para a Etapa 1, o efeito é nulo. Para análises futuras que dependam da estratificação, considerar regex específica para `^\s*POSTSCRIPT\s*$` antes de back matter.
+- Science in Action pg294: continuação da bibliografia (entradas Dauben, Dubos...) sem cabeçalho `References` na própria página. Caso esperado e benigno.
+- Pandora pg7: página de Acknowledgments com cabeçalho tipografado em letras espaçadas (`A C K N O W L E D G M E NT S`). A heurística de front matter não casa esse padrão. Análoga ao tratamento dado a `C H A P T E R` no Adendo 3; ajuste similar seria viável se o ganho justificasse.
+
+### Outputs
+
+- `outputs/amostra_validacao_etapa1.csv` (consolidado, 41 linhas com campos preenchidos).
+- `outputs/<id_obra>/csv/amostra_validacao.csv` (por obra).
+- `outputs/<id_obra>/relatorios/validacao_amostral_etapa1.md` (relatório por obra).
+- `outputs/validacao_amostral_etapa1.md` (relatório consolidado).

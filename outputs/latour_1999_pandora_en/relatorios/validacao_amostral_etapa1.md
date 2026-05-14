@@ -1,212 +1,80 @@
-# Amostra estratificada de validação: latour_1999_pandora_en
+# Validação amostral (Etapa 2): latour_1999_pandora_en
 
-Seed = 42. Estratos = inicio_capitulo, corpo, notas_fim, paratexto, qualidade_baixa. N por estrato = 3.
+Codificação automatizada por `scripts/08_validate_sample.py` sobre o texto
+normalizado em `corpus/txt_norm/<obra>.txt`. Cada página é classificada como
+`sim`, `nao` ou `parcial` quanto à correção do estrato predito. Inferências
+ambíguas são marcadas com `[INFERÊNCIA]` no campo de decisão metodológica.
 
-Use este documento como guia de leitura ao percorrer o PDF. Codifique cada página no CSV `amostra_validacao.csv`:
+## Resumo por estrato
 
-- `estrato_correto`: o estrato atribuído pelo algoritmo é correto? (sim/nao/parcial)
-- `classe_correta`: a classe específica predita é correta? (sim/nao/parcial)
-- `erro_extracao`: caracteres corrompidos, palavras coladas, linhas misturadas?
-- `decisao_metodologica`: qualquer observação a registrar.
+| Estrato | n | sim | parcial | nao | taxa de acerto |
+|---|---:|---:|---:|---:|---:|
+| `inicio_capitulo` | 3 | 3 | 0 | 0 | 100% |
+| `corpo` | 3 | 3 | 0 | 0 | 100% |
+| `notas_fim` | 0 | – | – | – | – |
+| `paratexto` | 3 | 2 | 1 | 0 | 67% |
+| `qualidade_baixa` | 3 | 3 | 0 | 0 | 100% |
 
-Se a taxa de erro em um estrato passar de 20%, ajustar a heurística correspondente em `scripts/01_extract_text.py` e reprocessar.
+## Codificação por página
 
-## Estrato: `inicio_capitulo`
+### Estrato `inicio_capitulo`
 
-### Página 35
+**Página 35**  
+- estrato_correto: `sim`  
+- decisão: cabeçalho de capítulo encontrado nas primeiras 5 linhas  
+- erro_extracao: 1 bloco(s) de letras espaçadas (running header)  
 
-- classe_predita: `inicio_capitulo`, qualidade_predita: `boa`, n_palavras: 318
+**Página 12**  
+- estrato_correto: `sim`  
+- decisão: cabeçalho de capítulo encontrado nas primeiras 5 linhas  
+- erro_extracao: 1 bloco(s) de letras espaçadas (running header)  
 
-**Início da página:**
+**Página 124**  
+- estrato_correto: `sim`  
+- decisão: cabeçalho de capítulo encontrado nas primeiras 5 linhas  
+- erro_extracao: 1 bloco(s) de letras espaçadas (running header)  
 
-> C H A P T E R T W 0 Circulating Reference Sampling the Soil in the Amazon Forest The only way to understand the reality of science studies is to follow what science studies does best, that is, paying close attention to the de tails of scientific practice. Once we have described t...
+### Estrato `corpo`
 
-**Meio:**
+**Página 231**  
+- estrato_correto: `sim`  
+- decisão: prosa contínua (446 palavras)  
+- erro_extracao: 1 bloco(s) de letras espaçadas (running header)  
 
-> I have chosen a discipline, soil science, and a situation, a field trip in the Amazon, that will not require too much previous knowledge. As we examine in detail the practices that produce information about a state of affairs, it should become clear how very unrealistic most of t...
+**Página 189**  
+- estrato_correto: `sim`  
+- decisão: prosa contínua (444 palavras)  
 
-**Fim:**
+**Página 157**  
+- estrato_correto: `sim`  
+- decisão: prosa contínua (433 palavras)  
+- erro_extracao: 1 bloco(s) de letras espaçadas (running header)  
 
-> , nor even two dis tinct ontological domains, but an entirely different phenomenon : cir culating reference* . To capture it, we need to slow our pace a bit and set aside all our time-saving abstractions. With the help of my camera, I will attempt to bring some sort of order to t...
+### Estrato `paratexto`
 
-### Página 12
+**Página 7**  
+- estrato_correto: `parcial`  
+- decisão: [INFERÊNCIA] página sem marcador claro de paratexto; classe herdada do estado anterior  
+- erro_extracao: 1 bloco(s) de letras espaçadas (running header)  
 
-- classe_predita: `inicio_capitulo`, qualidade_predita: `boa`, n_palavras: 308
+**Página 9**  
+- estrato_correto: `sim`  
+- decisão: 3 linha(s) com padrão de TOC  
 
-**Início da página:**
+**Página 335**  
+- estrato_correto: `sim`  
+- decisão: cabeçalho de back matter detectado  
 
-> C H A P T E R 0 N E "Do You Believe in Reality?" Newsfrom the Trenches of the Science Wars "I have a question for you," he said, taking out of his pocket a crum pled piece of paper on which he had scribbled a few key words. He took a breath: "Do you believe in reality?" "But of c...
+### Estrato `qualidade_baixa`
 
-**Meio:**
+**Página 11**  
+- estrato_correto: `sim`  
+- decisão: apenas 0 palavra(s) extraída(s)  
 
-> tation of a Swiss resort located in the tropical mountains of Teresopolis in Brazil. Has reality truly become something people have to believe in, I wondered, the answer to a serious question asked in a hushed and embarrassed tone? Is reality something like God, the topic of a co...
+**Página 1**  
+- estrato_correto: `sim`  
+- decisão: apenas 0 palavra(s) extraída(s)  
 
-**Fim:**
-
-> ly, something like "Of course not! Do you think I am that naive?" This was not a joke, then: he really was concerned, and his query had been in earnest. "I have two more questions," he added, sounding more relaxed. "Do we know more than we used to?" "But of course! A thousand tim...
-
-### Página 124
-
-- classe_predita: `inicio_capitulo`, qualidade_predita: `boa`, n_palavras: 315
-
-**Início da página:**
-
-> C H A P T E R F 0 U R From Fabrication to Reality Pasteur and His Lactic Acid Ferment We have now made two moves that should begin to modify for good the settlement* laid out in the first chapter. The notion of a world "out there" to which a mind-in-a-vat tries to get access by e...
-
-**Meio:**
-
-> that reference is not something that is added to words, but that it is a circulating phenomenon, whose deambulation to borrow, once again, William James's term-should not be inter rupted by any saltation if we want words to refer to the things progres sively packed into them. Ins...
-
-**Fim:**
-
-> ociety, psychology, ideology, people" ; and at the same time, "Be absolutely, not relatively, sure of the laws of the world outside. " Against this contradictory injunction, we realized that the only rea sonable, the only realistic way for a mind to speak truthfully about the wor...
-
-## Estrato: `corpo`
-
-### Página 231
-
-- classe_predita: `corpo`, qualidade_predita: `boa`, n_palavras: 446
-
-**Início da página:**
-
-> PAN D O R A ' S H O P E 220 accuses Socrates of being enslaved by the people of Athens and of for getting what makes noble masters superior to the hoi polloi: "You pre tend that truth is your goal, Socrates, but in actual fact you steer discussions towards this kind of ethical id...
-
-**Meio:**
-
-> LLICLES : I can't explain it, Socrates, but I do think you're making your points well. All the same, I'm feeling what people invariably feel with you : I'm not entirely convinced. SO CRATES : It s the demotic love residing in your heart which is resisting ' me, Callicles. ( 5 13c...
-
-**Fim:**
-
-> re, but their worst quality, for our two protagonists, is even more elementary : the great constitutive defect of the people is that there are simply too many of them. "A rhetorician, then, " says Socrates with his tranquil arrogance, "isn't concerned to educate the people assemb...
-
-### Página 189
-
-- classe_predita: `corpo`, qualidade_predita: `boa`, n_palavras: 444
-
-**Início da página:**
-
-> PANDORA'S HOPE 178 techniques, that techniques are nothing more than pliable and diligent slaves. This simple example is enough to show that artifacts are no easier to grasp than facts : it took us two chapters to understand Pas teur's doubled epistemology, and it is going to tak...
-
-**Meio:**
-
-> plishment of the agent's goal is interrupted for whatever reason (perhaps the agent is not strong enough), then the agent makes a detour, a deviation like the one we saw in Chapter 3 in the operations of conviction between Joliot and Dautry: one cannot speak of techniques any mor...
-
-**Fim:**
-
-> al 2., then the materialist story obtains. The gun's intent, the gun's will, the gun's script have superseded those of Agent 1 ; it is human action that is no more than an intermediary. Note that in the figure it makes no difference if Agent 1 and Agent 2. are re versed. The myth...
-
-### Página 157
-
-- classe_predita: `corpo`, qualidade_predita: `boa`, n_palavras: 433
-
-**Início da página:**
-
-> PA N D O R A ' S HOPE decided to abandon. To do away with this divide, we decided to grant historicity to the microorganisms, not only to the humans discovering them. This entails that we should be able to say that not only the mi crobes-for-us-humans changed in the 1850s, but al...
-
-**Meio:**
-
-> portray nature, in movement instead of as a still life. Again, the divide between what pertains to human history and what to natural history would not have been bridged in the slightest. Episte mology and ontology would remain divided, no matter how agitated or chaotic the cosmos...
-
-**Fim:**
-
-> till using the same example as in Chapter 4, at the risk of giving the reader an over dose of lactic acid ferment. And then, to test the usefulness of this vo cabulary, I will shift to another canonical example from Pasteur's life, his debate with Pouchet over spontaneous generat...
-
-## Estrato: `paratexto`
-
-### Página 7
-
-- classe_predita: `paratexto`, qualidade_predita: `boa`, n_palavras: 254
-
-**Início da página:**
-
-> A C K N O W L E D G M E NT S viii again he offered a shelter for my work. My main gratitude goes, how ever, to John Tresch, who streamlined the language and logic of the manuscript. If readers are not satisfied with the result, they should try to imagine the jungle through which ...
-
-**Meio:**
-
-> w facts, nor it is exactly a book of philosophy. In it, using only very rudimentary tools, I simply try to present, in the space left empty by the dichotomy between subject and object,._4_,g>Jl!;; ptμ_aj $. 9.fil'.. PP..Y._fq .!? -P . h._u man and nonhuman,:. I agree that powerfu...
-
-**Fim:**
-
-> may succeed against the kidnapping of scientific disci plines by science warriors where others have failed. One last caveat. Throughout this book I use the expression "science studies" as if this discipline exists and is a homogeneous body of work with a single coherent metaphysi...
-
-### Página 9
-
-- classe_predita: `paratexto`, qualidade_predita: `boa`, n_palavras: 34
-
-**Início da página:**
-
-> C O NTENTS x Glossary 303 Bibliography 3 12 Index 317 AUTHOR'S NOTE: Words and phrases that I use in a technical sense are marked with an asterisk; for their definitions see the Glossary.
-
-**Meio:**
-
-> technical sense are marked with an asterisk; for their definitions see the Glossary.
-
-**Fim:**
-
-> C O NTENTS x Glossary 303 Bibliography 3 12 Index 317 AUTHOR'S NOTE: Words and phrases that I use in a technical sense are marked with an asterisk; for their definitions see the Glossary.
-
-### Página 335
-
-- classe_predita: `paratexto`, qualidade_predita: `boa`, n_palavras: 52
-
-**Início da página:**
-
-> INDEX 32 4 Waterfield, Robin, 218 Yeast, fermentation from, 115-116, 118, Weart, Spencer, 84-86, 90 120-121, 124, 126-127, 129, 131-133, 143, Weinberg, Steven, 216-218, 25 8-259, 265 150, 153 Wenner-Grenn Foundation, 2 Whitehead, Alfred North, 141, 153, 305- Zero-sum game, 114, 1...
-
-**Meio:**
-
-> 7, 147 306, 311 World War Il, 82-83, 88, 107, 111
-
-**Fim:**
-
-> INDEX 32 4 Waterfield, Robin, 218 Yeast, fermentation from, 115-116, 118, Weart, Spencer, 84-86, 90 120-121, 124, 126-127, 129, 131-133, 143, Weinberg, Steven, 216-218, 25 8-259, 265 150, 153 Wenner-Grenn Foundation, 2 Whitehead, Alfred North, 141, 153, 305- Zero-sum game, 114, 1...
-
-## Estrato: `qualidade_baixa`
-
-### Página 11
-
-- classe_predita: `qualidade_baixa`, qualidade_predita: `baixa`, n_palavras: 0
-
-**Início da página:**
-
-> 
-
-**Meio:**
-
-> 
-
-**Fim:**
-
-> 
-
-### Página 1
-
-- classe_predita: `qualidade_baixa`, qualidade_predita: `baixa`, n_palavras: 0
-
-**Início da página:**
-
-> 
-
-**Meio:**
-
-> 
-
-**Fim:**
-
-> 
-
-### Página 336
-
-- classe_predita: `qualidade_baixa`, qualidade_predita: `baixa`, n_palavras: 0
-
-**Início da página:**
-
-> 
-
-**Meio:**
-
-> 
-
-**Fim:**
-
-> 
+**Página 336**  
+- estrato_correto: `sim`  
+- decisão: apenas 0 palavra(s) extraída(s)  
