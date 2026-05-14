@@ -441,6 +441,103 @@ def figura_3_rede_cocorrencia() -> None:
     print(f"  figura 3 salva: {OUT_DIR / 'rede_cocorrencia_sia.png'}")
 
 
+# -------------------------------------------------------------------
+# Figuras 4-6: ranking absoluto por obra com contagem refinada do
+# campo militar e destaque cromático em vermelho ferrugem.
+# As figuras 4 e 5 substituem B4 e B7 do inventário; a figura 6 é o
+# painel combinado das três obras (B1 + B4 + B7).
+# -------------------------------------------------------------------
+
+OBRAS_ROTULO = {
+    "latour_woolgar_1986_lab_life_en": "Laboratory Life, 1986",
+    "latour_1987_science_action_en": "Science in Action, 1987",
+    "latour_1999_pandora_en": "Pandora's Hope, 1999",
+}
+
+
+def desenhar_ranking_absoluto(ax, obra_id: str, mostrar_xlabel: bool = True) -> None:
+    """Plota barras horizontais com n_ocorrencias por campo na obra.
+
+    A barra do campo militar usa a contagem refinada do passo 1
+    (Lab Life 37, SIA 364, Pandora 156) e cor vermelho ferrugem.
+    Os demais campos ficam em cinza médio. Ordenação decrescente
+    por contagem dentro de cada obra. Anotações inline à direita
+    das barras com o valor absoluto.
+    """
+    n_abs = carregar_n_absoluto(obra_id)
+    n_abs["militar"] = MILITAR_REFINADO[obra_id]["n"]
+
+    campos = sorted(n_abs.keys(), key=lambda g: -n_abs[g])
+    valores = [n_abs[g] for g in campos]
+    cores = ["#B22222" if g == "militar" else "#808080" for g in campos]
+
+    y = np.arange(len(campos))
+    ax.barh(y, valores, color=cores, edgecolor="white", linewidth=0.3)
+    ax.set_yticks(y)
+    ax.set_yticklabels(campos, fontsize=9)
+    ax.invert_yaxis()
+    ax.set_xlim(0, max(valores) * 1.12)
+    if mostrar_xlabel:
+        ax.set_xlabel("Ocorrências válidas (após exclusões)", fontsize=10)
+    ax.grid(axis="x", alpha=0.3, linewidth=0.5)
+    ax.set_axisbelow(True)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    for i, v in enumerate(valores):
+        ax.text(
+            v + max(valores) * 0.01,
+            i,
+            f" {v}",
+            va="center",
+            ha="left",
+            fontsize=8,
+            color="#303030",
+            fontweight="bold" if campos[i] == "militar" else "normal",
+        )
+
+    ax.text(
+        0.99, 0.02,
+        OBRAS_ROTULO[obra_id],
+        transform=ax.transAxes,
+        ha="right", va="bottom",
+        fontsize=10, color="#303030",
+        fontweight="bold",
+    )
+
+
+def figura_4_frequencia_sia_refinada() -> None:
+    """B4 refinada: ranking absoluto em SIA, militar em vermelho ferrugem."""
+    fig, ax = plt.subplots(figsize=(10, 7))
+    desenhar_ranking_absoluto(ax, "latour_1987_science_action_en")
+    salvar(fig, "frequencia_grupos_sia_refinada")
+    print(f"  figura 4 salva: {OUT_DIR / 'frequencia_grupos_sia_refinada.png'}")
+
+
+def figura_5_frequencia_pandora_refinada() -> None:
+    """B7 refinada: ranking absoluto em Pandora, militar em vermelho ferrugem."""
+    fig, ax = plt.subplots(figsize=(10, 7))
+    desenhar_ranking_absoluto(ax, "latour_1999_pandora_en")
+    salvar(fig, "frequencia_grupos_pandora_refinada")
+    print(f"  figura 5 salva: {OUT_DIR / 'frequencia_grupos_pandora_refinada.png'}")
+
+
+def figura_6_painel_tres_obras() -> None:
+    """Painel combinado: rankings absolutos das três obras (B1 + B4 + B7).
+
+    Três painéis empilhados verticalmente, cada um com a sua ordenação
+    própria. Eixo X independente por painel (escalas absolutas diferem
+    bastante entre as obras). Militar refinado em vermelho ferrugem.
+    """
+    fig, axes = plt.subplots(3, 1, figsize=(11, 14))
+    for ax, (obra_id, _ano) in zip(axes, OBRAS_ANO):
+        desenhar_ranking_absoluto(ax, obra_id, mostrar_xlabel=False)
+    axes[-1].set_xlabel("Ocorrências válidas (após exclusões)", fontsize=10)
+    fig.tight_layout()
+    salvar(fig, "frequencia_grupos_tres_obras_painel")
+    print(f"  figura 6 salva: {OUT_DIR / 'frequencia_grupos_tres_obras_painel.png'}")
+
+
 if __name__ == "__main__":
     estilo_matplotlib()
     print("Gerando figura 1 (comparação 17 campos × 3 obras)")
@@ -449,4 +546,10 @@ if __name__ == "__main__":
     figura_2_densidade_militar()
     print("Gerando figura 3 (rede de cocorrência em SIA)")
     figura_3_rede_cocorrencia()
+    print("Gerando figura 4 (ranking absoluto SIA com militar refinado)")
+    figura_4_frequencia_sia_refinada()
+    print("Gerando figura 5 (ranking absoluto Pandora com militar refinado)")
+    figura_5_frequencia_pandora_refinada()
+    print("Gerando figura 6 (painel das três obras, rankings absolutos)")
+    figura_6_painel_tres_obras()
     print(f"Gráficos salvos em {OUT_DIR}")
