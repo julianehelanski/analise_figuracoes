@@ -11,6 +11,7 @@ Janela KWIC: ±10 palavras. Catálogo: `campos_lexicais/catalogo_termos.yaml`.
 | inscription | 125 | 0 | 11.82 | `inscription` (84), `inscriptions` (21), `literary inscription` (17), `literary
 inscription` (3) |
 | network | 45 | 0 | 4.26 | `network` (28), `networks` (17) |
+| militar | 39 | 0 | 3.69 | `attack` (5), `battlefield` (5), `war` (4), `battle` (3) |
 | agonistic | 32 | 0 | 3.03 | `agonistic` (32) |
 | black_box | 10 | 0 | 0.95 | `black box` (3), `black-boxing` (2), `black
 box` (1), `black boxes` (1) |
@@ -39,6 +40,12 @@ inscription** 2 as a principle for organizing his initial observations of
 - p. ~7: 129 Narrowing Down the Possibilities 142 TRF Moves into Other **Networks** 148 Notes 149 4 THE MICROPROCESSING OF FACTS 151 The
 - p. ~26: concentrates less on the development of ideas than on changing **network** characteristics of a specialty over time (see also Gilbert, 1976:
 - p. ~26: existence of intellectual problems lead to the creation of social **networks** of scientists? Some authors avoid attempting to specify the direction
+
+### `militar` (n=39)
+
+- p. ~32: "lack of respect" for science is not intended as an **attack** on scientific activity. It is simply that we maintain an
+- p. ~55: its simplest version, the mythology goes as follows: After World **War** II it was realised that nerve cells could also secrete
+- p. ~55: A competing perspective, designated the "hormonal feedback model" was roundly **defeated** after a long struggle by participants who are now regarded
 
 ### `agonistic` (n=32)
 

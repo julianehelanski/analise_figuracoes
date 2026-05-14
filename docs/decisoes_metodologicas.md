@@ -247,3 +247,52 @@ Os seis casos `parcial` decorrem de páginas onde a heurística predisse pelo es
 - `outputs/<id_obra>/csv/amostra_validacao.csv` (por obra).
 - `outputs/<id_obra>/relatorios/validacao_amostral_etapa1.md` (relatório por obra).
 - `outputs/validacao_amostral_etapa1.md` (relatório consolidado).
+
+---
+
+## Etapa 3 — Lexicometria expandida (rodada parcial sobre o corpus de Etapa 1)
+
+Data da execução: 14 de maio de 2026.
+
+A Etapa 3 plena prevista no `plano_de_trabalho.md` (linhas 254-328) requer a inclusão de obras adicionais de Latour (*Pasteur 1984* em francês, *Reassembling 2005*, *On recalling ANT 1999*, *Clarifications 1996*), das obras centrais de Haraway (*Cyborg Manifesto*, *Situated Knowledges*, *Modest_Witness*, *Companion Species*, *When Species Meet*, *Staying with the Trouble*) e de Stengers e Ingold em escala reduzida. Como esses textos ainda não foram extraídos para `corpus/txt/`, a Etapa 3 é executada aqui em rodada parcial sobre as três obras de Latour da Etapa 1, com expansão do catálogo e dependências instaladas para suportar o corpus completo quando ele chegar.
+
+### 1. Expansão do catálogo: campo `militar`
+
+Decisão: o catálogo `campos_lexicais/catalogo_termos.yaml` recebe um novo grupo `militar` sob o autor Latour, com 64 variantes em inglês cobrindo o vocabulário militar-industrial que minha tese argumenta ser característico de Latour. Termos: `ally`/`allies`/`alliance`/`alliances`; `enemy`/`enemies`/`enmity`; `recruit` e flexões; `mobilise`/`mobilize` e flexões (variantes britânica e americana); `battle`/`battles`/`battlefield`/`embattled`; `war`/`wars`/`warfare`/`warlike`; `conquer` e flexões; `victory`/`victories`/`victorious`; `defeat` e flexões; `troops`; `attack` e flexões; `defend`/`defends`/`defended`/`defensive`/`defence`/`defenses`/`defenders`; `fortress`/`fortresses`/`fortified`/`fortify`/`citadel`/`citadels`; `weapon`/`weapons`/`weaponry`/`arsenal`/`arsenals`; `soldier`/`soldiers`; `siege`/`besieged`/`besieging`.
+
+Exclusões definidas para descartar usos metafóricos triviais e termos médicos: `best ally`, `natural ally`, `first attack`, `asthma attack`, `heart attack`, `panic attack`, `battle of ideas`.
+
+Justificativa: o campo militar é o eixo empírico da tensão figural que minha tese sustenta. Sem um grupo dedicado, esse vocabulário aparece dispersamente em outros grupos (`enrollment`, `mobilise`, `trial_of_strength` etc.) e a leitura quantitativa fica fragmentada. A consolidação em um único campo permite leitura de densidade total.
+
+### 2. Resultado quantitativo
+
+Contagem absoluta e frequência por 10.000 palavras, com janela KWIC de ±10:
+
+| Obra | n | freq/10k |
+|---|---:|---:|
+| `latour_woolgar_1986_lab_life_en` | 39 | 3,69 |
+| `latour_1987_science_action_en` | 374 | 26,74 |
+| `latour_1999_pandora_en` | 212 | 16,56 |
+
+O pico de 374 ocorrências em \emph{Science in Action} é a maior densidade do livro inteiro entre os dezessete campos figurativos do catálogo, ultrapassando `black_box` (9,58/10k), `network` (9,08/10k) e `translation` (5,58/10k). Variantes top em 1987: `allies` (92), `mobilisation` (28), `mobilised` (24), `alliances` (22), `ally` (21), `war` (16), `defence` (15). Em 1999, predominância de `war`/`wars` (85 conjuntas).
+
+### 3. Decisão sobre lematização
+
+A Etapa 3 prevê lematização com spaCy para neutralizar variações flexionais (`mobilise`/`mobilised`/`mobilising` viram um lema único). Instalei `spacy==3.8.14` e o modelo `en_core_web_sm` no ambiente, mas optei por **manter o casamento literal de variantes** nesta rodada parcial, por três razões:
+
+1. Auditabilidade: a lista de variantes literais é inspecionável no YAML; lematização é caixa-preta.
+2. Robustez: para inglês acadêmico, variantes flexionais regulares são poucas; listei explicitamente as principais para cada lema do campo militar.
+3. Custo de oportunidade: a lematização só se torna necessária quando entram obras em francês ou português, onde a flexão é mais rica. Para essa rodada (3 obras em inglês), o casamento literal é suficiente.
+
+A integração da lematização fica para a Etapa 3 plena, junto com a entrada de \emph{Pasteur 1984} em francês.
+
+### 4. Scripts e outputs atualizados
+
+Os scripts da Etapa 1 (02_kwic, 03_frequencies, 04_visualizations, 05_cooccurrence, 07_trajectory) foram re-executados sobre o catálogo expandido. Outputs por obra (`outputs/<obra>/csv/`, `outputs/<obra>/relatorios/`, `outputs/<obra>/figuras/`) e o consolidado (`outputs/trajetoria_latour_1986_1999.md` e `.csv`) refletem a inclusão do campo militar. A seção 4.3.a do relatório de trajetória traz a leitura interpretativa específica.
+
+### 5. Pendências para a Etapa 3 plena
+
+- Subir os `.txt` das obras adicionais do plano de trabalho.
+- Implementar lematização efetiva no `02_kwic.py` (flag `--lematizar`) para suportar francês e português.
+- Adicionar campos lexicais correspondentes para Haraway (têxtil-feminista: companheirismo, parentesco, fiação, tecitura, costura, tecelagem) e para Stengers/Ingold conforme o plano.
+- Comparação cruzada autor por autor, com matriz idioma × autor × campo.
