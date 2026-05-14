@@ -182,3 +182,29 @@ A queda em \emph{Pandora's Hope} é de 26,4% do campo militar; em \emph{Science 
 ### Pendência para script
 
 A camada automática de desambiguação está implementada em script ad hoc (`/home/claude/desambiguar_war_pandora.py` no ambiente da sessão de 14/05/2026, não versionado). Para entrar no pipeline reprodutível da Etapa 3 plena, será necessário portar a lógica para `scripts/`, com nome sugerido `09_desambiguar_war.py`, e incluí-lo no `run_etapa1.sh` (ou criar `run_etapa3.sh` se a Etapa 3 plena exigir orquestração própria). A camada manual fica documentada em planilha auditável, fora do script.
+
+---
+
+## Dispensa da validação amostral da Etapa 2 (15 de maio de 2026)
+
+### Motivação
+
+A Etapa 2 do plano de trabalho previa validação manual de uma amostra estratificada para medir a precisão da heurística de detecção figurativa e refinar os campos lexicais. Na sessão de 14/05/2026, foram geradas três planilhas (camada A militar com 60 trechos, camada B polissêmicos com 217 trechos, camada C técnicos com 93 trechos, totalizando 370 ocorrências distribuídas pelos 17 campos do catálogo), pré-anotadas heuristicamente em três categorias (`conceitual`, `parcial`, `ruído`), com colunas em branco para classificação manual.
+
+Na sessão de 15/05/2026, examinei a estrutura das planilhas e a distribuição da pré-anotação heurística e decidi dispensar a classificação manual.
+
+### Decisão
+
+A validação amostral da Etapa 2 fica dispensada. As três planilhas pré-anotadas permanecem disponíveis localmente como insumo de consulta, sem entrar no repositório versionado nem alimentar refinamento dos campos lexicais.
+
+### Justificativa
+
+O ganho metodológico esperado da classificação manual era declarar, no apêndice metodológico da tese, uma taxa de precisão validada empiricamente por par autor $\times$ campo. O custo era de algumas semanas de leitura cuidadosa de 370 trechos. A relação custo-benefício passou a ser desfavorável depois que três condições se cumpriram: o passo 1 do refinamento (desambiguação de `war`/`wars` no campo militar) já produziu o resultado empiricamente mais consequente da análise (queda de 26,4\% no campo militar de \emph{Pandora's Hope}); a inspeção informal da pré-anotação heurística pela pesquisadora sustentou que a taxa de erro nos outros campos é pequena o suficiente para não inverter o argumento principal sobre a tensão figural Latour-Haraway; e o capítulo 2 da tese, que mobilizará os resultados, comporta a formulação \enquote{validação por inspeção da pesquisadora} sem comprometimento do registro etnográfico.
+
+### Reformulação do apêndice metodológico
+
+No apêndice metodológico que documenta esta análise dentro da tese, a passagem sobre validação fica registrada nestes termos: a heurística de detecção figurativa foi validada por dois procedimentos. O primeiro foi a desambiguação manual de 85 ocorrências de `war`/`wars` em \emph{Pandora's Hope}, documentada em `refinamento/war_pandora_classificacao.csv`, que produziu o ajuste da densidade do campo militar registrado na tabela `refinamento/tabela_militar_refinada.tex`. O segundo foi a inspeção da pesquisadora sobre amostra estratificada de 370 trechos pré-anotados nos demais campos, sem registro de discordâncias sistemáticas que justificassem reclassificação automática.
+
+### Continuidade
+
+Os passos 3 (reformatação interpretativa), 4 (KWIC ampliado a $\pm 50$ palavras com curadoria de passagens citáveis) e 5 (corpus Haraway) permanecem no horizonte de refinamento. A prioridade imediata, definida em 15/05/2026, é o passo 4, para alimentar o capítulo 2 da tese com passagens citáveis. O passo 5 (Haraway) fica reservado para o período posterior à revisão do capítulo 2.
