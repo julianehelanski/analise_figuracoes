@@ -1,0 +1,86 @@
+pagina,termo,categoria_auto,gatilho_detectado,contexto_antes,trecho_central,contexto_depois,categoria_final,justificativa
+8,wars,descritivo_historico,Science,"Believe in Reality?"" 1 Newsfrom the Trenches of the Science",Wars,2. Circulating Reference 24 Sampling the Soil in the Amazon,descritivo,automatico: gatilho 'Science'
+8,wars,descritivo_historico,Science,174 Following Daedalus's Labyrinth 7. The Invention of the Science,Wars,216 The Settlement of Socrates and Callicles 8. A Politics,descritivo,automatico: gatilho 'Science'
+12,wars,descritivo_historico,Science,"You Believe in Reality?"" Newsfrom the Trenches of the Science",Wars,"""I have a question for you,"" he said, taking out",descritivo,automatico: gatilho 'Science'
+26,wars,descritivo_historico,science,may sound incredi ole Ill these times of the science,wars,we are not at war. Af; soon as we refuse,descritivo,automatico: gatilho 'science'
+26,war,ambiguo,,these times of the science wars: we are not at,war,Af; soon as we refuse to engage the scientific disciplines,descritivo,p.26 'these times of the science wars' — colocacao fora da janela
+28,war,descritivo_historico,science,can't avoid the nasty feeling that there is a science,war,"going on. In the end, are you a friend of",descritivo,automatico: gatilho 'science'
+28,war,ambiguo,,"and German soldiers grew cabbages and turnips during the ""phony",war,"in 1940. Scientists always stomp around meetings talking about ""bridging",descritivo,p.28 'phony war 1940' — referencia historica WWII
+30,wars,descritivo_historico,science,of objectification and reification. Good scientists enlist in the science,wars,only in their spare time or when they are retired,descritivo,automatico: gatilho 'science'
+30,war,descritivo_historico,cold,"one side there are what could be called the ""cold",war,"disciplines, "" which still look superficially like the Science of",descritivo,automatico: gatilho 'cold'
+31,war,ambiguo,,other use than as a weapon for waging a political,war,"against politics."" To put it even more bluntly, science studies",figurativo,p.31 'war against politics' — tropo de Latour
+31,war,ambiguo,,"scientists, leaving on the other side only a few disgruntled",war,physicists still wishing to help Socrates shut the mouths of,descritivo,p.31 'war physicists' — agente nomeado historicamente
+34,wars,descritivo_historico,science,few of them. Far from the rumblings of the science,wars,"in which neither you nor I want to fight (well,",descritivo,automatico: gatilho 'science'
+92,war,ambiguo,,"Frederic Joliot, advised by his friends in the Ministry of",War,"and by Andre Laugier, the director of the recently established",descritivo,p.92 'Ministry of War' — instituicao nomeada
+92,war,ambiguo,,that had brought together the interests of the Ministry of,War,"the CNRS, and the Un ion Miniere. But this time",descritivo,p.92 'Ministry of War' — instituicao nomeada
+94,war,descritivo_historico,World War,only too shortly before the defeat of France in World,War,"II, was also kept in formed of Joliot' s work",descritivo,automatico: gatilho 'World War'
+94,war,ambiguo,,"to obtaining the heavy water from Norway. While the ""phony",war,"was taking place between the Siegfried and the Maginot lines,",descritivo,p.94 'phony war' Siegfried/Maginot — WWII
+95,war,ambiguo,,"for the legal problems with the Union Miniere, the ""phony",war,""" Dautry's na tionalism, the German spies ; and the",descritivo,p.95 'phony war' Dautry/German spies — WWII
+97,war,ambiguo,,"tunnel, the historian ultimately arrives on the other side, with",war,and politics. But en route she might meet a colleague,descritivo,"p.97 capitulo sobre Joliot, narrativa WWII"
+99,war,ambiguo,,"that will enable him , in the middle of a",war,"to obtain the tons of graphite, the uranium, and the",descritivo,"p.99 capitulo sobre Joliot, narrativa WWII (uranio, grafite)"
+99,war,ambiguo,,translation consists of combining two hitherto dif ferent interests (waging,war,slowing down neutrons) to form a single composite goal (see,descritivo,p.99 'waging war / slowing down neutrons' — narrativa WWII
+103,war,ambiguo,,expected ways fresh definitions of what it is to make,war,and fresh definitions of what the world is made of.,descritivo,p.103 'make war' capitulo Joliot/WWII
+107,war,ambiguo,,easily be cast aside-the proof being that three countries at,war,immediately set to work at building their own reactors. Disciplining,descritivo,p.107 'three countries at war' — WWII explicito
+111,war,descritivo_historico,World War,"in struments and major equipment that, at least since World",War,"Il, have made up the history of Big Science. For",descritivo,automatico: gatilho 'World War'
+116,war,descritivo_historico,Great War,How was Taylorism accepted by French trade-unionists during the Great,War,How did economics little by little become one of the,descritivo,automatico: gatilho 'Great War'
+118,wars,descritivo_historico,science,is always one of the first casualties of the science,wars,"Of course Joliot ""has thoughts"" ; of course he ""has",descritivo,automatico: gatilho 'science'
+122,war,descritivo_historico,World War,studying the military decisions and programs of France during World,War,"IL As we have seen, operations of translation made Joliot'",descritivo,automatico: gatilho 'World War'
+123,war,ambiguo,,"the mili tary used, in their different ways, to make",war,and peace. Now we can begin to measure the huge,figurativo,p.123 'make war and peace' — alusao clausewitziana e ao proprio livro Pasteur
+141,wars,descritivo_historico,science,philosophy of science or the pitiful stakes of the science,wars,: they are the very questions tackled over and over,descritivo,automatico: gatilho 'science'
+145,war,ambiguo,,is fertile enough for that feat of fiction. Surely a,war,be tween two contrary forces will not do the job.,figurativo,p.145 'war between two contrary forces' — tropo conceitual
+146,wars,descritivo_historico,science,"anything, in spite of the furious volleys of the science",wars,we may be slowly moving from absurdity to com mon,descritivo,automatico: gatilho 'science'
+158,war,ambiguo,,"understand, however, that the pair human-nonhuman does not involve a",war,"between two op posite forces. On the contrary, the more",figurativo,p.158 'war between two opposite forces' humano-naohumano — tropo
+159,war,ambiguo,,"the new picture I am trying to sketch, the traditional",war,is dismantled twice : not only are there no winners,figurativo,p.159 'traditional war is dismantled' subjects/objects — tropo
+163,wars,descritivo_historico,science,"history, certainly cannot be used as fodder for the science",wars,So we have made some progress. The negative answer to,descritivo,automatico: gatilho 'science'
+179,wars,descritivo_historico,science,"that science studies preaches relativism but that, in the science",wars,those who claim that the labor of keeping up the,descritivo,automatico: gatilho 'science'
+181,war,descritivo_historico,World War,history of Ger man culture after the end of World,War,II. Exactly the same thing happened with Pasteur. He retrofitted,descritivo,automatico: gatilho 'World War'
+186,war,ambiguo,,"Icarus on the way. De spised, indispensable, criminal, ever at",war,with the three kings who draw their power from his,figurativo,p.186 Dedalo 'ever at war with the three kings' — mitologico/figurativo
+204,war,ambiguo,,lines than the one drawn for the polemical tug of,war,between objects and subjects. The name of the game is,figurativo,p.204 'tug of war between objects and subjects' — tropo
+209,wars,descritivo_historico,science,"to make their new social theory felt, as the science",wars,have made painfully clear to all . Despite the heroic,descritivo,automatico: gatilho 'science'
+210,wars,descritivo_historico,science,the myth of progress. At the heart of the science,wars,lies the power ful accusation that those who undermine the,descritivo,automatico: gatilho 'science'
+211,war,ambiguo,,"where it leads, of what we should do, of what",war,"we should wage, is entirely different in the two maps,",figurativo,p.211 'what war we should wage' — figurativo
+211,war,descritivo_historico,science,makes a world of difference. Of this difference the science,war,"riors remain blissfully ignorant, convinced that we want to confuse",descritivo,automatico: gatilho 'science'
+226,wars,descritivo_historico,science,wanting. Every one of the weapons used in the science,wars,"includ ing the very distinction between science and politics, has",descritivo,automatico: gatilho 'science'
+227,wars,descritivo_historico,Science,of doing away with politics. The Invention of the Science,Wars,"The Settlement of Socrates and Callicles ""If Right cannot prevail,",descritivo,automatico: gatilho 'Science'
+229,wars,ambiguo,,of Books as a contribution to the raging Sci ence,Wars,"Fresh as in 385 B . c . , it",descritivo,p.229 'raging Science Wars' — colocacao fora da janela
+232,war,descritivo_historico,science,ists would be like reconstituting science studies from the science,war,riors' pamphlets ! I will thus call the Callicles playing,descritivo,automatico: gatilho 'science'
+235,war,ambiguo,,alone against the people. We complain that without Right the,war,"of all against all will take over, but we fail",figurativo,p.235 'war of all against all' — alusao hobbesiana
+235,war,ambiguo,,"all will take over, but we fail to notice this",war,"of two, Socra tes and Callicles, against all the others.",figurativo,p.235 'war of two against all' Socrates/Callicles — figurativo
+246,war,ambiguo,,displaced into a more open contest between two tugs of,war,": one between the two heroes and the other, not",figurativo,p.246 'tugs of war' entre herois e demos — tropo
+246,war,ambiguo,,"Athens on the other, children, women, and slaves included. The",war,"of two against all, the strange war of the duo",figurativo,p.246 'war of two against all' — figurativo
+246,war,ambiguo,,"slaves included. The war of two against all, the strange",war,of the duo trying to make us believe that without,figurativo,p.246 'war of the duo' — figurativo
+246,war,ambiguo,,make us believe that without them it would be the,war,of all against all. A Politics Freed from S cience,figurativo,p.246 'war of all against all' — Hobbes citado
+266,war,ambiguo,,Callicles as portrayed by Plato ! The mythology of the,war,of all against all that threatens to engulf civilization if,figurativo,p.266 'war of all against all' — Hobbes
+267,war,ambiguo,,"to the Cave, grasping only at shadows, they begin a",war,of all against all. A POLITICS FREED FROM SCIENCE 25,figurativo,p.267 'war of all against all' — Hobbes
+269,wars,ambiguo,,PA N D O RA ' S HOPE S cience,Wars,? What about Peace? Let's now abandon the irony and,descritivo,p.269 cabecalho 'Science Wars? What about Peace?'
+270,war,ambiguo,,"Science, capital S , for political irrationality"" is only a",war,"cry. In that sense, and that sense only, it is",figurativo,p.270 'war cry' — tropo
+270,wars,descritivo_historico,Science,as we can witness in these days of the Science,Wars,"However, this definition of Science No. 1, I am afraid,",descritivo,automatico: gatilho 'Science'
+272,wars,descritivo_historico,Science,few disgruntled scientists. If the battle-lines of the so-called Science,Wars,"were drawn in any plausible way, the people like us",descritivo,automatico: gatilho 'Science'
+273,war,ambiguo,,"harder to comprehend. As we saw earlier, when deciphering the",war,between Reason and Force on the one hand and the,figurativo,p.273 'war between Reason and Force' — tropo metafisico
+275,war,ambiguo,,weakening hand of Socrates the rope used in the tug-of,war,"against the demos, and later, as the slash indicates, Socrates'",figurativo,p.275 'tug-of-war against the demos' — figurativo
+276,war,descritivo_historico,Science,"slaves "" but of grown-up citizens. There is a Science",War,but it is not the one that pits descendants of,descritivo,automatico: gatilho 'Science'
+277,wars,ambiguo,,the squalid fate of providing cannon fodder for the political,wars,against the demos while clothed in the drab uniform of,figurativo,p.277 'political wars against the demos' — figurativo
+278,war,ambiguo,,thing so utterly different : two opposing sides in a,war,between sub jects and obj ects? Something is missing. Something,figurativo,p.278 'war between subjects and objects' — tropo
+298,wars,descritivo_historico,science,to tackle the major question at issue in the science,wars,The modernist Enlighte nm e nt in its republican ideal,descritivo,automatico: gatilho 'science'
+300,wars,ambiguo,,Paul sending all the pagan idols packing? Of the great,wars,of the Byzantine era between iconoclasts and iconodules (Mondzain 1996),descritivo,p.300 'great wars of the Byzantine era' iconoclastas — historico
+306,wars,descritivo_historico,science,Even their common des tiny has been erased. The science,wars,are only the latest episode in this polemical use of,descritivo,automatico: gatilho 'science'
+307,war,ambiguo,,way around. That there was once a time when a,war,"could be waged between ""relativists,"" who claimed that language re",figurativo,p.307 'war could be waged between relativists' — tropo
+307,war,descritivo_historico,Cold,"was never intended to protect them, it was always a",war,"ma chine-a Cold War machine, a Science War machine. The",descritivo,automatico: gatilho 'Cold'
+307,war,descritivo_historico,Cold,"protect them, it was always a war ma chine-a Cold",War,"machine, a Science War machine. The expression ""socializing nonhumans to",descritivo,automatico: gatilho 'Cold'
+307,war,descritivo_historico,Cold,"always a war ma chine-a Cold War machine, a Science",War,"machine. The expression ""socializing nonhumans to bear upon the human",descritivo,automatico: gatilho 'Cold'
+309,war,ambiguo,,too was seized by modernists as oil for their political,war,"machine, that theology debased itself by agreeing to play a",figurativo,p.309 'political war machine' — tropo
+310,wars,ambiguo,,"Unfortunately, as we have learned so painfully in this century,",wars,"have devastating effects, since they force every camp to stoop",figurativo,p.310 'wars have devastating effects' — generalizacao figurativa
+310,war,ambiguo,,every camp to stoop to the level of its adversary.,War,has never been a situation in which to think subtle,figurativo,p.310 'War has never been a situation to think subtly' — figurativo
+310,wars,descritivo_historico,Science,over all the values of discussion and argumentation. The Science,Wars,have been no exception. Just when a long and thoughtful,descritivo,automatico: gatilho 'Science'
+310,war,ambiguo,,"weapons-I want, above all, to decide for myself what my",war,aims are. This is what I have tried to achieve,figurativo,p.310 'what my war aims are' — figurativo (autoposicionamento de Latour)
+311,wars,descritivo_historico,science,"shadowboxing, I have decided to behave as if the science",wars,"were a respectable intellectual issue, not a pathetic dis pute",descritivo,automatico: gatilho 'science'
+311,war,descritivo_historico,world war,"the world out there, everyone would admit that ""this means",war,"a world war, even-at least a metaphysical one. It is",descritivo,automatico: gatilho 'world war'
+311,war,descritivo_historico,world war,"there, everyone would admit that ""this means war,"" a world",war,even-at least a metaphysical one. It is a battle that,descritivo,automatico: gatilho 'world war'
+311,war,ambiguo,,still in the offing. If anyone wants to wage this,war,"they will now know on what grounds I stand, what",figurativo,p.311 'wage this war' — figurativo
+311,wars,ambiguo,,the collective is so formida ble that it renders all,wars,"puny by comparison-including, of course, the science wars. In this",descritivo,p.311 'science wars' explicito — colocacao fora da janela
+311,wars,descritivo_historico,science,"renders all wars puny by comparison-including, of course, the science",wars,"In this century, which fortunately is coming to a close,",descritivo,automatico: gatilho 'science'
+319,war,ambiguo,,and nonhumans refer to a different political regime from the,war,forced upon us by the distinction between subject and object.,figurativo,p.319 'war forced upon us by the distinction subject/object' — tropo
+319,war,ambiguo,,would look like if it were not engaged in the,war,to shortcut due political process. The pair hu man-nonhuman is,figurativo,p.319 'war to shortcut due political process' — tropo
+326,wars,descritivo_historico,Science,"Les Empecheurs de penser en rond. --- 1998. ""The Science",Wars,": What about Peace ? "" In Baudoin Jurdant, ed.,",descritivo,automatico: gatilho 'Science'
+333,wars,descritivo_historico,Science,"74, 80, 103, 113, 122, 150, 248, 272, 297, Science",wars,"1, 15, 17-19, 107-109, 111- 311 ; scientific, 26, 30,",descritivo,automatico: gatilho 'Science'
+335,war,descritivo_historico,World War,"153, 305- Zero-sum game, 114, 125-127, 147 306, 311 World",War,"Il, 82-83, 88, 107, 111",descritivo,automatico: gatilho 'World War'
