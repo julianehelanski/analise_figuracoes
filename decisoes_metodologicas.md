@@ -139,3 +139,46 @@ A estrutura comparativa do relatório de trajetória é o que torna a Etapa 1 an
 ## Adendos
 
 (reservar espaço para revisões posteriores das decisões acima, com data e justificativa)
+---
+
+## Refinamento da Etapa 3 — Desambiguação de `war`/`wars` no campo militar
+
+Data da decisão: 14 de maio de 2026.
+
+### Motivação
+
+A leitura crítica do relatório `outputs/trajetoria_latour_1986_1999.md` identificou um efeito de inflação na densidade do campo `militar` em \emph{Pandora's Hope} (1999). Das 212 ocorrências contabilizadas no campo, 85 são da variante `war`/`wars`. Parte dessas ocorrências aparece em colocações que nomeiam objetos historicamente datados, como `science wars`, `World War II`, `Cold War`, `Franco-Prussian war`, `phony war`, `Ministry of War`, e em referências bibliográficas (Tolstoi, \emph{War and Peace}). Esses usos são descritivos de um objeto nomeado, não mobilizações figurativas do vocabulário militar pela escrita de Latour. Contar esses usos junto com os figurativos confunde dois fenômenos distintos e enfraquece o argumento empírico que a tese constrói sobre a tensão figural Latour-Haraway.
+
+### Decisão
+
+A análise do campo `militar` passa a registrar, para cada obra, duas contagens: a **contagem bruta** (todas as ocorrências detectadas pelo catálogo, sem filtro) e a **contagem refinada** (com subtração das ocorrências de `war`/`wars` classificadas como descritivo-históricas).
+
+A classificação é binária: `descritivo` para usos em colocação histórica ou editorial nomeada; `figurativo` para mobilizações do vocabulário militar como tropo descritivo da prática científica ou da polêmica metafísica. A regra opera em duas camadas:
+
+1. **Camada automática**: a ocorrência é classificada como `descritivo` se houver, nas 5 palavras adjacentes ao termo (de cada lado), um dos seguintes gatilhos lexicais (case-insensitive): `science`, `culture`, `cold`, `world war`, `second world`, `first world`, `great war`, `post-war`, `pre-war`, `vietnam`, `korean`, `civil war`, `gulf war`, `nuclear war`.
+
+2. **Camada manual**: ocorrências não capturadas pela camada automática são revisadas em janela ampliada (capítulo inteiro quando necessário) e classificadas com justificativa breve. A camada manual cobre casos em que a colocação está fora da janela KWIC (e.g. `science wars` mencionado uma vez no início do capítulo e referido por elipse depois), referências históricas sem termo-âncora explícito (capítulos sobre Joliot e Szilard que narram WWII), instituições nomeadas (`Ministry of War`), referências bibliográficas e alusões textuais clássicas (Hobbes `war of all against all`, Tolstoi).
+
+### Aplicação simétrica
+
+A desambiguação se aplica às três obras do corpus, não apenas a \emph{Pandora's Hope}. A aplicação simétrica garante comparabilidade: filtrar apenas a obra em que o efeito é visível introduziria viés.
+
+### Resultado
+
+| Obra | Bruto ($n$) | Bruto/10k | Descritivo subtraído | Refinado ($n$) | Refinado/10k |
+|---|---:|---:|---:|---:|---:|
+| \emph{Laboratory Life} (1986) | 39 | 3,69 | 2 | 37 | 3,50 |
+| \emph{Science in Action} (1987) | 374 | 26,74 | 10 | 364 | 26,03 |
+| \emph{Pandora's Hope} (1999) | 212 | 16,56 | 56 | 156 | 12,19 |
+
+A queda em \emph{Pandora's Hope} é de 26,4% do campo militar; em \emph{Science in Action}, 2,7%; em \emph{Laboratory Life}, 5,1%. O pico de 1987 permanece como ponto de cristalização do vocabulário militar-industrial em uso figurativo. A leitura da seção 4.3.a do relatório de trajetória precisa de ajuste: o vocabulário militar figurativo recua pela metade entre 1987 e 1999 em densidade por dez mil palavras, em vez de se manter estável; parte da aparência de continuidade vinha de Latour estar narrando historicamente a militarização da ciência no século XX (Joliot, Szilard, science wars).
+
+### Artefatos
+
+- `outputs/refinamento/war_pandora_classificacao.csv`: os 85 hits de `war`/`wars` em \emph{Pandora's Hope} classificados um a um, com justificativa.
+- `outputs/refinamento/militar_refinado_tres_obras.csv`: tabela consolidada bruto/refinado para as três obras.
+- `outputs/refinamento/tabela_militar_refinada.tex`: tabela em LaTeX pronta para `\input{}` na tese.
+
+### Pendência para script
+
+A camada automática de desambiguação está implementada em script ad hoc (`/home/claude/desambiguar_war_pandora.py` no ambiente da sessão de 14/05/2026, não versionado). Para entrar no pipeline reprodutível da Etapa 3 plena, será necessário portar a lógica para `scripts/`, com nome sugerido `09_desambiguar_war.py`, e incluí-lo no `run_etapa1.sh` (ou criar `run_etapa3.sh` se a Etapa 3 plena exigir orquestração própria). A camada manual fica documentada em planilha auditável, fora do script.
