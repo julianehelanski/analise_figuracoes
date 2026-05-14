@@ -7,6 +7,7 @@ Janela KWIC: ±10 palavras. Catálogo: `campos_lexicais/catalogo_termos.yaml`.
 
 | grupo | n | excluídas | freq./10k pal | variantes top |
 |---|---:|---:|---:|---|
+| militar | 212 | 0 | 16.56 | `war` (55), `wars` (30), `mobilization` (10), `defend` (10) |
 | translation | 70 | 2 | 5.47 | `translation` (48), `translations` (13), `translated` (5), `translates` (2) |
 | construction | 62 | 0 | 4.84 | `construction` (32), `constructed` (18), `social construction` (9), `constructing` (3) |
 | articulation | 53 | 0 | 4.14 | `articulation` (30), `articulated` (14), `articulate` (6), `articulations` (3) |
@@ -23,6 +24,12 @@ box` (2), `black boxes` (1) |
 | immutable_mobile | 3 | 0 | 0.23 | `immutable mobiles` (3) |
 
 ## Exemplos por grupo (top 3 ocorrências)
+
+### `militar` (n=212)
+
+- p. ~8: Believe in Reality?" 1 Newsfrom the Trenches of the Science **Wars** 2. Circulating Reference 24 Sampling the Soil in the Amazon
+- p. ~8: 174 Following Daedalus's Labyrinth 7. The Invention of the Science **Wars** 216 The Settlement of Socrates and Callicles 8. A Politics
+- p. ~12: You Believe in Reality?" Newsfrom the Trenches of the Science **Wars** "I have a question for you," he said, taking out
 
 ### `translation` (n=70)
 

@@ -7,6 +7,7 @@ Janela KWIC: ±10 palavras. Catálogo: `campos_lexicais/catalogo_termos.yaml`.
 
 | grupo | n | excluídas | freq./10k pal | variantes top |
 |---|---:|---:|---:|---|
+| militar | 374 | 0 | 26.74 | `allies` (92), `mobilisation` (28), `mobilised` (24), `alliances` (22) |
 | black_box | 134 | 0 | 9.58 | `black box` (71), `black boxes` (54), `black
 box` (4), `black
 boxes` (2) |
@@ -26,6 +27,12 @@ calculation` (2), `centre of calculation` (1) |
 | immutable_mobile | 4 | 0 | 0.29 | `immutable mobiles` (3), `immutable mobile` (1) |
 
 ## Exemplos por grupo (top 3 ocorrências)
+
+### `militar` (n=374)
+
+- p. ~1: Interesting others in the laboratories ...................................................................... 162 Part B. Counting **Allies** and Resources .............................................................................. 179 PART III. From Short to Longer
+- p. ~4: Part A: Interesting others in the laboratories. Part B: Counting **allies** and resources PART III FROM SHORT TO LONGER NETWORKS 177
+- p. ~19: who, several times already, have ruined their efforts. Besides, another **ally** is missing to set up the trial, a humble ally
 
 ### `black_box` (n=134)
 
