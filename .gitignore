@@ -35,3 +35,11 @@ outputs/**/.cache/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Passo 4 (15/05/2026): artefatos com reprodução extensa de Latour ficam fora do repositório público.
+# Contêm trechos com ±50 palavras de contexto e curadoria de passagens citáveis para a tese.
+# O script de geração está versionado em scripts/; os PDFs originais ficam no Drive local;
+# rodar o script reproduz os arquivos abaixo localmente.
+outputs/passo4/kwic_ampliado.csv
+outputs/passo4/passagens_curadas.md
+outputs/passo4/sequencia_exercito_ciencia.md
