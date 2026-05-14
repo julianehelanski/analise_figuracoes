@@ -30,21 +30,20 @@ Notas:
 - Em Science in Action o ganho foi retirar 276 marcadores `((NN))` que o conversor injetou no corpo.
 - O cabeçalho espaçado `P A N D O R A ' S H O P E` em Pandora ocorre nas variantes (com letras coladas, com palavras intermediárias, etc.) que escapam ao regex conservador; o impacto sobre o KWIC é nulo porque tokens de letra única não casam termos do catálogo.
 
-## 3. Classificação por estado da página (limitação conhecida)
+## 3. Classificação por estado da página
 
-A heurística de classificação por estado em `scripts/01_extract_text.py` (replicada em `01b_normalize_text.py`) classifica cada página em uma das cinco classes `inicio_capitulo`, `corpo`, `notas_fim`, `paratexto`, `qualidade_baixa`. A distribuição produzida é fortemente enviesada:
+A heurística de `scripts/01b_normalize_text.py` (e `01_extract_text.py` para futuras re-extrações) classifica cada página em uma das cinco classes `inicio_capitulo`, `corpo`, `notas_fim`, `paratexto`, `qualidade_baixa`. Adendos 2 e 3 das decisões metodológicas refinaram a heurística para distinguir front matter (não-sticky) de back matter (sticky), detectar início de capítulo no topo da página (5 primeiras linhas), e aceitar variantes tipográficas como `CHAPTER ONE` ou letras espaçadas `C H A P T E R` (estilo Pandora's Hope). Distribuição resultante:
 
 | Obra | inicio_capitulo | corpo | notas_fim | paratexto | qualidade_baixa |
 |---|---:|---:|---:|---:|---:|
-| `latour_woolgar_1986_lab_life_en` | 0 | 4 | 0 | 282 | 10 |
-| `latour_1987_science_action_en` | 1 | 2 | 0 | 309 | 2 |
-| `latour_1999_pandora_en` | 0 | 3 | 0 | 328 | 6 |
+| `latour_woolgar_1986_lab_life_en` | 7 | 200 | 33 | 46 | 10 |
+| `latour_1987_science_action_en` | 4 | 277 | 4 | 27 | 2 |
+| `latour_1999_pandora_en` | 3 | 297 | 0 | 31 | 6 |
 
-Diagnóstico: o estado `paratexto` é sticky e a primeira página de cada obra contém "Contents"/"Sumário", o que dispara `paratexto` no início e nunca sai. A heurística atual transita `corpo → paratexto` ao casar regex de back matter, mas trata `front matter` (TOC, copyright) com a mesma regex, sem distinguir `front` de `back`. Consequência: o restante do livro fica preso em `paratexto`.
+Notas sobre os estratos sub-representados:
 
-Esse viés impede uma amostra estratificada balanceada (passo 6 abaixo). O KWIC, as frequências, a cocorrência e a trajetória **não** dependem dessa classificação e seus números seguem corretos, calculados sobre o texto integral.
-
-Decisão pendente da Juliane: ajustar a heurística antes da Etapa 2 (validação amostral), separando `front matter` de `back matter` e tornando reversível a entrada em `paratexto`. Proposta detalhada acompanha o relatório de amostra (item 6).
+- `notas_fim` em Pandora's Hope: a obra não preserva linha isolada "Notes" detectável pela regex (a seção de notas é absorvida no back matter); como a heurística não identifica transição corpo → notas_fim, esse estrato fica vazio para essa obra.
+- `qualidade_baixa` em Science in Action: o livro só tem 2 páginas marcadas como qualidade baixa, sinal positivo da extração; a amostra fica sub-representada porque o livro não oferece mais material para validar.
 
 ## 4. Tabela de frequências preliminar (consolidada)
 
@@ -94,21 +93,19 @@ Consolidados (em `outputs/`):
 
 ## 6. Status da amostra estratificada (passo 6 do plano)
 
-A decisão de 13/05/2026 previu 45 páginas (15 por obra, 5 estratos de 3). Por causa do viés da heurística descrito em §3, a amostra efetiva tem **26 páginas**, distribuídas:
+A decisão de 13/05/2026 previu 45 páginas (15 por obra, 5 estratos de 3). Após a correção da heurística (Adendos 2 e 3), a amostra efetiva tem **41 páginas**, distribuídas:
 
-- `latour_woolgar_1986_lab_life_en`: 9 páginas (3 `corpo`, 3 `paratexto`, 3 `qualidade_baixa`).
-- `latour_1987_science_action_en`: 8 páginas (1 `inicio_capitulo`, 2 `corpo`, 3 `paratexto`, 2 `qualidade_baixa`).
-- `latour_1999_pandora_en`: 9 páginas (3 `corpo`, 3 `paratexto`, 3 `qualidade_baixa`).
+- `latour_woolgar_1986_lab_life_en`: 15 páginas (3 em cada estrato; cobertura completa).
+- `latour_1987_science_action_en`: 14 páginas (3 `inicio_capitulo`, 3 `corpo`, 3 `notas_fim`, 3 `paratexto`, 2 `qualidade_baixa`).
+- `latour_1999_pandora_en`: 12 páginas (3 `inicio_capitulo`, 3 `corpo`, 0 `notas_fim`, 3 `paratexto`, 3 `qualidade_baixa`).
 
-Os estratos `notas_fim` e `inicio_capitulo` estão sub-representados em todas as obras. Para chegar a 45 páginas balanceadas, a heurística precisa ser corrigida. Proposta de correção:
+As 4 páginas faltantes correspondem a estratos onde o próprio livro não oferece material:
 
-1. Separar `front_matter` (Contents, copyright, half-title) de `back_matter` (Bibliography, Index, References, Notes).
-2. Tornar `front_matter` não-sticky (permitir saída para `corpo` ao casar pattern de capítulo).
-3. Manter `back_matter` sticky (uma vez na bibliografia, fica nela).
-4. Refinar detecção de início de capítulo para casar variantes em maiúsculas tipo `CHAPTER 1` ou números isolados seguidos de título em caixa alta (padrão de Lab Life e Pandora).
+- 1 página em `qualidade_baixa` de Science in Action (o livro só tem 2 páginas classificadas como baixa qualidade; sinal positivo de extração limpa).
+- 3 páginas em `notas_fim` de Pandora's Hope (a obra não preserva linha isolada "Notes" antes das notas globais; a seção é absorvida no back matter).
 
-A correção é simples (~40 linhas de alteração em `01_extract_text.py` e replicação em `01b_normalize_text.py`), mas é decisão analítica: define o que conta como "corpo" para fins de validação amostral. **Aguardo aprovação antes de implementar e reprocessar.**
+A amostra está pronta em `outputs/amostra_validacao_etapa1.csv` (consolidada) e em `outputs/<id>/csv/amostra_validacao.csv` (por obra), com colunas vazias para codificação manual durante a Etapa 2 (`estrato_correto`, `classe_correta`, `erro_extracao`, `decisao_metodologica`).
 
 ---
 
-**Resumo executivo**: extração e normalização concluídas com qualidade boa nas três obras (947 páginas, 373.611 palavras, 1.452 ocorrências válidas no catálogo). KWIC, frequências, visualizações, cocorrência e trajetória entregues e consistentes com leitura qualitativa esperada (Lab Life concentra `inscription`/`construction`; Science in Action consolida `black_box`/`network`/`translation`; Pandora introduz `factish` e `circulating_reference`). Amostra estratificada incompleta (26/45) por viés da heurística de classificação de páginas; correção proposta e parada para aprovação antes de avançar à Etapa 2.
+**Resumo executivo**: extração e normalização concluídas com qualidade boa nas três obras (947 páginas, 373.611 palavras, 1.452 ocorrências válidas no catálogo). KWIC, frequências, visualizações, cocorrência e trajetória entregues e consistentes com leitura qualitativa esperada (Lab Life concentra `inscription`/`construction`; Science in Action consolida `black_box`/`network`/`translation`; Pandora introduz `factish` e `circulating_reference`). Amostra estratificada com 41/45 páginas, faltando apenas onde o próprio livro não oferece material. Heurística de classificação de páginas refinada em dois adendos. Pronto para passar à Etapa 2 (validação amostral) com aprovação.

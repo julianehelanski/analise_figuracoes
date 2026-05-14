@@ -57,19 +57,34 @@ _MAP_PONTUACAO = str.maketrans({
     "�": " ",                 # replacement char -> espaço
 })
 
-# Heurísticas de classificação por página (copiadas de 01_extract_text.py) ---- #
+# Heurísticas de classificação por página (Adendo 2 das decisões) ------------- #
 
 _RE_INICIO_CAPITULO = re.compile(
-    r"^\s*(chapter|capítulo|capitulo|chapitre|part|parte)\s+(\d+|[ivxlcdm]+)\b",
+    # Variante 1: 'Chapter 1', 'CHAPTER 1', 'Capítulo 1', 'Part I', etc.
+    r"^\s*(chapter|capítulo|capitulo|chapitre|part|parte)\s+(\d+|[ivxlcdm]+)\b"
+    # Variante 2: letras espaçadas 'C H A P T E R' (estilo Pandora's Hope).
+    r"|^\s*C\s+H\s+A\s+P\s+T\s+E\s+R\b"
+    # Variante 3: 'Chapter One', 'CHAPTER ONE' (ordinal por extenso).
+    r"|^\s*chapter\s+(one|two|three|four|five|six|seven|eight|nine|ten)\b",
     re.IGNORECASE | re.MULTILINE,
 )
+# Janela de "topo da página" para detectar início de capítulo. Páginas de notas
+# de fim podem conter "Chapter N" como subtítulo de notas por capítulo (caso
+# Science in Action pg282); restringir a detecção às primeiras N linhas
+# distingue capítulo real (sempre no topo da página) de subtítulo de nota.
+_LINHAS_TOPO_INICIO_CAPITULO = 5
 _RE_NOTAS_FIM = re.compile(
     r"^\s*(notes|notas)\s*$", re.IGNORECASE | re.MULTILINE,
 )
-_RE_PARATEXTO = re.compile(
-    r"^\s*(bibliography|references|bibliografia|index|índice|indice|"
-    r"acknowledgements|acknowledgments|agradecimentos|appendix|apêndice|apendice|"
-    r"contents|sumário|sumario)\s*$",
+_RE_FRONT_MATTER = re.compile(
+    r"^\s*(contents|table of contents|sumário|sumario|"
+    r"acknowledgements|acknowledgments|agradecimentos|"
+    r"preface|prefácio|prefacio|dedication|introduction|foreword)\s*$",
+    re.IGNORECASE | re.MULTILINE,
+)
+_RE_BACK_MATTER = re.compile(
+    r"^\s*(bibliography|references|additional references|bibliografia|"
+    r"index|índice|indice|appendix|apêndice|apendice)\s*$",
     re.IGNORECASE | re.MULTILINE,
 )
 
@@ -144,31 +159,60 @@ def avaliar_qualidade_pagina(texto: str) -> str:
     return "boa"
 
 
-_ESTADO_INICIAL = "corpo"
+_ESTADO_INICIAL = "front_matter"
+
+
+def _inicio_capitulo_no_topo(conteudo: str) -> bool:
+    """Verdadeiro se 'Chapter N' / 'Capítulo N' aparece nas primeiras linhas."""
+    linhas_topo = "\n".join(conteudo.split("\n")[:_LINHAS_TOPO_INICIO_CAPITULO])
+    return bool(_RE_INICIO_CAPITULO.search(linhas_topo))
 
 
 def classificar_paginas(texto: str) -> list[dict[str, object]]:
+    """Classifica páginas em cinco classes, usando estado em três valores.
+
+    Estados internos:
+        front_matter  páginas antes do primeiro capítulo (Contents, Preface...).
+                      Não-sticky: a primeira detecção de início de capítulo
+                      transita para `corpo`.
+        corpo         páginas de conteúdo principal.
+        back_matter   páginas a partir de Bibliography, References, Index,
+                      Appendix. Sticky: uma vez aqui, fica.
+
+    Classe `notas_fim` é estado intermediário entre `corpo` e `back_matter`,
+    disparado por uma página com apenas a palavra `Notes` ou `Notas`.
+
+    As cinco classes finais registradas em corpus/paginas/<id>.csv são
+    `inicio_capitulo`, `corpo`, `notas_fim`, `paratexto`, `qualidade_baixa`.
+    Tanto front quanto back matter são rotulados `paratexto`; o estado
+    interno apenas controla quando é possível transitar.
+    """
     paginas = texto.split("\f")
     classificacao: list[dict[str, object]] = []
     estado = _ESTADO_INICIAL
     for numero, conteudo in enumerate(paginas, start=1):
         qualidade = avaliar_qualidade_pagina(conteudo)
+
         if qualidade == "baixa":
             classe = "qualidade_baixa"
-        elif _RE_PARATEXTO.search(conteudo):
+        elif _RE_BACK_MATTER.search(conteudo):
             classe = "paratexto"
-            estado = "paratexto"
-        elif _RE_NOTAS_FIM.search(conteudo) and estado != "paratexto":
-            classe = "notas_fim"
-            estado = "notas_fim"
-        elif (
-            _RE_INICIO_CAPITULO.search(conteudo)
-            and estado not in ("notas_fim", "paratexto")
-        ):
+            estado = "back_matter"
+        elif estado == "back_matter":
+            classe = "paratexto"
+        elif _inicio_capitulo_no_topo(conteudo):
+            # Capítulo real fica no topo da página; entra (ou volta) para corpo.
             classe = "inicio_capitulo"
             estado = "corpo"
+        elif estado == "notas_fim":
+            classe = "notas_fim"
+        elif _RE_NOTAS_FIM.search(conteudo) and estado == "corpo":
+            classe = "notas_fim"
+            estado = "notas_fim"
+        elif estado == "front_matter":
+            classe = "paratexto"
         else:
-            classe = estado if estado in ("notas_fim", "paratexto") else "corpo"
+            classe = "corpo"
 
         classificacao.append({
             "pagina": numero,

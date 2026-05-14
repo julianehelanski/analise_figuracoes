@@ -1,4 +1,4 @@
 id,autor,titulo,ano_edicao,idioma,paginas_total,palavras_total,paginas_corpo,paginas_inicio_capitulo,paginas_notas_fim,paginas_paratexto,paginas_qualidade_baixa,taxa_qualidade_boa,taxa_qualidade_baixa,qualidade_global
-latour_1987_science_action_en,Latour Bruno,Science in Action: How to Follow Scientists and Engineers through Society,1987,en,314,139861,2,1,0,309,2,0.990,0.006,boa
-latour_1999_pandora_en,Latour Bruno,Pandora's Hope: Essays on the Reality of Science Studies,1999,en,337,128001,3,0,0,328,6,0.979,0.018,boa
-latour_woolgar_1986_lab_life_en,Latour Bruno; Woolgar Steve,Laboratory Life: The Construction of Scientific Facts,1986,en,296,105749,4,0,0,282,10,0.949,0.034,boa
+latour_1987_science_action_en,Latour Bruno,Science in Action: How to Follow Scientists and Engineers through Society,1987,en,314,139861,277,4,4,27,2,0.990,0.006,boa
+latour_1999_pandora_en,Latour Bruno,Pandora's Hope: Essays on the Reality of Science Studies,1999,en,337,128001,297,3,0,31,6,0.979,0.018,boa
+latour_woolgar_1986_lab_life_en,Latour Bruno; Woolgar Steve,Laboratory Life: The Construction of Scientific Facts,1986,en,296,105749,200,7,33,46,10,0.949,0.034,boa
