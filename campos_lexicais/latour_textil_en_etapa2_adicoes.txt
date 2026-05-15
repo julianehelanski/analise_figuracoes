@@ -1,0 +1,73 @@
+# Adicoes Etapa 2: campo textil
+#
+# Termos textil-topologicos detectados na inspecao qualitativa dos artigos
+# metateoricos de Latour (1996 Clarifications, 1999 Recalling). Reuso como
+# adicao separada ao catalogo, sem alterar campos_lexicais/catalogo_termos.yaml
+# (decisao registrada em docs/decisoes_metodologicas.md, secao Etapa 2).
+#
+# Formato: um termo por linha. Linhas iniciadas por # sao ignoradas.
+# Variantes morfologicas explicitas (singular/plural, ing/ed) listadas.
+#
+# Grupo: textil
+thread
+threads
+threading
+threaded
+thread-like
+threadlike
+weave
+weaves
+weaving
+woven
+weaver
+knot
+knots
+knotted
+knotting
+tangle
+tangles
+tangled
+tangling
+fiber
+fibers
+fibre
+fibres
+fibrous
+filament
+filaments
+filamentary
+string
+strings
+stringy
+wire
+wires
+wiry
+rope
+ropes
+ropy
+lace
+laces
+laced
+lacing
+plait
+plaits
+plaited
+plaiting
+twist
+twists
+twisted
+twisting
+net
+nets
+netting
+tie
+ties
+tied
+fabric
+fabrics
+woven
+texture
+textures
+textured
+capillary
+capillaries

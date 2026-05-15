@@ -1,0 +1,59 @@
+# Adicoes Etapa 2: campo topologia
+#
+# Termos topologicos detectados na inspecao qualitativa dos artigos
+# metateoricos de Latour (1996 Clarifications, 1999 Recalling). O grupo
+# `network` ja existe no catalogo principal; este arquivo lista termos
+# topologicos adicionais para a Etapa 2, sem duplicar `network`.
+#
+# Formato: um termo por linha. Linhas iniciadas por # sao ignoradas.
+#
+# Grupo: topologia
+fluid
+fluids
+fluidity
+surface
+surfaces
+node
+nodes
+connection
+connections
+connectivity
+connected
+disconnected
+topology
+topological
+topologies
+flat
+fold
+folds
+folded
+folding
+locus
+loci
+trajectory
+trajectories
+flow
+flows
+flowing
+circulation
+circulations
+circulating
+circulate
+path
+paths
+pathway
+pathways
+grid
+grids
+mesh
+meshes
+boundary
+boundaries
+inside
+outside
+proximity
+proximities
+scale
+scales
+plane
+planes

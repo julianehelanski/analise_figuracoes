@@ -32,10 +32,19 @@ OUTPUTS_DIR = REPO_ROOT / "outputs"
 CORPUS_TXT_DIR = REPO_ROOT / "corpus" / "txt_norm"
 
 
-def obras_em_escopo() -> list[dict[str, str]]:
+def obras_em_escopo(escopo: str = "etapa1") -> list[dict[str, str]]:
+    """Filtra metadata.csv por `escopo_etapa1`, `escopo_etapa2` ou ambos."""
     with METADATA_CSV.open(encoding="utf-8", newline="") as f:
-        return [row for row in csv.DictReader(f)
-                if row.get("escopo_etapa1", "").strip().lower() == "sim"]
+        linhas = list(csv.DictReader(f))
+    def _mark(r: dict[str, str], col: str) -> bool:
+        return r.get(col, "").strip().lower() == "sim"
+    if escopo == "etapa1":
+        return [r for r in linhas if _mark(r, "escopo_etapa1")]
+    if escopo == "etapa2":
+        return [r for r in linhas if _mark(r, "escopo_etapa2")]
+    if escopo == "todos":
+        return [r for r in linhas if _mark(r, "escopo_etapa1") or _mark(r, "escopo_etapa2")]
+    raise SystemExit(f"escopo desconhecido '{escopo}'.")
 
 
 def carregar_ocorrencias(obra_id: str) -> list[tuple[str, int]]:
@@ -189,9 +198,12 @@ def main() -> None:
     parser.add_argument("--only", help="filtra obras por substring de id.")
     parser.add_argument("--janela", type=int, default=200,
                         help="janela em palavras para cocorrência (default: 200).")
+    parser.add_argument("--escopo", default="etapa1",
+                        choices=["etapa1", "etapa2", "todos"],
+                        help="filtro de obras: etapa1 (default), etapa2 ou todos.")
     args = parser.parse_args()
 
-    obras = obras_em_escopo()
+    obras = obras_em_escopo(args.escopo)
     if args.only:
         obras = [o for o in obras if args.only.lower() in o["id"].lower()]
     for obra in obras:

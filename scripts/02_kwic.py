@@ -147,14 +147,55 @@ def estimar_pagina(posicao: int, separadores: list[int]) -> int:
     return lo + 1  # 1-indexed
 
 
-def obras_em_escopo() -> list[dict[str, str]]:
+def obras_em_escopo(escopo: str = "etapa1") -> list[dict[str, str]]:
+    """Lê metadata.csv e filtra pelo escopo solicitado.
+
+    `escopo` aceita `etapa1`, `etapa2` ou `todos`. Para `todos`, devolve obras
+    com `escopo_etapa1=='sim'` OU `escopo_etapa2=='sim'`.
+    """
     if not METADATA_CSV.exists():
         sys.exit(f"ERRO: {METADATA_CSV} não existe.")
     with METADATA_CSV.open(encoding="utf-8", newline="") as f:
-        return [
-            row for row in csv.DictReader(f)
-            if row.get("escopo_etapa1", "").strip().lower() == "sim"
-        ]
+        linhas = list(csv.DictReader(f))
+    def _mark(r: dict[str, str], col: str) -> bool:
+        return r.get(col, "").strip().lower() == "sim"
+    if escopo == "etapa1":
+        return [r for r in linhas if _mark(r, "escopo_etapa1")]
+    if escopo == "etapa2":
+        return [r for r in linhas if _mark(r, "escopo_etapa2")]
+    if escopo == "todos":
+        return [r for r in linhas if _mark(r, "escopo_etapa1") or _mark(r, "escopo_etapa2")]
+    sys.exit(f"ERRO: escopo desconhecido '{escopo}'. Use etapa1, etapa2 ou todos.")
+
+
+def ler_texto_sem_cabecalho(caminho: Path) -> str:
+    """Lê o `.txt` e prepara para tokenização.
+
+    Aplica duas operações que preservam offsets em comprimento (mantendo
+    o casamento de posicao_no_texto entre KWIC e cocorrência):
+
+    1. Linhas iniciadas por `#` (cabeçalho de metadados dos artigos da
+       Etapa 2) viram espaços do mesmo comprimento. Os tokens do cabeçalho
+       não entram no KWIC.
+    2. Caracteres de controle ASCII de baixa ordem (`\\x00`-`\\x08`,
+       `\\x0b`-`\\x1f`, `\\x7f`) viram espaço. Em particular `\\x02` (STX)
+       aparece como artefato de OCR nos artigos da Etapa 2, no papel
+       funcional de soft hyphen ou separador, e quebraria a tokenização
+       de palavras como `abil\\x02ity` se mantido. Análogo ao tratamento de
+       U+00AD aplicado aos livros pelo Adendo 1 das decisões metodológicas.
+    """
+    texto = caminho.read_text(encoding="utf-8", errors="replace")
+    saida: list[str] = []
+    for linha in texto.splitlines(keepends=True):
+        if linha.lstrip().startswith("#"):
+            corpo = linha.rstrip("\n\r")
+            saida.append(" " * len(corpo) + linha[len(corpo):])
+        else:
+            saida.append(linha)
+    texto_sem_header = "".join(saida)
+    # Substitui caracteres de controle de baixa ordem por espaço (preserva offset).
+    texto_limpo = re.sub(r"[\x00-\x08\x0b-\x1f\x7f]", " ", texto_sem_header)
+    return texto_limpo
 
 
 def identificar_autor_da_obra(obra: dict[str, str]) -> str:
@@ -186,7 +227,7 @@ def kwic_obra(
         print(f"  [pular] {txt_path} não existe; rode antes scripts/01_extract_text.py.")
         return
 
-    texto = txt_path.read_text(encoding="utf-8", errors="replace")
+    texto = ler_texto_sem_cabecalho(txt_path)
     palavras = localizar_palavras(texto)
     separadores = [m.start() for m in re.finditer(r"\f", texto)]
 
@@ -278,6 +319,9 @@ def main() -> None:
     parser.add_argument("--only", help="filtra obras por substring de id.")
     parser.add_argument("--janela", type=int, default=10,
                         help="janela KWIC em palavras antes/depois (default: 10).")
+    parser.add_argument("--escopo", default="etapa1",
+                        choices=["etapa1", "etapa2", "todos"],
+                        help="filtro de obras: etapa1 (default), etapa2 ou todos.")
     args = parser.parse_args()
 
     grupos = carregar_catalogo()
@@ -286,7 +330,7 @@ def main() -> None:
         if not grupos:
             sys.exit(f"Nenhum grupo no YAML para autor='{args.autor}'.")
 
-    obras = obras_em_escopo()
+    obras = obras_em_escopo(args.escopo)
     if args.only:
         obras = [o for o in obras if args.only.lower() in o["id"].lower()]
         if not obras:

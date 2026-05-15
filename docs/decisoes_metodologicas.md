@@ -296,3 +296,107 @@ Os scripts da Etapa 1 (02_kwic, 03_frequencies, 04_visualizations, 05_cooccurren
 - Implementar lematização efetiva no `02_kwic.py` (flag `--lematizar`) para suportar francês e português.
 - Adicionar campos lexicais correspondentes para Haraway (têxtil-feminista: companheirismo, parentesco, fiação, tecitura, costura, tecelagem) e para Stengers/Ingold conforme o plano.
 - Comparação cruzada autor por autor, com matriz idioma × autor × campo.
+
+---
+
+## Etapa 2 — Extensão da análise lexicométrica aos artigos teóricos de Latour
+
+Data da decisão: 15 de maio de 2026.
+
+A Etapa 2 (no sentido do `briefing_etapa2_artigos_latour.md`, v2) estende a instrumentação lexicométrica da Etapa 1 a dois artigos metateóricos de Latour, com o objetivo de submeter à mesma contagem sistemática a hipótese qualitativa de divisão de trabalho metafórico por gênero textual: vocabulário militar-industrial dominante nos livros monográficos (já documentado pela Etapa 1) e vocabulário têxtil-topológico ocupando o terreno nos artigos metateóricos.
+
+### 1. Corpus
+
+Adiciono ao `metadata.csv` (marcados com `escopo_etapa2 = sim`):
+
+- `latour_1996_clarifications_en` — Bruno Latour, *On Actor-Network Theory: A Few Clarifications*, *Soziale Welt*, vol. 47, n. 4, pp. 369-381, 1996.
+- `latour_1999_recalling_en` — Bruno Latour, *On Recalling ANT*, in Law e Hassard (orgs.), *Actor Network Theory and After*, Blackwell, Oxford, pp. 15-25, 1999.
+
+O slug do segundo artigo foi unificado a partir do registro anterior `latour_1999_recalling_ant_en` para `latour_1999_recalling_en`, alinhando-se à convenção do briefing e dos caminhos de output (`outputs/<slug>/...`).
+
+### 2. Origem dos `.txt` e cadeia de mediação
+
+Os dois arquivos vieram já normalizados, em sessão de chat anterior com o Claude, fora do pipeline canônico `scripts/01_extract_text.py` → `scripts/01b_normalize_text.py`. A normalização externa foi registrada nos próprios cabeçalhos `#` dos `.txt`, com referência a `scripts/12_etapa2_extrair_ocr_zips.py` (script de extração fora deste repositório). Os arquivos foram depositados em `corpus/txt_norm/` por upload direto à sessão remota, sem passar pelo Drive sincronizado, dado que a sessão remota não tem acesso ao Drive da pesquisadora.
+
+A cadeia mim → chat → Claude Code → repositório é registrada como dado etnográfico, em coerência com o tratamento que a tese dá às demais cadeias de mediação técnica.
+
+### 3. Restrição de cobertura do *Recalling*
+
+O OCR de origem (zip de 11 páginas) entregou texto principal limpo apenas para as páginas pares do zip (2, 4, 6, 8, 10), que cobrem as páginas 16, 18, 20, 22 e 24 do volume. As páginas ímpares do zip estavam severamente truncadas no início das linhas e foram excluídas, conforme nota de estrutura no cabeçalho do `.txt`. As páginas 15 (abertura + abstract) e 25 (final + bibliografia) do volume não estão integralmente representadas.
+
+Consequências:
+
+- A contagem do *Recalling* opera sobre 1.344 palavras de corpo, equivalente a cerca de 80% do artigo original.
+- A passagem-chave dos pp. 19-20 sobre a contaminação do vocabulário (`vocabulary has contaminated our ability to let the actors build their own space`) está integralmente preservada no corpus. Confirmação por sanity check em `scripts/13_audit_articles_etapa2.py`.
+- A limitação enfraquece a quantificação absoluta do artigo mas não compromete o argumento comparativo, que opera por ordem de grandeza (3 a 7 vezes menor que *Science in Action*).
+- Fica registrada como pendência para uma eventual Etapa 2-bis a reanálise com PDF nativo do *Recalling*, caso adquirido.
+
+### 4. Saneamento de OCR adicional no momento da leitura
+
+A auditoria dos dois `.txt` registrou caracteres de controle ASCII residuais (12 ocorrências de `\x02` no *Recalling*, 11 no *Clarifications*) que funcionam, na maior parte das ocorrências, como soft hyphens não resolvidos pelo OCR. Exemplos: `actor\x02network`, `abil\x02ity`, `micro\x02distinction`, `non\x02existing`.
+
+Decisão: ao invés de reescrever os `.txt` (que ficariam menos auditáveis), `ler_texto_sem_cabecalho` em `scripts/02_kwic.py` substitui `\x02` (e demais caracteres de controle ASCII de baixa ordem `\x00`-`\x08`, `\x0b`-`\x1f`, `\x7f`) por espaço durante a leitura, preservando offsets. O tratamento é análogo ao Adendo 1 das decisões da Etapa 1 (soft hyphen U+00AD nos livros) e mantém os `.txt` como artefato auditável intacto. A regex do catálogo já tolera ausência de hífen (`[-\s]?` em `compilar_padrao`), de modo que `actor\x02network` casa o termo `actor-network` mesmo após a substituição por espaço.
+
+Limitação registrada: no *Recalling*, 11 candidatos a colagem de OCR (tokens com mais de 18 letras consecutivas sem espaço, do tipo `havealternatedbetweentwo`, `stochasticcomposition`, `intersubjectiveencounter`) permanecem no corpus como sub-recobrimento esperado. O efeito sobre a contagem do campo militar é marginal (a estimativa preliminar do briefing já contempla `n = 1`); o efeito sobre os campos têxtil e topologia será aferido na contagem da Etapa 2.1.
+
+### 5. Catálogos têxtil e topologia (sem alterar o YAML)
+
+O catálogo `campos_lexicais/catalogo_termos.yaml` permanece intacto, em coerência com o princípio da Etapa 2 de usar instrumento idêntico à Etapa 1 para tornar o contraste defensável. Os campos têxtil e topologia, exigidos pela hipótese de divisão de trabalho metafórico, entram como arquivos de adição separados:
+
+- `campos_lexicais/latour_textil_en_etapa2_adicoes.txt` (61 variantes literais: `thread`, `weave`, `knot`, `tangle`, `fiber`, `fibrous`, `filament`, `string`, `wire`, `rope`, `lace`, `plait`, `twist`, `net`, `fabric`, `texture`, `capillary` e flexões).
+- `campos_lexicais/latour_topologia_en_etapa2_adicoes.txt` (43 variantes literais: `fluid`, `surface`, `node`, `connection`, `topology`, `flat`, `fold`, `locus`, `trajectory`, `flow`, `circulation`, `path`, `grid`, `mesh`, `boundary`, `inside`, `outside`, `proximity`, `scale`, `plane` e flexões; `network` permanece no grupo homônimo do YAML para não duplicar).
+
+A consolidação dos termos têxteis e topológicos em grupos do `catalogo_termos.yaml` fica pendente até a aprovação dos resultados da Etapa 2.1. Enquanto isso, os arquivos `.txt` de adição são tratados como suplemento auditável.
+
+### 6. Categorias novas de desambiguação do campo militar
+
+A desambiguação automática + manual aplicada na Etapa 1 (gatilhos lexicais para *Science Wars*, *World War*, *Cold War*, *Franco-Prussian War*, *Ministry of War*, *phony war*, *War and Peace*, etc.) ganha duas categorias novas específicas para os artigos metateóricos:
+
+- `metalinguistico`: ocorrências em que Latour cita o próprio vocabulário da TAR (como em `vocabulary association, translation, alliance, obligatory passage point`). Gatilho automático candidato: ocorrência dentro de aspas, ou em vizinhança imediata (cinco palavras) com termos do vocabulário próprio da TAR (`association`, `translation`, `passage point`, `actor-network`, `enrollment`).
+- `descritivo-bibliografico`: ocorrências em referências bibliográficas e em títulos de obras citadas (`La nouvelle alliance` de Prigogine e Stengers). Gatilho automático candidato: ocorrência em itálico, ou em vizinhança imediata com nomes de autores ou anos entre parênteses, ou em formatação de bibliografia ao final do artigo.
+
+A implementação desses gatilhos fica para a Etapa 2.2, junto com a planilha de classificação no formato de `refinamento/war_pandora_classificacao.csv`.
+
+### 7. Janela de cocorrência
+
+A janela de cocorrência de 200 palavras, calibrada para os livros, corresponde a cerca de 15% do *Recalling* (1.344 palavras) e a 2,5% do *Clarifications* (7.934 palavras), o que distorce a comparabilidade. Decisão: na Etapa 2.4, gerar duas versões da matriz de cocorrência para os artigos, uma com janela 200 (controle direto para comparação com os livros) e outra com janela proporcional (2% do total, arredondada para 27 e 159 palavras respectivamente). A decisão final sobre qual versão entra na tese cabe à pesquisadora após inspeção das duas matrizes.
+
+### 8. Mudanças no código aplicadas para suportar a Etapa 2
+
+- Coluna `escopo_etapa2` adicionada a `corpus/metadata.csv` (e à cópia em `metadata.csv` na raiz). Marcada `sim` para os dois artigos e `nao` para as demais 31 obras.
+- Slug `latour_1999_recalling_ant_en` renomeado para `latour_1999_recalling_en` (referência cruzada com os caminhos `outputs/<slug>/...` do briefing).
+- `scripts/02_kwic.py`, `scripts/03_frequencies.py`, `scripts/04_visualizations.py` e `scripts/05_cooccurrence.py` ganharam o argumento `--escopo etapa1|etapa2|todos` (default: `etapa1` para preservar comportamento prévio).
+- `scripts/02_kwic.py` ganhou `ler_texto_sem_cabecalho` que descarta linhas iniciadas por `#` e substitui caracteres de controle ASCII por espaço, preservando offsets para o casamento com a matriz de cocorrência.
+- `scripts/13_audit_articles_etapa2.py` é o novo script de sanity check para os `.txt` da Etapa 2: reporta linhas de cabeçalho, palavras de corpo, candidatos de colagem de OCR, caracteres de controle residuais e presença de passagens-chave por slug.
+- `corpus/qualidade_extracao.csv` recebeu duas linhas para os artigos, com `palavras_total` e `qualidade_global` (`boa_com_pequenos_artefatos_de_ocr` para o *Clarifications*; `parcial_com_colagem_de_ocr` para o *Recalling*).
+
+### 9. Convenção de contagem de palavras
+
+A Etapa 1 contabiliza `palavras_total` em `corpus/qualidade_extracao.csv` via `re.split(r"\s+", conteudo)` (`scripts/01_extract_text.py:255`), que divide o texto por whitespace e conta tokens. A inspeção exploratória registrada no `briefing_etapa2_artigos_latour.md` § 2 usou a convenção alternativa `\b\w+\b` (regex de borda de palavra), que conta também separadores internos como hifens e apóstrofos como fronteira, produzindo um número marginalmente maior.
+
+Decisão: registro em `corpus/qualidade_extracao.csv` os valores em convenção `split` para garantir comparabilidade direta com os livros, da seguinte forma:
+
+| Slug | Convenção `split` (registrado) | Convenção `\b\w+\b` (preliminar do briefing) | Diferença |
+|---|---:|---:|---:|
+| `latour_1996_clarifications_en` | 7.848 | 7.934 | +86 (1,1%) |
+| `latour_1999_recalling_en` | 1.241 | 1.344 | +103 (8,3%) |
+
+A diferença maior no *Recalling* é consequência do OCR colado discutido na seção 4 desta entrada: tokens como `havealternatedbetweentwo` contam como uma só palavra em ambas as convenções, mas o número total cai porque a tokenização absorve tudo em torno desses tokens. As densidades por 10.000 palavras na Etapa 2.1 e seguintes operam sobre os valores `split` (7.848 e 1.241). A leitura interpretativa pode mencionar os dois números quando convier para sustentar a ordem de grandeza do achado.
+
+### 10. Gate 2.0 e pendências
+
+O Gate 2.0 é a confirmação, por parte da pesquisadora, dos seguintes pontos verificados pelo `scripts/13_audit_articles_etapa2.py`:
+
+- Cabeçalho `#` íntegro nos dois arquivos.
+- Contagens de palavras de corpo (convenção `\b\w+\b`): 7.934 para `latour_1996_clarifications_en`; 1.344 para `latour_1999_recalling_en`. Em convenção `split` (a registrada em `qualidade_extracao.csv`): 7.848 e 1.241 respectivamente.
+- Presença das passagens-chave: sequência têxtil-topológica `fibrous, thread-like, wiry, stringy, ropy, capillary` no *Clarifications*; passagem da contaminação do vocabulário no *Recalling*.
+- Registro dos artefatos de OCR (colagem e caracteres de controle) como limitação metodológica explícita.
+
+Pendências para a Etapa 2.1 e seguintes, conforme briefing § 5:
+
+- 2.1 contagem bruta com `scripts/03_frequencies.py --escopo etapa2` e geração da tabela comparativa preliminar das 5 obras.
+- 2.2 KWIC com `scripts/02_kwic.py --escopo etapa2 --janela 10`; desambiguação automática do campo militar (incluindo as duas categorias novas).
+- 2.3 desambiguação manual pela pesquisadora.
+- 2.4 cocorrência em janela 200 e em janela proporcional, com `scripts/05_cooccurrence.py`.
+- 2.5 outputs comparativos em `outputs/etapa2_artigos/` (três tabelas e relatório).
+- 2.6 validação amostral semântica A/B/C análoga à da Etapa 1.
