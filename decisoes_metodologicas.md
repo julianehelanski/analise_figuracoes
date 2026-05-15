@@ -1,210 +1,71 @@
-# Decisões metodológicas — projeto `analise_figuracoes`
-
-Este documento registra as decisões metodológicas tomadas para cada etapa da análise computacional do corpus teórico mobilizado na tese. Cada decisão é datada, justificada e revisável. Alterações posteriores devem ser registradas em adendo, com data e razão, sem sobrescrever a decisão anterior.
-
 ---
 
-## Etapa 1 — Análise de trajetória conceitual em três obras de Bruno Latour (1986, 1987, 1999)
+## Extensão da análise lexicométrica aos artigos teóricos de Latour (1996, 1999)
 
-Data da decisão: 13 de maio de 2026.
-
-### Objetivo analítico
-
-A Etapa 1 rastreia o vocabulário figurativo de Bruno Latour em três obras publicadas ao longo de duas décadas, com objetivo de mapear continuidades, deslocamentos e introduções conceituais ao longo da trajetória do autor. A escolha de três obras do mesmo autor (em vez de uma) permite análise de trajetória que análise de obra única não oferece: como conceitos como *inscription*, *black box*, *immutable mobile* aparecem, persistem ou são reformulados ao longo do tempo, e quais figurações são introduzidas em momentos específicos da obra (por exemplo, *factish* em 1999).
-
-A primeira obra do corpus, *Laboratory Life* (1986), tem coautoria com Steve Woolgar. Esse fato é registrado no metadata e considerado na análise: o vocabulário figurativo do livro é coautoral, e a comparação com as obras subsequentes (de Latour solo) permite observar quais figurações persistem após a parceria.
-
-### 1. Corpus inicial
-
-**Decisão**: a Etapa 1 processa três obras, todas em inglês:
-
-- `latour_woolgar_1986_lab_life_en` — Latour e Woolgar, *Laboratory Life: The Construction of Scientific Facts*, Princeton University Press, 1986 (segunda edição).
-- `latour_1987_science_action_en` — Bruno Latour, *Science in Action: How to Follow Scientists and Engineers through Society*, Harvard University Press, 1987.
-- `latour_1999_pandora_en` — Bruno Latour, *Pandora's Hope: Essays on the Reality of Science Studies*, Harvard University Press, 1999.
-
-**Justificativa**: as três obras compõem a trajetória de Latour entre o estudo etnográfico inicial do laboratório (com Woolgar), a sistematização da teoria ator-rede como programa de pesquisa, e a reflexão posterior sobre realismo científico e mediação. O vocabulário figurativo de cada obra é parcialmente herdeiro do anterior e parcialmente novo. Mapear esses três momentos permite produzir resultados que dialogam diretamente com a tese, em que Latour é mobilizado em todos os capítulos.
-
-**Escolha da edição de *Laboratory Life***: a edição de 1986 (Princeton) substitui a de 1979 (Sage). A diferença não é trivial: a edição de 1986 remove a palavra "Social" do subtítulo (de *The Social Construction of Scientific Facts* para *The Construction of Scientific Facts*) e inclui um pós-escrito em que os autores justificam essa remoção. O pós-escrito é, ele mesmo, registro de deslocamento figurativo. A edição 1986 contém o texto da edição 1979 acrescido do pós-escrito, e é a edição mais citada na literatura subsequente.
-
-### 2. Idioma de trabalho
-
-**Decisão**: inglês. Modelo spaCy a carregar: `en_core_web_sm`.
-
-**Justificativa**: as três obras são originais em inglês. Latour é francês e parte da sua obra é publicada originalmente em francês, mas as três obras desta etapa foram escritas e publicadas em inglês como textos originais (não como traduções). A análise se faz na língua de publicação original. Traduções para o português entram em rodadas posteriores, com pergunta analítica distinta.
-
-### 3. Janela KWIC
-
-**Decisão**: janela de ±10 palavras (10 palavras antes do termo-alvo e 10 palavras depois).
-
-**Justificativa**: 5 palavras (padrão `nltk` e CLAWS) trunca a unidade argumentativa na prosa teórica densa de Latour, em que conceitos como *immutable mobile* ou *centre of calculation* costumam vir acompanhados de elaboração extensa. Janelas de 15 ou mais palavras geram contexto longo demais para leitura rápida durante validação amostral. 10 palavras é o ponto onde a unidade argumentativa fecha sem produzir excesso. A janela é parâmetro revisável: se a validação amostral mostrar que casos específicos exigem janela maior, o ajuste pode ser feito por termo, com adendo abaixo.
-
-### 4. Catálogo único de termos em YAML
-
-**Decisão**: aceita. O catálogo de termos a rastrear será mantido em arquivo único `campos_lexicais/catalogo_termos.yaml`, com hierarquia autor → campo figurativo → termos, e metadados por termo (variantes, lematização, exclusões, nota analítica).
-
-**Justificativa**: arquivo único é mais auditável que múltiplos `.txt` plano. YAML permite registrar variantes, exclusões e notas que em `.txt` virariam ruído. O catálogo torna-se artefato citável: pode integrar o apêndice metodológico da tese, documentando exatamente quais termos foram rastreados e com que critérios.
-
-**Estrutura inicial do catálogo para a Etapa 1 (Latour)**:
-
-```yaml
-latour:
-  inscription:
-    termos: ["inscription", "inscriptions", "inscription device", "inscription devices", "literary inscription"]
-    nota: "Conceito presente desde Laboratory Life. Verificar continuidade nas tres obras."
-  immutable_mobile:
-    termos: ["immutable mobile", "immutable mobiles"]
-    nota: "Aparece em Science in Action. Rastrear se ha precursor em Laboratory Life."
-  black_box:
-    termos: ["black box", "black-box", "black boxes", "blackbox", "blackboxing", "black-boxing"]
-    nota: "Verificar primeira ocorrencia entre as tres obras."
-  centre_of_calculation:
-    termos: ["centre of calculation", "center of calculation", "centres of calculation", "centers of calculation"]
-    nota: "Variantes ortograficas britanica e americana."
-  actor_network:
-    termos: ["actor-network", "actor network", "actant", "actants"]
-    nota: "Em Laboratory Life o termo 'actant' ja aparece. Em Science in Action a expressao actor-network se consolida."
-  translation:
-    termos: ["translation", "translations", "translate", "translates", "translated"]
-    exclusoes: ["translation of", "english translation", "french translation"]
-    nota: "Atencao a falsos positivos: 'translation' em sentido linguistico trivial precisa ser separado do sentido conceitual."
-  trial_of_strength:
-    termos: ["trial of strength", "trials of strength"]
-    nota: "Conceito de Science in Action."
-  factish:
-    termos: ["factish", "factishes"]
-    nota: "Neologismo de Pandora's Hope. Verificar se ha precursores."
-  circulating_reference:
-    termos: ["circulating reference", "circulating references"]
-    nota: "Pandora's Hope."
-  articulation:
-    termos: ["articulation", "articulations", "articulate", "articulated"]
-    nota: "Conceito reformulado em Pandora's Hope. Possivel ruido por usos triviais do termo."
-  construction:
-    termos: ["construction", "constructed", "constructing", "social construction"]
-    nota: "Conceito central em Laboratory Life. O pos-escrito de 1986 discute a polissemia do termo."
-  proposition:
-    termos: ["proposition", "propositions"]
-    nota: "Reformulacao em Pandora's Hope. Atencao a usos logicos triviais."
-  network:
-    termos: ["network", "networks", "networking"]
-    exclusoes: ["telephone network", "computer network"]
-    nota: "Termo polissemico. Validacao amostral cuidadosa."
-  agonistic:
-    termos: ["agonistic", "agonistics", "agonistic field"]
-    nota: "Science in Action."
-  enrollment:
-    termos: ["enrollment", "enrolment", "enroll", "enrol", "enrolled"]
-    nota: "Variantes ortograficas britanica e americana."
-  spokesperson:
-    termos: ["spokesperson", "spokespersons", "spokesman", "spokesmen", "spokeswoman"]
-    nota: "Traducao do frances 'porte-parole'."
-```
-
-### 5. Validação amostral das heurísticas de detecção de corpo e de qualidade
-
-**Decisão**: validação por amostra estratificada de 15 páginas por obra (45 páginas no total para as três obras), distribuídas em cinco categorias de 3 páginas cada.
-
-**Justificativa**: a validação estratificada garante representatividade dos contextos onde a heurística pode falhar. A redução de 25 para 15 páginas por obra é compensada pela triplicação do número de obras: 45 páginas no total cobre proporcionalmente mais diversidade de layouts editoriais e padrões de extração do que 25 páginas de uma obra única. Se durante a revisão a taxa de erro em uma categoria ultrapassar 20%, a amostra naquela categoria é ampliada e a heurística correspondente é ajustada.
-
-**Distribuição da amostra (por obra)**:
-
-- 3 páginas marcadas pelo algoritmo como início de capítulo
-- 3 páginas marcadas como corpo de capítulo
-- 3 páginas marcadas como notas de fim
-- 3 páginas marcadas como bibliografia, índice remissivo ou outros paratextos
-- 3 páginas com aviso automático de qualidade baixa (caracteres corrompidos, falhas de OCR, ligaduras mal extraídas)
-
-Resultado da validação fica registrado em três arquivos:
-
-- `outputs/latour_woolgar_1986_lab_life_en/relatorios/validacao_amostral_etapa1.md`
-- `outputs/latour_1987_science_action_en/relatorios/validacao_amostral_etapa1.md`
-- `outputs/latour_1999_pandora_en/relatorios/validacao_amostral_etapa1.md`
-
-### 6. Estrutura do relatório final da Etapa 1
-
-**Decisão**: o relatório final da Etapa 1 é organizado em dois níveis: relatório por obra (três arquivos) e relatório de trajetória (um arquivo consolidado).
-
-**Por obra**: cada obra recebe seu próprio diretório de outputs em `outputs/<id_da_obra>/`, com KWIC, tabelas de frequência, visualizações e relatório descritivo.
-
-**Trajetória consolidada**: o arquivo `outputs/trajetoria_latour_1986_1999.md` agrega resultados das três obras com foco em três perguntas:
-
-1. Quais figurações aparecem em todas as três obras? Com que frequência relativa?
-2. Quais figurações são introduzidas em uma obra e desaparecem ou persistem nas seguintes?
-3. Como o vocabulário coautoral de *Laboratory Life* (Latour-Woolgar) se relaciona com o vocabulário das obras posteriores de Latour solo?
-
-A estrutura comparativa do relatório de trajetória é o que torna a Etapa 1 analiticamente distinta de três análises independentes empilhadas.
-
----
-
-## Adendos
-
-(reservar espaço para revisões posteriores das decisões acima, com data e justificativa)
----
-
-## Refinamento da Etapa 3 — Desambiguação de `war`/`wars` no campo militar
-
-Data da decisão: 14 de maio de 2026.
+Data da decisão: 15 de maio de 2026.
 
 ### Motivação
 
-A leitura crítica do relatório `outputs/trajetoria_latour_1986_1999.md` identificou um efeito de inflação na densidade do campo `militar` em \emph{Pandora's Hope} (1999). Das 212 ocorrências contabilizadas no campo, 85 são da variante `war`/`wars`. Parte dessas ocorrências aparece em colocações que nomeiam objetos historicamente datados, como `science wars`, `World War II`, `Cold War`, `Franco-Prussian war`, `phony war`, `Ministry of War`, e em referências bibliográficas (Tolstoi, \emph{War and Peace}). Esses usos são descritivos de um objeto nomeado, não mobilizações figurativas do vocabulário militar pela escrita de Latour. Contar esses usos junto com os figurativos confunde dois fenômenos distintos e enfraquece o argumento empírico que a tese constrói sobre a tensão figural Latour-Haraway.
+A inspeção qualitativa dos dois artigos metateóricos de Latour disponíveis no projeto, *On actor-network theory: a few clarifications* (1996, *Soziale Welt*, v. 47, n. 4, pp. 369-381) e *On recalling ANT* (1999, in Law e Hassard, *Actor Network Theory and After*, Oxford: Blackwell, pp. 15-25), sugeriu que o vocabulário figurativo desses textos opera em registro distinto do dos três livros monográficos da Etapa 1. Nos artigos, o léxico militar-industrial recua sensivelmente, e o léxico que ocupa o seu lugar é o têxtil-topológico (`network`, `filament`, `fluid`, `weaving`, `thread`, `fibrous`, `knot`, `ropy`, `stringy`, `wiry`). Em *On recalling ANT*, Latour formula a autocrítica explícita ao reconhecer que o vocabulário da TAR contaminou a operação descritiva que essa mesma teoria reivindicava (pp. 19-20). Submeter essa intuição qualitativa à mesma contagem sistemática da Etapa 1 produz, se confirmada, evidência de divisão de trabalho metafórico por gênero textual: o vocabulário militar-industrial domina onde Latour faz descrição de campo e recua onde reflete metateoricamente sobre o próprio vocabulário. O resultado é registro citável para o capítulo 2 da tese, na subseção que ancora a leitura empírica da figuração militar-industrial.
 
 ### Decisão
 
-A análise do campo `militar` passa a registrar, para cada obra, duas contagens: a **contagem bruta** (todas as ocorrências detectadas pelo catálogo, sem filtro) e a **contagem refinada** (com subtração das ocorrências de `war`/`wars` classificadas como descritivo-históricas).
+Os dois artigos passam a integrar o corpus da análise lexicométrica como textos adicionais, com slugs `latour_1996_clarifications_en` e `latour_1999_recalling_en`. A contagem usa o mesmo catálogo de dezessete campos figurais da Etapa 1, sem ajuste de parâmetros. A apresentação dos resultados é comparativa entre os cinco textos (três livros mais dois artigos), agregada em `outputs/etapa2_artigos/`. O briefing operacional desta extensão fica versionado na raiz do repositório como `briefing_etapa2_artigos_latour.md`. As condições de execução, os gates de revisão e os outputs esperados estão registrados nesse briefing e não são repetidos aqui.
 
-A classificação é binária: `descritivo` para usos em colocação histórica ou editorial nomeada; `figurativo` para mobilizações do vocabulário militar como tropo descritivo da prática científica ou da polêmica metafísica. A regra opera em duas camadas:
+### Aplicação simétrica do catálogo e dos parâmetros
 
-1. **Camada automática**: a ocorrência é classificada como `descritivo` se houver, nas 5 palavras adjacentes ao termo (de cada lado), um dos seguintes gatilhos lexicais (case-insensitive): `science`, `culture`, `cold`, `world war`, `second world`, `first world`, `great war`, `post-war`, `pre-war`, `vietnam`, `korean`, `civil war`, `gulf war`, `nuclear war`.
+A defensabilidade do contraste entre artigos e livros depende de instrumentação idêntica. Por isso, o catálogo de dezessete campos figurais permanece inalterado, a janela KWIC continua em $\pm 10$ palavras (decisão da Etapa 1), e a contagem segue o mesmo modelo de densidade por dez mil palavras. Acréscimo de variantes ao catálogo, se necessário, fica em arquivo separado `campos_lexicais/latour_*_en_etapa2_adicoes.txt`, com adendo de justificativa neste documento.
 
-2. **Camada manual**: ocorrências não capturadas pela camada automática são revisadas em janela ampliada (capítulo inteiro quando necessário) e classificadas com justificativa breve. A camada manual cobre casos em que a colocação está fora da janela KWIC (e.g. `science wars` mencionado uma vez no início do capítulo e referido por elipse depois), referências históricas sem termo-âncora explícito (capítulos sobre Joliot e Szilard que narram WWII), instituições nomeadas (`Ministry of War`), referências bibliográficas e alusões textuais clássicas (Hobbes `war of all against all`, Tolstoi).
+### Tratamento do OCR como gesto registrado no apêndice metodológico
 
-### Aplicação simétrica
+Os dois artigos vieram como zips de OCR página-a-página, com extensão `.PDF` mas conteúdo de imagem mais texto extraído por página. A normalização para `.txt` foi feita fora do pipeline, em sessão de chat com o Claude no dia 15 de maio de 2026, antes do início da execução da extensão. A normalização aplicou as operações que constam no cabeçalho de metadados de cada `.txt`: concatenação de páginas em ordem natural (sort numérico), remoção de carriage returns e form feeds, remoção de rodapé editorial recorrente do Recalling (variantes de "© The Editorial Board of The Sociological Review 1999"), remoção de linhas que contêm apenas números (numeração de página solta), correção de hifenização de fim de linha, junção de linhas dentro de parágrafos preservando dupla quebra como fronteira. Erros de OCR difusos (palavras grudadas como "manufacturersdo", letras trocadas como "llix" em vez de "Felix", caracteres de controle nó binarizado) não foram corrigidos, porque a correção exigiria julgamento caso a caso e introduziria interferência no material que importa registrar como ele chegou.
 
-A desambiguação se aplica às três obras do corpus, não apenas a \emph{Pandora's Hope}. A aplicação simétrica garante comparabilidade: filtrar apenas a obra em que o efeito é visível introduziria viés.
+O gesto da normalização fora do pipeline é dado etnográfico, em coerência com o que o capítulo 4 da tese descreve para outras cadeias de mediação técnica (a coleta de áudio do Spira passa por filtros, conversões, etiquetagem, espectrogramas, e cada passo é parte da rede que produz a inscrição final). A diferença entre a Etapa 1, em que a extração foi feita pelo pipeline Python a partir de PDFs nativos, e esta extensão, em que a normalização foi feita pelo Claude no chat a partir de OCRs já feitos, marca dois tipos de mediação computacional que a tese tematiza: o script versionado que opera de modo reprodutível, e o gesto situado de uma sessão de inferência em modelo de linguagem que opera por edição interativa e produz artefato único.
 
-### Resultado
+### Restrição de cobertura do Recalling
 
-| Obra | Bruto ($n$) | Bruto/10k | Descritivo subtraído | Refinado ($n$) | Refinado/10k |
-|---|---:|---:|---:|---:|---:|
-| \emph{Laboratory Life} (1986) | 39 | 3,69 | 2 | 37 | 3,50 |
-| \emph{Science in Action} (1987) | 374 | 26,74 | 10 | 364 | 26,03 |
-| \emph{Pandora's Hope} (1999) | 212 | 16,56 | 56 | 156 | 12,19 |
+O zip de OCR do *Recalling* tem 11 páginas, e a inspeção qualitativa identificou que as páginas com numeração ímpar do zip (1, 3, 5, 7, 9, 11) trazem OCR severamente truncado nas primeiras letras de cada linha, com palavras cortadas como `llix` (= Felix), `otion` (= notion), `ncrediblepretensions` (= Incredible pretensions), `Ivenot` (= I have not). As páginas com numeração par do zip (2, 4, 6, 8, 10) trazem OCR limpo do texto principal, cobrindo as páginas 16, 18, 20, 22, 24 do volume original. A inspeção por similaridade de sequência (`SequenceMatcher`) sobre pares de páginas consecutivas registrou ratios baixos (entre 0,01 e 0,30), o que descarta duplicação extensa de conteúdo entre páginas. Em casos pontuais como a passagem-chave dos pp. 19-20 sobre a contaminação do vocabulário, o texto se estende da página par (zip 6, p. 20 do volume) para a página ímpar seguinte (zip 7, p. 21 do volume), e o OCR truncado da página ímpar reproduz parte do conteúdo da par anterior em forma corrompida, o que produz contagem dupla artificial dos termos da passagem.
 
-A queda em \emph{Pandora's Hope} é de 26,4% do campo militar; em \emph{Science in Action}, 2,7%; em \emph{Laboratory Life}, 5,1%. O pico de 1987 permanece como ponto de cristalização do vocabulário militar-industrial em uso figurativo. A leitura da seção 4.3.a do relatório de trajetória precisa de ajuste: o vocabulário militar figurativo recua pela metade entre 1987 e 1999 em densidade por dez mil palavras, em vez de se manter estável; parte da aparência de continuidade vinha de Latour estar narrando historicamente a militarização da ciência no século XX (Joliot, Szilard, science wars).
+A decisão foi excluir as páginas com numeração ímpar do zip e manter apenas as pares. A cobertura resultante é de aproximadamente 80\% do artigo: pp. 16 a 24 do volume, com 1.344 palavras de corpo. As páginas 15 (abertura e abstract) e 25 (final do texto e início da bibliografia) do volume não estão integralmente representadas. A passagem-chave dos pp. 19-20 sobre a contaminação do vocabulário está integralmente incluída no corpus (no conteúdo da página 6 do zip, correspondente à página 20 do volume).
 
-### Artefatos
+A restrição enfraquece a quantificação absoluta do *Recalling* e não enfraquece o argumento comparativo. O argumento opera sobre a magnitude da diferença entre o registro figurativo dos livros monográficos e o dos artigos metateóricos, e essa magnitude se mantém pela cobertura de 80\% do artigo, em que a passagem-chave do argumento autocrítico está integralmente representada. O *Clarifications* não tem essa restrição: as 14 páginas estão íntegras e o OCR é limpo.
 
-- `outputs/refinamento/war_pandora_classificacao.csv`: os 85 hits de `war`/`wars` em \emph{Pandora's Hope} classificados um a um, com justificativa.
-- `outputs/refinamento/militar_refinado_tres_obras.csv`: tabela consolidada bruto/refinado para as três obras.
-- `outputs/refinamento/tabela_militar_refinada.tex`: tabela em LaTeX pronta para `\input{}` na tese.
+A pendência fica registrada como item aberto: se um PDF nativo do *Recalling* (em vez do zip de OCR) for obtido em algum momento, a reanálise pode incluir o artigo integral e oferecer contagem mais robusta. Essa pendência abre uma eventual Etapa 2-bis, sem prazo definido.
+
+### Ajustes ao pipeline para textos curtos
+
+O *Recalling* (1.344 palavras de corpo) e o *Clarifications* (7.934 palavras de corpo) são consideravelmente menores que os três livros da Etapa 1 (entre 105 mil e 140 mil palavras). A janela de cocorrência de 200 palavras usada na Etapa 1 corresponde a cerca de 0,15\% do texto de *Science in Action* e a 15\% do texto do *Recalling*. A aplicação da mesma janela aos artigos inflaria artificialmente a matriz de cocorrência. Por isso, a cocorrência dos artigos é calculada em duas versões: a janela fixa de 200 palavras como controle, e uma janela proporcional de 2\% do texto arredondada (cerca de 27 palavras para o *Recalling* e cerca de 159 palavras para o *Clarifications*). A apresentação final escolhe entre as duas versões depois da inspeção dos resultados, no gate 2.4 do briefing da extensão.
+
+### Categorias novas de desambiguação para os artigos
+
+A inspeção qualitativa preliminar das ocorrências do campo militar nos dois artigos identificou dois tipos de uso que não se encaixam nas categorias de desambiguação aplicadas no refinamento da Etapa 3 (`descritivo` versus `figurativo`):
+
+1. **`metalinguistico`**: ocorrência em que Latour cita o próprio vocabulário da TAR para submetê-lo à autocrítica. O exemplo do *Recalling* é a única ocorrência do campo militar nas pp. 16-24 do volume: a palavra `alliance` aparece dentro da sequência `vocabulary association, translation, alliance, obligatory passage point`, em que o autor enumera os termos da própria teoria para questionar a sua pobreza vocabular. Gatilho automático sugerido: ocorrência em vizinhança imediata (cinco palavras) com termos do vocabulário interno da TAR como `association`, `translation`, `passage point`, `actor-network`, `enrollment`.
+
+2. **`descritivo-bibliografico`**: ocorrência em referência bibliográfica ou em título de obra citada. O exemplo do *Clarifications* é a citação do livro `La nouvelle alliance` de Prigogine e Stengers (1979) no corpo do texto. Gatilho automático sugerido: ocorrência em vizinhança imediata com nomes de autores e anos entre parênteses, ou em formatação de bibliografia ao final do artigo.
+
+A planilha de classificação manual segue o mesmo formato de `refinamento/war_pandora_classificacao.csv`, com a coluna `classificacao` aceitando os valores `figurativa`, `descritivo-historica`, `metalinguistico`, `descritivo-bibliografico`. A aplicação simétrica das duas categorias novas se faz também aos três livros da Etapa 1, em caráter retrospectivo, para preservar a comparabilidade. A revisão retrospectiva é uma pendência registrada no plano de execução do briefing.
+
+### Resultado preliminar
+
+A contagem manual exploratória com regex de borda de palavra sobre os `.txt` normalizados, restrita ao corpo do texto, registrou para o campo militar e para amostras dos campos têxtil e topológico:
+
+| Campo | *Recalling* 1999 (1.344 palavras) | *Clarifications* 1996 (7.934 palavras) | *Science in Action* 1987 (139.861 palavras, refinada) |
+|---|---:|---:|---:|
+| Militar (64 variantes) | 1 ocorrência, 7,44 por dez mil | 3 ocorrências, 3,78 por dez mil | 364 ocorrências, 26,03 por dez mil |
+| Têxtil (50 variantes da amostra) | 0 ocorrências, 0,00 por dez mil | 15 ocorrências, 18,91 por dez mil | (a contar) |
+| Topologia (5 variantes da amostra: network, fluid, filament, surface, node) | 10 ocorrências, 74,40 por dez mil | 113 ocorrências, 142,43 por dez mil | (a contar) |
+
+A densidade militar nos artigos é de três a sete vezes menor que em *Science in Action*. A densidade topológica nos artigos é várias vezes superior à esperada pela leitura cruzada dos livros. A contagem dos campos têxtil e topológico nos três livros é pendência da Etapa 2 propriamente dita, conforme registrado no briefing.
 
 ### Pendência para script
 
-A camada automática de desambiguação está implementada em script ad hoc (`/home/claude/desambiguar_war_pandora.py` no ambiente da sessão de 14/05/2026, não versionado). Para entrar no pipeline reprodutível da Etapa 3 plena, será necessário portar a lógica para `scripts/`, com nome sugerido `09_desambiguar_war.py`, e incluí-lo no `run_etapa1.sh` (ou criar `run_etapa3.sh` se a Etapa 3 plena exigir orquestração própria). A camada manual fica documentada em planilha auditável, fora do script.
+A normalização dos zips de OCR foi feita por código Python ad hoc, executado em ambiente da sessão de chat de 15/05/2026 (`/tmp/latour_artigos_check/normalizar_v3.py`, não versionado). Para entrar no pipeline reprodutível da Etapa 2 plena, será necessário portar a lógica para `scripts/`, com nome sugerido `12_extrair_ocr_zips.py`. A função principal recebe um diretório de zip de OCR e um conjunto de páginas a incluir (parâmetro útil para casos como o *Recalling*, em que metade das páginas precisa ser excluída), e produz `.txt` com cabeçalho de metadados em comentário. A camada de inspeção qualitativa (identificação de páginas com OCR truncado) fica fora do script, como gesto da pesquisadora documentado neste registro.
 
----
+### Artefatos
 
-## Dispensa da validação amostral da Etapa 2 (15 de maio de 2026)
-
-### Motivação
-
-A Etapa 2 do plano de trabalho previa validação manual de uma amostra estratificada para medir a precisão da heurística de detecção figurativa e refinar os campos lexicais. Na sessão de 14/05/2026, foram geradas três planilhas (camada A militar com 60 trechos, camada B polissêmicos com 217 trechos, camada C técnicos com 93 trechos, totalizando 370 ocorrências distribuídas pelos 17 campos do catálogo), pré-anotadas heuristicamente em três categorias (`conceitual`, `parcial`, `ruído`), com colunas em branco para classificação manual.
-
-Na sessão de 15/05/2026, examinei a estrutura das planilhas e a distribuição da pré-anotação heurística e decidi dispensar a classificação manual.
-
-### Decisão
-
-A validação amostral da Etapa 2 fica dispensada. As três planilhas pré-anotadas permanecem disponíveis localmente como insumo de consulta, sem entrar no repositório versionado nem alimentar refinamento dos campos lexicais.
-
-### Justificativa
-
-O ganho metodológico esperado da classificação manual era declarar, no apêndice metodológico da tese, uma taxa de precisão validada empiricamente por par autor $\times$ campo. O custo era de algumas semanas de leitura cuidadosa de 370 trechos. A relação custo-benefício passou a ser desfavorável depois que três condições se cumpriram: o passo 1 do refinamento (desambiguação de `war`/`wars` no campo militar) já produziu o resultado empiricamente mais consequente da análise (queda de 26,4\% no campo militar de \emph{Pandora's Hope}); a inspeção informal da pré-anotação heurística pela pesquisadora sustentou que a taxa de erro nos outros campos é pequena o suficiente para não inverter o argumento principal sobre a tensão figural Latour-Haraway; e o capítulo 2 da tese, que mobilizará os resultados, comporta a formulação \enquote{validação por inspeção da pesquisadora} sem comprometimento do registro etnográfico.
-
-### Reformulação do apêndice metodológico
-
-No apêndice metodológico que documenta esta análise dentro da tese, a passagem sobre validação fica registrada nestes termos: a heurística de detecção figurativa foi validada por dois procedimentos. O primeiro foi a desambiguação manual de 85 ocorrências de `war`/`wars` em \emph{Pandora's Hope}, documentada em `refinamento/war_pandora_classificacao.csv`, que produziu o ajuste da densidade do campo militar registrado na tabela `refinamento/tabela_militar_refinada.tex`. O segundo foi a inspeção da pesquisadora sobre amostra estratificada de 370 trechos pré-anotados nos demais campos, sem registro de discordâncias sistemáticas que justificassem reclassificação automática.
-
-### Continuidade
-
-Os passos 3 (reformatação interpretativa), 4 (KWIC ampliado a $\pm 50$ palavras com curadoria de passagens citáveis) e 5 (corpus Haraway) permanecem no horizonte de refinamento. A prioridade imediata, definida em 15/05/2026, é o passo 4, para alimentar o capítulo 2 da tese com passagens citáveis. O passo 5 (Haraway) fica reservado para o período posterior à revisão do capítulo 2.
+- `briefing_etapa2_artigos_latour.md` na raiz do repositório: especificação operacional completa da Etapa 2 dos artigos teóricos, com plano em sete etapas, gates de revisão, e o que está fora do escopo.
+- `corpus/txt_norm/latour_1996_clarifications_en.txt`: texto normalizado do *Clarifications*, 8.021 palavras (incluindo cabeçalho de metadados), 48 KB.
+- `corpus/txt_norm/latour_1999_recalling_en.txt`: texto normalizado do *Recalling* nas páginas pares do zip (cobertura pp. 16-24 do volume), 1.515 palavras (incluindo cabeçalho), 9 KB.
+- `metadata.csv`: duas linhas novas com os slugs, anos, idioma e edição-fonte.
+- `outputs/etapa2_artigos/`: diretório de saída a ser criado na execução, com tabelas comparativas em CSV e LaTeX e relatório de síntese.
