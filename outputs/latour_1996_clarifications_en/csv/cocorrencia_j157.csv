@@ -1,0 +1,9 @@
+,actor_network,centre_of_calculation,construction,militar,network,textil,topologia,translation
+actor_network,0,0,3,3,138,6,84,1
+centre_of_calculation,0,0,0,0,4,3,2,0
+construction,3,0,0,0,2,2,1,0
+militar,3,0,0,0,8,2,0,1
+network,138,4,2,8,0,101,616,2
+textil,6,3,2,2,101,0,171,1
+topologia,84,2,1,0,616,171,0,7
+translation,1,0,0,1,2,1,7,0

@@ -1,0 +1,6 @@
+,actor_network,construction,militar,network,topologia
+actor_network,0,0,0,6,0
+construction,0,0,1,1,5
+militar,0,1,0,0,5
+network,6,1,0,0,20
+topologia,0,5,5,20,0

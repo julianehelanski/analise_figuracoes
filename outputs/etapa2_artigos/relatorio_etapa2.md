@@ -92,12 +92,53 @@ A contagem refinada dos livros vem do `refinamento/militar_refinado_tres_obras.c
 - `outputs/etapa2_artigos/militar_classificacao_automatica.csv`: 4 ocorrências dos artigos, com `categoria_auto`, `gatilho_detectado`, `categoria_final` (igual à automática) e `justificativa`. A pesquisadora ajusta `categoria_final` se discordar.
 - `outputs/etapa2_artigos/tabela_militar_refinada_5_obras.tex`: tabela LaTeX consolidada, pronta para `\input{}` no master da tese.
 
-## Próximos passos (Gate 2.2 pendente)
+## Etapa 2.4: cocorrência figural
 
-A pesquisadora revisa a planilha `militar_classificacao_automatica.csv` e marca discordâncias se houver. Não há ocorrência sem gatilho na camada automática (4/4 cobertas), portanto a Etapa 2.3 (desambiguação manual) reduz-se a confirmação ou ajuste das quatro classificações sugeridas.
+Data da execução: 15 de maio de 2026, sequencial ao Gate 2.2 confirmado pela pesquisadora.
 
-Em seguida:
+Apliquei `scripts/05_cooccurrence.py` aos dois artigos em duas configurações de janela, conforme briefing § 3.4:
 
-- Etapa 2.4: cocorrência com janela 200 (controle, comparável aos livros) e janela proporcional (27 palavras para *Recalling*, 159 para *Clarifications*).
-- Etapa 2.5: outputs comparativos consolidados (3 tabelas: comparativa geral, campo militar refinado, têxtil-topológico).
+- **Janela 200 palavras** (controle direto, mesma janela aplicada aos livros da Etapa 1).
+- **Janela proporcional 2%** das palavras totais por obra: 25 palavras para *Recalling* (sobre 1.241), 157 palavras para *Clarifications* (sobre 7.848). Os valores resultam da convenção `split` registrada em `corpus/qualidade_extracao.csv`; o briefing § 3.4 antecipava 27 e 159 a partir da convenção `\b\w+\b`, ligeiramente diferente.
+
+Top 5 pares por força, em cada configuração:
+
+**Clarifications 1996:**
+
+| Par | j=200 | j=157 (prop.) |
+|---|---:|---:|
+| network, topologia | 783 | 616 |
+| textil, topologia | 222 | 171 |
+| actor_network, network | 162 | 138 |
+| network, textil | 130 | 101 |
+| actor_network, topologia | 102 | 84 |
+
+**Recalling 1999:**
+
+| Par | j=200 | j=25 (prop.) |
+|---|---:|---:|
+| network, topologia | 20 | 2 |
+| actor_network, network | 6 | 2 |
+| militar, topologia | 5 | 1 |
+
+O ranking dos pares principais é consistente entre as duas janelas em ambas as obras. O campo militar ocupa posição periférica nos dois artigos: em *Clarifications* o par `militar`–`network` (8 na janela proporcional) é cerca de 77 vezes menor que `network`–`topologia` (616). A malha argumentativa central dos artigos é estruturada por `network`–`topologia` e suas extensões `actor_network` e `textil`.
+
+### Outputs da Etapa 2.4
+
+- `outputs/<obra>/csv/cocorrencia_j200.csv` (matriz controle).
+- `outputs/<obra>/csv/cocorrencia_j025.csv` (Recalling, proporcional).
+- `outputs/<obra>/csv/cocorrencia_j157.csv` (Clarifications, proporcional).
+- `outputs/<obra>/relatorios/cocorrencia_j*.md` (top 20 pares por configuração).
+- `outputs/<obra>/figuras/rede_cocorrencia_j*.{png,svg}` (rede com nós dimensionados por frequência do grupo e arestas dimensionadas pela força de cocorrência, layout *force-directed* com `seed=42`).
+- `outputs/etapa2_artigos/cocorrencia_comparacao.md`: relatório consolidado lado a lado das duas configurações para cada artigo.
+
+### Recomendação para a tese (pendente Gate 2.4)
+
+Sugiro adotar a **janela proporcional** como configuração principal na tabela e na figura do capítulo 2, com a janela 200 mencionada em nota de rodapé como controle metodológico. A justificativa: a janela proporcional padroniza a fração textual da janela entre obras de tamanhos distintos, e o ranking dos pares centrais é preservado. A janela 200 permanece como ponto de comparação com os livros monográficos.
+
+A decisão final cabe à pesquisadora. Alternativas viáveis: apresentar as duas configurações lado a lado, ou manter apenas a 200 e mover a proporcional para o apêndice metodológico.
+
+## Próximos passos (Gate 2.4 pendente)
+
+- Etapa 2.5: outputs comparativos consolidados (três tabelas: comparativa geral, campo militar refinado, têxtil-topológico).
 - Etapa 2.6: validação amostral semântica A/B/C análoga à da Etapa 1.
