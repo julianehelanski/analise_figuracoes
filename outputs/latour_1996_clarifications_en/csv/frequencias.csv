@@ -1,0 +1,9 @@
+grupo,n_ocorrencias,n_excluidas,frequencia_por_10k_palavras,variantes_top
+topologia,118,0,150.36,"connections(18), scale(10), outside(10), circulating(10)"
+network,93,2,118.50,"network(59), networks(33), networking(1)"
+textil,39,0,49.69,"net(10), nets(3), tied(3), tie(2)"
+actor_network,19,0,24.21,"actor-network(9), actant(4), actants(4), actor network(2)"
+translation,4,0,5.10,"translation(2), translations(1), translates(1)"
+militar,3,0,3.82,"allies(1), enemies(1), alliance(1)"
+construction,2,0,2.55,construction(2)
+centre_of_calculation,1,0,1.27,centre of calculation(1)

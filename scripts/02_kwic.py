@@ -69,6 +69,39 @@ def carregar_catalogo() -> list[GrupoTermo]:
     return grupos
 
 
+def carregar_adicoes(caminhos: list[Path]) -> list[GrupoTermo]:
+    """Carrega arquivos `.txt` de adições ao catálogo (Etapa 2 em diante).
+
+    Convenção do nome: `<autor>_<grupo>_<idioma>_etapa<N>_adicoes.txt`. O
+    arquivo lista um termo por linha; linhas iniciadas por `#` e linhas
+    vazias são ignoradas. O grupo é tratado como adição (sem exclusões),
+    com nota referenciando o arquivo de origem.
+    """
+    grupos: list[GrupoTermo] = []
+    for p in caminhos:
+        if not p.exists():
+            sys.exit(f"ERRO: arquivo de adições {p} não existe.")
+        partes = p.stem.split("_")
+        if len(partes) < 2:
+            sys.exit(f"ERRO: nome de arquivo de adições inesperado: {p.name}")
+        autor = partes[0].lower()
+        grupo = partes[1].lower()
+        termos: list[str] = []
+        for linha in p.read_text(encoding="utf-8").splitlines():
+            t = linha.strip()
+            if not t or t.startswith("#"):
+                continue
+            termos.append(t)
+        if not termos:
+            continue
+        grupos.append(GrupoTermo(
+            autor=autor, grupo=grupo,
+            termos=tuple(termos), exclusoes=(),
+            nota=f"Adicoes: {p.name}",
+        ))
+    return grupos
+
+
 def compilar_padrao(termos: tuple[str, ...]) -> re.Pattern[str]:
     """Compila regex que casa qualquer variante, com word-boundaries.
 
@@ -322,9 +355,15 @@ def main() -> None:
     parser.add_argument("--escopo", default="etapa1",
                         choices=["etapa1", "etapa2", "todos"],
                         help="filtro de obras: etapa1 (default), etapa2 ou todos.")
+    parser.add_argument("--adicoes", default="",
+                        help="lista de arquivos de adições ao catálogo "
+                             "(separados por vírgula).")
     args = parser.parse_args()
 
     grupos = carregar_catalogo()
+    if args.adicoes:
+        caminhos = [Path(p.strip()) for p in args.adicoes.split(",") if p.strip()]
+        grupos = grupos + carregar_adicoes(caminhos)
     if args.autor:
         grupos = [g for g in grupos if g.autor == args.autor.lower()]
         if not grupos:

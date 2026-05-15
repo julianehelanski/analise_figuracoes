@@ -90,17 +90,18 @@ def cocorrencia_por_janela(
     return pares
 
 
-def gerar_outputs(obra_id: str, janela: int) -> None:
+def gerar_outputs(obra_id: str, janela: int, sufixo: str = "") -> None:
     ocs = carregar_ocorrencias(obra_id)
     if not ocs:
         print(f"  [pular] sem ocorrências válidas para {obra_id}.")
         return
     grupos = sorted({g for g, _ in ocs})
     pares = cocorrencia_por_janela(ocs, janela)
+    sufixo_arquivo = f"_{sufixo}" if sufixo else ""
 
     csv_dir = OUTPUTS_DIR / obra_id / "csv"
     csv_dir.mkdir(parents=True, exist_ok=True)
-    matriz = csv_dir / "cocorrencia.csv"
+    matriz = csv_dir / f"cocorrencia{sufixo_arquivo}.csv"
     with matriz.open("w", encoding="utf-8", newline="") as f:
         escritor = csv.writer(f)
         escritor.writerow([""] + grupos)
@@ -114,7 +115,7 @@ def gerar_outputs(obra_id: str, janela: int) -> None:
                     linha.append(pares.get(chave, 0))
             escritor.writerow(linha)
 
-    md = OUTPUTS_DIR / obra_id / "relatorios" / "cocorrencia.md"
+    md = OUTPUTS_DIR / obra_id / "relatorios" / f"cocorrencia{sufixo_arquivo}.md"
     md.parent.mkdir(parents=True, exist_ok=True)
     linhas: list[str] = [
         f"# Cocorrência figural: {obra_id}",
@@ -167,8 +168,8 @@ def gerar_outputs(obra_id: str, janela: int) -> None:
     nx.draw_networkx_labels(G, pos, font_size=8, ax=ax)
     ax.set_axis_off()
     fig.tight_layout()
-    fig.savefig(fig_dir / "rede_cocorrencia.png", dpi=300)
-    fig.savefig(fig_dir / "rede_cocorrencia.svg")
+    fig.savefig(fig_dir / f"rede_cocorrencia{sufixo_arquivo}.png", dpi=300)
+    fig.savefig(fig_dir / f"rede_cocorrencia{sufixo_arquivo}.svg")
     plt.close(fig)
 
     # Louvain opcional
@@ -178,7 +179,7 @@ def gerar_outputs(obra_id: str, janela: int) -> None:
         clusters: dict[int, list[str]] = defaultdict(list)
         for node, cid in particao.items():
             clusters[cid].append(node)
-        with (md.parent / "cocorrencia_clusters.md").open("w", encoding="utf-8") as f:
+        with (md.parent / f"cocorrencia_clusters{sufixo_arquivo}.md").open("w", encoding="utf-8") as f:
             f.write(f"# Clusters Louvain: {obra_id}\n\n")
             for cid, nodes in sorted(clusters.items()):
                 f.write(f"## Cluster {cid} (n={len(nodes)})\n\n")
@@ -188,9 +189,9 @@ def gerar_outputs(obra_id: str, janela: int) -> None:
     except ImportError:
         pass
 
-    print(f"  gravado: outputs/{obra_id}/csv/cocorrencia.csv")
-    print(f"  gravado: outputs/{obra_id}/figuras/rede_cocorrencia.png")
-    print(f"  gravado: outputs/{obra_id}/relatorios/cocorrencia.md")
+    print(f"  gravado: outputs/{obra_id}/csv/cocorrencia{sufixo_arquivo}.csv")
+    print(f"  gravado: outputs/{obra_id}/figuras/rede_cocorrencia{sufixo_arquivo}.png")
+    print(f"  gravado: outputs/{obra_id}/relatorios/cocorrencia{sufixo_arquivo}.md")
 
 
 def main() -> None:
@@ -201,6 +202,9 @@ def main() -> None:
     parser.add_argument("--escopo", default="etapa1",
                         choices=["etapa1", "etapa2", "todos"],
                         help="filtro de obras: etapa1 (default), etapa2 ou todos.")
+    parser.add_argument("--sufixo", default="",
+                        help="sufixo nos nomes de arquivo de saída "
+                             "(default: vazio, sobrescreve cocorrencia.csv).")
     args = parser.parse_args()
 
     obras = obras_em_escopo(args.escopo)
@@ -208,7 +212,7 @@ def main() -> None:
         obras = [o for o in obras if args.only.lower() in o["id"].lower()]
     for obra in obras:
         print(f"\n[{obra['id']}]")
-        gerar_outputs(obra["id"], args.janela)
+        gerar_outputs(obra["id"], args.janela, args.sufixo)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 grupo,n_ocorrencias,n_excluidas,frequencia_por_10k_palavras,variantes_top
+topologia,353,0,27.58,"outside(52), inside(36), flow(30), circulating(28)"
 militar,212,0,16.56,"war(55), wars(30), mobilization(10), defend(10)"
+textil,105,0,8.20,"thread(14), ties(12), net(8), threads(8)"
 translation,70,2,5.47,"translation(48), translations(13), translated(5), translates(2)"
 construction,62,0,4.84,"construction(32), constructed(18), social construction(9), constructing(3)"
 factish,53,0,4.14,"factishes(33), factish(20)"

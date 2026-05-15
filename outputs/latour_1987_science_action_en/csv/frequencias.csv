@@ -1,9 +1,11 @@
 grupo,n_ocorrencias,n_excluidas,frequencia_por_10k_palavras,variantes_top
+topologia,485,0,34.68,"inside(136), outside(101), scale(62), path(39)"
 militar,374,0,26.74,"allies(92), mobilisation(28), mobilised(24), alliances(22)"
 black_box,134,0,9.58,"black box(71), black boxes(54), black
 box(4), black
 boxes(2)"
 network,127,2,9.08,"networks(78), network(49)"
+textil,111,0,7.94,"tied(52), tie(22), ties(10), net(8)"
 translation,78,5,5.58,"translation(49), translations(17), translated(8), translates(2)"
 inscription,62,0,4.43,"inscriptions(47), inscription(15)"
 construction,53,0,3.79,"construction(45), constructed(5), social construction(2), constructing(1)"

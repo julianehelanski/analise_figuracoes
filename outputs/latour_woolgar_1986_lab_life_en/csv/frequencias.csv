@@ -1,10 +1,12 @@
 grupo,n_ocorrencias,n_excluidas,frequencia_por_10k_palavras,variantes_top
 construction,204,0,19.29,"construction(134), constructed(44), social construction(16), constructing(9)"
+topologia,146,0,13.81,"outside(52), scale(10), connections(9), flow(9)"
 inscription,125,0,11.82,"inscription(84), inscriptions(21), literary inscription(17), literary
 inscription(3)"
 network,45,0,4.26,"network(28), networks(17)"
 militar,39,0,3.69,"attack(5), battlefield(5), war(4), battle(3)"
 agonistic,32,0,3.03,agonistic(32)
+textil,13,0,1.23,"string(6), thread(2), wire(2), knotted(1)"
 black_box,10,0,0.95,"black box(3), black-boxing(2), black
 box(1), black boxes(1)"
 proposition,5,0,0.47,"proposition(4), propositions(1)"

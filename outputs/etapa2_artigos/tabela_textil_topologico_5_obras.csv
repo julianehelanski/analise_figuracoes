@@ -1,0 +1,6 @@
+obra,palavras_total,textil_n,textil_freq_10k,textil_variantes_top,topologia_n,topologia_freq_10k,topologia_variantes_top
+latour_woolgar_1986_lab_life_en,105749,13,1.23,"string(6), thread(2), wire(2), knotted(1)",146,13.81,"outside(52), scale(10), connections(9), flow(9)"
+latour_1987_science_action_en,139861,111,7.94,"tied(52), tie(22), ties(10), net(8)",485,34.68,"inside(136), outside(101), scale(62), path(39)"
+latour_1999_pandora_en,128001,105,8.20,"thread(14), ties(12), net(8), threads(8)",353,27.58,"outside(52), inside(36), flow(30), circulating(28)"
+latour_1996_clarifications_en,7848,39,49.69,"net(10), nets(3), tied(3), tie(2)",118,150.36,"connections(18), scale(10), outside(10), circulating(10)"
+latour_1999_recalling_en,1241,0,0.00,,13,104.75,"scale(1), flat(1), folded(1), flow(1)"

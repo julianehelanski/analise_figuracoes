@@ -350,16 +350,29 @@ A consolidação dos termos têxteis e topológicos em grupos do `catalogo_termo
 
 ### 6. Categorias novas de desambiguação do campo militar
 
-A desambiguação automática + manual aplicada na Etapa 1 (gatilhos lexicais para *Science Wars*, *World War*, *Cold War*, *Franco-Prussian War*, *Ministry of War*, *phony war*, *War and Peace*, etc.) ganha duas categorias novas específicas para os artigos metateóricos:
+A desambiguação automática + manual aplicada na Etapa 1 (gatilhos lexicais para *Science Wars*, *World War*, *Cold War*, *Franco-Prussian War*, *Ministry of War*, *phony war*, *War and Peace*, etc.) ganha três categorias novas específicas para os artigos metateóricos:
 
-- `metalinguistico`: ocorrências em que Latour cita o próprio vocabulário da TAR (como em `vocabulary association, translation, alliance, obligatory passage point`). Gatilho automático candidato: ocorrência dentro de aspas, ou em vizinhança imediata (cinco palavras) com termos do vocabulário próprio da TAR (`association`, `translation`, `passage point`, `actor-network`, `enrollment`).
-- `descritivo-bibliografico`: ocorrências em referências bibliográficas e em títulos de obras citadas (`La nouvelle alliance` de Prigogine e Stengers). Gatilho automático candidato: ocorrência em itálico, ou em vizinhança imediata com nomes de autores ou anos entre parênteses, ou em formatação de bibliografia ao final do artigo.
+- `metalinguistico`: ocorrências em que Latour cita o próprio vocabulário da TAR (como em `vocabulary association, translation, alliance, obligatory passage point`). Gatilho automático implementado: ≥2 aspas curvas/retas na janela junto a ≥1 termo do vocabulário próprio da TAR (`association`, `translation`, `passage point`, `actor-network`, `enrollment`, `actant`, `network` e variantes), ou indicador citacional explícito (`vocabulary`, `term`, `notion`, `so-called`, `the way AT is`) com ≥2 termos da TAR.
+- `descritivo_bibliografico`: ocorrências em referências bibliográficas e em títulos de obras citadas (`La nouvelle alliance` de Prigogine e Stengers). Gatilho automático implementado: ≥2 sinais entre ano em parênteses, editora conhecida (`Routledge`, `Blackwell`, `Harvard`, `Gallimard`, `Bantam` etc.) e nomes próprios sequenciais com `and`/`et`.
+- `conceitual_debate`: ocorrências em que o termo militar descreve polêmica entre escolas teóricas (`pre-relativist enemies`, `Reflexivists`, etc.). Gatilho automático: ≥2 palavras terminadas em `-ist`, `-ists`, `-ism`, `-isms` na janela. Categoria registrada como distinta do uso figural da prática científica, em coerência com a leitura do briefing § 2.
 
-A implementação desses gatilhos fica para a Etapa 2.2, junto com a planilha de classificação no formato de `refinamento/war_pandora_classificacao.csv`.
+A implementação está em `scripts/15_etapa2_desambiguar_militar.py`. A planilha de classificação `outputs/etapa2_artigos/militar_classificacao_automatica.csv` segue o formato de `refinamento/war_pandora_classificacao.csv`.
+
+**Achado da Etapa 2.2**: cobertura automática de 4/4 ocorrências militares dos artigos. Todas caem em categorias não-figurais. A contagem refinada figural do campo militar nos artigos cai para zero, sustentando empiricamente a hipótese de divisão de trabalho metafórico por gênero textual proposta pelo briefing.
+
+**Ressalva sobre a citação prevista no briefing § 2 que não está no corpus**: a passagem metalinguística `vocabulary association, translation, alliance, obligatory passage point` (que motivou a categoria `metalinguistico`) não aparece nas pp. 16-24 do *Recalling* incluídas no corpus. A inferência mais provável é que esteja em uma das páginas excluídas (15 ou 25 do volume). A única ocorrência militar efetiva no corpus do *Recalling* é `wars` em `Science Wars` (`descritivo_historico`). O argumento comparativo permanece sustentado: o `wars` de `Science Wars` também é não-figural, e a refinada figural do *Recalling* permanece zero.
 
 ### 7. Janela de cocorrência
 
-A janela de cocorrência de 200 palavras, calibrada para os livros, corresponde a cerca de 15% do *Recalling* (1.344 palavras) e a 2,5% do *Clarifications* (7.934 palavras), o que distorce a comparabilidade. Decisão: na Etapa 2.4, gerar duas versões da matriz de cocorrência para os artigos, uma com janela 200 (controle direto para comparação com os livros) e outra com janela proporcional (2% do total, arredondada para 27 e 159 palavras respectivamente). A decisão final sobre qual versão entra na tese cabe à pesquisadora após inspeção das duas matrizes.
+A janela de cocorrência de 200 palavras, calibrada para os livros, corresponde a cerca de 15% do *Recalling* (1.241 palavras na convenção `split`) e a 2,5% do *Clarifications* (7.848 palavras), o que distorce a comparabilidade. Decisão: na Etapa 2.4, gerar duas versões da matriz de cocorrência para os artigos, uma com janela 200 (controle direto para comparação com os livros) e outra com janela proporcional (2% do total, arredondada para 25 palavras no *Recalling* e 157 no *Clarifications*).
+
+O briefing § 3.4 antecipava 27 e 159 com base na convenção `\b\w+\b`; os valores aplicados (25 e 157) refletem a convenção `split` registrada em `corpus/qualidade_extracao.csv`, que é a convenção da Etapa 1.
+
+Implementação: `scripts/05_cooccurrence.py` ganhou o argumento `--sufixo`, que sufixa os nomes dos arquivos de saída (CSV, MD e figuras) para que as duas configurações coexistam sem sobrescrita. `scripts/16_etapa2_cocorrencia_comparacao.py` consolida as duas matrizes lado a lado em `outputs/etapa2_artigos/cocorrencia_comparacao.md`.
+
+**Achado da Etapa 2.4**: o ranking dos pares principais é consistente entre as duas janelas em ambos os artigos. Em *Clarifications*, `network`–`topologia` lidera com 783 (j=200) e 616 (j=157); o par envolvendo `militar` mais forte é `militar`–`network` com 10/8, cerca de 77 vezes menor. Em *Recalling*, `network`–`topologia` lidera com 20/2. A malha argumentativa central dos artigos é estruturada por `network`–`topologia`, `actor_network` e `textil`; o vocabulário militar ocupa posição periférica.
+
+A decisão final sobre qual versão entra na tese cabe à pesquisadora após o Gate 2.4. A recomendação registrada em `outputs/etapa2_artigos/cocorrencia_comparacao.md` é apresentar a janela proporcional como configuração principal, com a janela 200 em nota como controle.
 
 ### 8. Mudanças no código aplicadas para suportar a Etapa 2
 
@@ -383,20 +396,49 @@ Decisão: registro em `corpus/qualidade_extracao.csv` os valores em convenção 
 
 A diferença maior no *Recalling* é consequência do OCR colado discutido na seção 4 desta entrada: tokens como `havealternatedbetweentwo` contam como uma só palavra em ambas as convenções, mas o número total cai porque a tokenização absorve tudo em torno desses tokens. As densidades por 10.000 palavras na Etapa 2.1 e seguintes operam sobre os valores `split` (7.848 e 1.241). A leitura interpretativa pode mencionar os dois números quando convier para sustentar a ordem de grandeza do achado.
 
-### 10. Gate 2.0 e pendências
+### 10. Outputs comparativos consolidados (Etapa 2.5)
 
-O Gate 2.0 é a confirmação, por parte da pesquisadora, dos seguintes pontos verificados pelo `scripts/13_audit_articles_etapa2.py`:
+Os outputs finais para incorporação ao capítulo 2 da tese estão em `outputs/etapa2_artigos/`, gerados por `scripts/17_etapa2_tabelas_finais.py` ao final da Etapa 2.5. Três cortes tabulares respondem ao briefing § 4.2:
 
-- Cabeçalho `#` íntegro nos dois arquivos.
-- Contagens de palavras de corpo (convenção `\b\w+\b`): 7.934 para `latour_1996_clarifications_en`; 1.344 para `latour_1999_recalling_en`. Em convenção `split` (a registrada em `qualidade_extracao.csv`): 7.848 e 1.241 respectivamente.
-- Presença das passagens-chave: sequência têxtil-topológica `fibrous, thread-like, wiry, stringy, ropy, capillary` no *Clarifications*; passagem da contaminação do vocabulário no *Recalling*.
-- Registro dos artefatos de OCR (colagem e caracteres de controle) como limitação metodológica explícita.
+1. **Comparativa geral** das 5 obras × 19 grupos figurativos: `tabela_comparativa_5_obras.tex` (LaTeX), `tabela_comparativa_5_obras_n.csv` (contagem absoluta) e `tabela_comparativa_5_obras_freq.csv` (densidade por 10k). Gerada na Etapa 2.1, mantida sem alteração.
+2. **Campo militar refinado** das 5 obras: duas versões LaTeX. `tabela_militar_refinada_5_obras.tex` (Etapa 2.2, enxuta com bruta vs. refinada figural) para o capítulo 2. `tabela_militar_refinado_5_obras_detalhada.tex` (Etapa 2.5, breakdown por categoria) para o apêndice metodológico. CSV equivalente em `tabela_militar_refinado_5_obras.csv`. As três categorias de desambiguação aplicadas apenas aos artigos (descritivo-bibliográfica, metalinguística, polêmica conceitual) ficam como `--` nos livros, em coerência com o escopo da Etapa 1.
+3. **Têxtil e topologia** das 5 obras: `tabela_textil_topologico_5_obras.{csv,tex}`. A coluna `textil_variantes_top` do CSV registra as quatro variantes mais frequentes por obra, base para a depuração da Etapa 2.6 (polissemia esperada em `tie`, `net`, `string`).
 
-Pendências para a Etapa 2.1 e seguintes, conforme briefing § 5:
+A leitura sintética dos contrastes está em `outputs/etapa2_artigos/relatorio_etapa2.md`. A redação da subseção do capítulo 2 que mobiliza esses resultados é responsabilidade da pesquisadora.
 
-- 2.1 contagem bruta com `scripts/03_frequencies.py --escopo etapa2` e geração da tabela comparativa preliminar das 5 obras.
-- 2.2 KWIC com `scripts/02_kwic.py --escopo etapa2 --janela 10`; desambiguação automática do campo militar (incluindo as duas categorias novas).
-- 2.3 desambiguação manual pela pesquisadora.
-- 2.4 cocorrência em janela 200 e em janela proporcional, com `scripts/05_cooccurrence.py`.
-- 2.5 outputs comparativos em `outputs/etapa2_artigos/` (três tabelas e relatório).
-- 2.6 validação amostral semântica A/B/C análoga à da Etapa 1.
+### 11. Protocolo A/B/C da validação amostral semântica (Etapa 2.6)
+
+O briefing § 3.6 indica que a Etapa 2.6 aplica "a mesma validação amostral" em três camadas (A/B/C) usada na Etapa 1, mas a Etapa 1 do repositório não tinha implementação prévia desse protocolo (o `scripts/08_validate_sample.py` valida classificação de página, não classificação semântica de ocorrências figurativas). Defino aqui o protocolo aplicado à Etapa 2.6:
+
+- **Camada A — top-densidade**: cinco ocorrências por campo cuja janela KWIC tem o maior número de termos do mesmo campo lexical na vizinhança imediata. Heurística: passagens onde o campo aparece de modo concentrado são candidatas a uso central e a citação na tese. Em *Clarifications*, a camada A do campo `textil` recuperou a sequência canônica `fibrous, thread-like, wiry, stringy, ropy, capillary` na primeira página.
+- **Camada B — aleatória**: cinco ocorrências aleatórias por campo, com `seed=42`. Representa o "fundo" do campo, sem viés de densidade.
+- **Camada C — variantes raras**: cinco ocorrências por campo cuja variante (`termo_encontrado`) é das menos frequentes no campo. Heurística: ocorrências em variantes raras são as mais suspeitas de polissemia ou uso periférico (`tie` como verbo em vez de laço, `net` como rede de computadores em vez de tessitura, etc.).
+
+Quando o campo tem menos de 15 ocorrências, a amostra é exaustiva, com a camada rotulada como `exaustiva`. Caso do *Recalling* (22 ocorrências totais nos campos validados: 13 `topologia` + 7 `network` + 2 `actor_network` + 0 `textil`).
+
+Campos validados: `textil`, `topologia`, `network`, `actor_network`. São os quatro campos centrais do argumento têxtil-topológico da Etapa 2. O campo `militar` está fora desta amostra porque já foi 100% desambiguado na Etapa 2.2 (cobertura 4/4).
+
+Implementação em `scripts/18_etapa2_validacao_amostral.py`. Outputs:
+
+- `outputs/<artigo>/csv/validacao_amostral_semantica.csv` (60 linhas em *Clarifications*, 22 em *Recalling*).
+- `outputs/etapa2_artigos/validacao_amostral_semantica.csv` (consolidado, 82 linhas).
+- `outputs/etapa2_artigos/validacao_amostral_instrucoes.md` (instruções de preenchimento para a pesquisadora).
+
+A planilha tem colunas pré-preenchidas (`obra`, `campo`, `camada`, `id_kwic`, `pagina`, `termo_encontrado`, `contexto_antes`, `trecho_central`, `contexto_depois`) e colunas em branco para preenchimento manual: `uso_figural` (`sim`/`parcial`/`nao`), `subcategoria` (texto livre, sugestões: `tecnico`, `polissemia`, `descritivo`, `metalinguistico`), `comentario` (texto livre, registro etnográfico).
+
+Após o preenchimento, gero `outputs/etapa2_artigos/validacao_amostral_resultados.md` com taxa de uso figural por campo e por camada, mapa de polissemia, e densidade refinada figural para `textil` e `topologia` (bruta × taxa de figuralidade aferida).
+
+Pendência: a Etapa 1 prevê a mesma validação A/B/C para os livros (passo 2 do refinamento mencionado no `CLAUDE.md`). Quando essa validação for executada, a Etapa 2 pode rodar comparação cruzada de figuralidade entre livros e artigos no mesmo protocolo. Esta etapa fica fora do escopo da 2.6.
+
+### 12. Estado da Etapa 2 ao final da Etapa 2.5
+
+Cinco subetapas concluídas em sequência, com gates de revisão confirmados pela pesquisadora entre cada uma:
+
+- **2.0** integração dos `.txt` normalizados ao corpus, escopo_etapa2 no `metadata.csv`, infraestrutura de scripts.
+- **2.1** contagem bruta nas 5 obras com `02_kwic.py` e `03_frequencies.py`, tabela comparativa em `outputs/etapa2_artigos/tabela_comparativa_5_obras.{csv,tex}`.
+- **2.2** desambiguação automática do campo militar nos artigos (cobertura 4/4), com cinco categorias e gatilhos em `scripts/15_etapa2_desambiguar_militar.py`. Tabela militar refinada em `tabela_militar_refinada_5_obras.tex`.
+- **2.3** não executada por desnecessidade: a cobertura automática 4/4 dispensou desambiguação manual de adição (a pesquisadora pode ainda ajustar `categoria_final` na planilha se discordar).
+- **2.4** cocorrência com duas janelas (200 controle + proporcional 2%) para os artigos, com `--sufixo` em `05_cooccurrence.py`. Consolidado em `cocorrencia_comparacao.md`.
+- **2.5** três tabelas finais consolidadas (comparativa geral, militar refinado, têxtil-topológico) e relatório `relatorio_etapa2.md` com leitura sintética dos contrastes.
+
+Pendência: **2.6 validação amostral semântica A/B/C** análoga à da Etapa 1, aplicada aos trechos figurativos dos artigos. A pesquisadora confirma a Etapa 2.5 antes da 2.6.

@@ -1,0 +1,6 @@
+grupo,n_ocorrencias,n_excluidas,frequencia_por_10k_palavras,variantes_top
+topologia,13,0,104.75,"scale(1), flat(1), folded(1), flow(1)"
+network,7,0,56.41,"network(6), networks(1)"
+actor_network,2,0,16.12,actor-network(2)
+construction,1,0,8.06,social construction(1)
+militar,1,0,8.06,wars(1)
