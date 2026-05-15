@@ -396,20 +396,25 @@ Decisão: registro em `corpus/qualidade_extracao.csv` os valores em convenção 
 
 A diferença maior no *Recalling* é consequência do OCR colado discutido na seção 4 desta entrada: tokens como `havealternatedbetweentwo` contam como uma só palavra em ambas as convenções, mas o número total cai porque a tokenização absorve tudo em torno desses tokens. As densidades por 10.000 palavras na Etapa 2.1 e seguintes operam sobre os valores `split` (7.848 e 1.241). A leitura interpretativa pode mencionar os dois números quando convier para sustentar a ordem de grandeza do achado.
 
-### 10. Gate 2.0 e pendências
+### 10. Outputs comparativos consolidados (Etapa 2.5)
 
-O Gate 2.0 é a confirmação, por parte da pesquisadora, dos seguintes pontos verificados pelo `scripts/13_audit_articles_etapa2.py`:
+Os outputs finais para incorporação ao capítulo 2 da tese estão em `outputs/etapa2_artigos/`, gerados por `scripts/17_etapa2_tabelas_finais.py` ao final da Etapa 2.5. Três cortes tabulares respondem ao briefing § 4.2:
 
-- Cabeçalho `#` íntegro nos dois arquivos.
-- Contagens de palavras de corpo (convenção `\b\w+\b`): 7.934 para `latour_1996_clarifications_en`; 1.344 para `latour_1999_recalling_en`. Em convenção `split` (a registrada em `qualidade_extracao.csv`): 7.848 e 1.241 respectivamente.
-- Presença das passagens-chave: sequência têxtil-topológica `fibrous, thread-like, wiry, stringy, ropy, capillary` no *Clarifications*; passagem da contaminação do vocabulário no *Recalling*.
-- Registro dos artefatos de OCR (colagem e caracteres de controle) como limitação metodológica explícita.
+1. **Comparativa geral** das 5 obras × 19 grupos figurativos: `tabela_comparativa_5_obras.tex` (LaTeX), `tabela_comparativa_5_obras_n.csv` (contagem absoluta) e `tabela_comparativa_5_obras_freq.csv` (densidade por 10k). Gerada na Etapa 2.1, mantida sem alteração.
+2. **Campo militar refinado** das 5 obras: duas versões LaTeX. `tabela_militar_refinada_5_obras.tex` (Etapa 2.2, enxuta com bruta vs. refinada figural) para o capítulo 2. `tabela_militar_refinado_5_obras_detalhada.tex` (Etapa 2.5, breakdown por categoria) para o apêndice metodológico. CSV equivalente em `tabela_militar_refinado_5_obras.csv`. As três categorias de desambiguação aplicadas apenas aos artigos (descritivo-bibliográfica, metalinguística, polêmica conceitual) ficam como `--` nos livros, em coerência com o escopo da Etapa 1.
+3. **Têxtil e topologia** das 5 obras: `tabela_textil_topologico_5_obras.{csv,tex}`. A coluna `textil_variantes_top` do CSV registra as quatro variantes mais frequentes por obra, base para a depuração da Etapa 2.6 (polissemia esperada em `tie`, `net`, `string`).
 
-Pendências para a Etapa 2.1 e seguintes, conforme briefing § 5:
+A leitura sintética dos contrastes está em `outputs/etapa2_artigos/relatorio_etapa2.md`. A redação da subseção do capítulo 2 que mobiliza esses resultados é responsabilidade da pesquisadora.
 
-- 2.1 contagem bruta com `scripts/03_frequencies.py --escopo etapa2` e geração da tabela comparativa preliminar das 5 obras.
-- 2.2 KWIC com `scripts/02_kwic.py --escopo etapa2 --janela 10`; desambiguação automática do campo militar (incluindo as duas categorias novas).
-- 2.3 desambiguação manual pela pesquisadora.
-- 2.4 cocorrência em janela 200 e em janela proporcional, com `scripts/05_cooccurrence.py`.
-- 2.5 outputs comparativos em `outputs/etapa2_artigos/` (três tabelas e relatório).
-- 2.6 validação amostral semântica A/B/C análoga à da Etapa 1.
+### 11. Estado da Etapa 2 ao final da Etapa 2.5
+
+Cinco subetapas concluídas em sequência, com gates de revisão confirmados pela pesquisadora entre cada uma:
+
+- **2.0** integração dos `.txt` normalizados ao corpus, escopo_etapa2 no `metadata.csv`, infraestrutura de scripts.
+- **2.1** contagem bruta nas 5 obras com `02_kwic.py` e `03_frequencies.py`, tabela comparativa em `outputs/etapa2_artigos/tabela_comparativa_5_obras.{csv,tex}`.
+- **2.2** desambiguação automática do campo militar nos artigos (cobertura 4/4), com cinco categorias e gatilhos em `scripts/15_etapa2_desambiguar_militar.py`. Tabela militar refinada em `tabela_militar_refinada_5_obras.tex`.
+- **2.3** não executada por desnecessidade: a cobertura automática 4/4 dispensou desambiguação manual de adição (a pesquisadora pode ainda ajustar `categoria_final` na planilha se discordar).
+- **2.4** cocorrência com duas janelas (200 controle + proporcional 2%) para os artigos, com `--sufixo` em `05_cooccurrence.py`. Consolidado em `cocorrencia_comparacao.md`.
+- **2.5** três tabelas finais consolidadas (comparativa geral, militar refinado, têxtil-topológico) e relatório `relatorio_etapa2.md` com leitura sintética dos contrastes.
+
+Pendência: **2.6 validação amostral semântica A/B/C** análoga à da Etapa 1, aplicada aos trechos figurativos dos artigos. A pesquisadora confirma a Etapa 2.5 antes da 2.6.

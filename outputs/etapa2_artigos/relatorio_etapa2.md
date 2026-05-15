@@ -1,10 +1,10 @@
-# Relatório preliminar da Etapa 2.1: contagem bruta dos artigos teóricos de Latour
+# Relatório consolidado da Etapa 2: análise lexicométrica dos artigos teóricos de Latour
 
-Data da execução: 15 de maio de 2026.
+Data da execução: 15 de maio de 2026. Cinco subetapas executadas em sequência (2.0, 2.1, 2.2, 2.4, 2.5), com gates de revisão pela pesquisadora entre cada uma. A Etapa 2.3 não foi necessária (cobertura automática 4/4 das ocorrências militares dos artigos). A Etapa 2.6 (validação amostral semântica A/B/C) fica como pendência ao final deste relatório.
 
-Este relatório consolida a contagem lexicométrica nos dezenove campos figurativos (dezessete do catálogo da Etapa 1 e duas adições da Etapa 2: `textil` e `topologia`) para as cinco obras de Latour em análise: três livros monográficos e dois artigos metateóricos. A pergunta empírica que orienta a tabela é a divisão de trabalho metafórico por gênero textual proposta no briefing da Etapa 2.
+Este documento consolida a contagem lexicométrica nos dezenove campos figurativos (dezessete do catálogo da Etapa 1 e duas adições da Etapa 2: `textil` e `topologia`) para as cinco obras de Latour em análise: três livros monográficos (*Laboratory Life* 1986, *Science in Action* 1987, *Pandora's Hope* 1999) e dois artigos metateóricos (*Clarifications* 1996, *Recalling ANT* 1999). A pergunta empírica que orienta o trabalho é a divisão de trabalho metafórico por gênero textual proposta pelo briefing da Etapa 2: o vocabulário militar-industrial domina nos livros monográficos solo; o vocabulário têxtil-topológico ocupa o terreno nos artigos metateóricos.
 
-## Densidade do campo militar (ocorrências por 10.000 palavras)
+## Etapa 2.1: contagem bruta. Densidade do campo militar (ocorrências por 10.000 palavras)
 
 | Obra | Palavras | n militar | freq./10k |
 |---|---:|---:|---:|
@@ -138,7 +138,74 @@ Sugiro adotar a **janela proporcional** como configuração principal na tabela 
 
 A decisão final cabe à pesquisadora. Alternativas viáveis: apresentar as duas configurações lado a lado, ou manter apenas a 200 e mover a proporcional para o apêndice metodológico.
 
-## Próximos passos (Gate 2.4 pendente)
+## Etapa 2.5: outputs comparativos consolidados
 
-- Etapa 2.5: outputs comparativos consolidados (três tabelas: comparativa geral, campo militar refinado, têxtil-topológico).
-- Etapa 2.6: validação amostral semântica A/B/C análoga à da Etapa 1.
+Data da execução: 15 de maio de 2026, sequencial ao Gate 2.4 confirmado pela pesquisadora.
+
+Esta etapa fecha o pacote analítico da Etapa 2 com três tabelas finais para incorporação no capítulo 2 da tese e a leitura sintética dos contrastes. As tabelas e o relatório respondem ao briefing § 4.2.
+
+### Os três cortes tabulares
+
+1. **Comparativa geral (19 campos × 5 obras)**: `outputs/etapa2_artigos/tabela_comparativa_5_obras.{csv,tex}`. Gerada na Etapa 2.1 e mantida sem alteração. Versão LaTeX em formato `booktabs`, com densidade por 10.000 palavras e contagem absoluta entre parênteses.
+2. **Campo militar refinado (5 obras)**: duas versões. A enxuta `tabela_militar_refinada_5_obras.tex` apresenta bruta e refinada figural, adequada à seção do capítulo 2. A detalhada `tabela_militar_refinado_5_obras_detalhada.tex` decompõe a subtração por categoria (descritivo-histórica, descritivo-bibliográfica, metalinguística, polêmica conceitual), apropriada ao apêndice metodológico. CSV equivalente em `tabela_militar_refinado_5_obras.csv`.
+3. **Têxtil e topologia (5 obras)**: `tabela_textil_topologico_5_obras.{csv,tex}`. Mostra a inversão de densidade entre livros monográficos e artigos metateóricos no vocabulário têxtil-topológico.
+
+### KWIC militar dos artigos (com categoria de desambiguação)
+
+- **Clarifications 1996**, termo `allies`, categoria `metalinguistico` (gatilho: aspas=4, tar=2):
+  > male- who wishes to grab power makes a network of **allies** and extend his power -doing some “networking” or “liaising” as
+- **Clarifications 1996**, termo `enemies`, categoria `conceitual_debate` (gatilho: ismos=['Reflexivists', 'pre-relativist']):
+  > anything to the world. Reflexivists as well as their pre-relativist **enemies** dream of substracting knowledge from the things in themselves. AT
+- **Clarifications 1996**, termo `alliance`, categoria `descritivo_bibliografico` (gatilho: ano_parenteses+editora+autores_sequenciais):
+  > Routledge, London, (1985). Ilya Prigogine et Isabelle Stengers, La nouvelle **alliance** métamorphose de la science, Gallimard/Bantam, Paris/New-York, (1979). Michel SERRES, HERMES.
+- **Recalling ANT 1999**, termo `Wars`, categoria `descritivo_historico` (gatilho: casa 'Science Wars'):
+  > which it derived, mentioned social constructivism and the recent Science **Wars** Clearly the treatment of the collectiveof scientificreality as a circulation
+
+### Cinco exemplos KWIC têxtil-topológico em *Clarifications*
+
+- **textil**, termo `tie`:
+  > The second one is to grant them sociality and to **tie** them with the social fabric. The third one is to
+- **textil**, termo `fabric`:
+  > grant them sociality and to tie them with the social **fabric** The third one is to consider them as a semiotic
+- **textil**, termo `filaments`:
+  > of methaphors to describe essences: instead of surfaces one gets **filaments** (or rhyzomes in Deleuze’s parlance 197-). More precisely it is
+- **textil**, termo `fibrous`:
+  > societies cannot be described without recognizing them as having a **fibrous** thread-like, wiry, stringy, ropy, capillary character that is never captured
+- **textil**, termo `thread`:
+  > cannot be described without recognizing them as having a fibrous, **thread** wiry, stringy, ropy, capillary character that is never captured by
+
+### Leitura sintética
+
+Os três cortes tabulares consolidam três resultados articulados.
+
+Primeiro: a densidade do campo militar bruto cai de 16,56-26,74 ocorrências por 10.000 palavras nos livros monográficos de Latour solo (*Science in Action* 1987 e *Pandora's Hope* 1999) para 3,82 e 8,06 nos dois artigos metateóricos. Após a desambiguação aplicada na Etapa 2.2, a contagem refinada figural cai a zero nos dois artigos. O vocabulário militar-industrial está presente nos artigos apenas em uso descritivo-histórico (`Science Wars`), descritivo-bibliográfico (`La nouvelle alliance` no rodapé), metalinguístico (Latour citando uso ingênuo da TAR que ele rebate) e de polêmica conceitual entre escolas teóricas (`pre-relativist enemies`).
+Segundo: o vocabulário têxtil-topológico ocupa o terreno deixado pelo militar nos artigos. A densidade de `topologia` em *Clarifications* 1996 atinge 150,36 ocorrências por 10.000 palavras, mais de quatro vezes a densidade do mesmo campo em *Science in Action* 1987 (34,68/10k), e 5,5 vezes a de *Pandora's Hope* 1999 (27,58/10k). No *Recalling* 1999, a densidade topológica é de 104,75/10k. O campo `textil`, ausente no *Recalling*, atinge 49,69/10k em *Clarifications*, com a sequência paradigmática `fibrous, thread-like, wiry, stringy, ropy, capillary character` (página 76 do PDF interno) como passagem-citação central.
+Terceiro: a cocorrência confirma que a malha argumentativa dos artigos é estruturada por `network`–`topologia`. Em *Clarifications* j=157, esse par tem 616 ocorrências conjuntas, contra 8 do par `militar`–`network` (relação cerca de 77 vezes menor). No *Recalling*, mesmo com o texto curto, `network`–`topologia` lidera a topologia da rede figurativa.
+Esses três resultados sustentam a hipótese de divisão de trabalho metafórico por gênero textual proposta pelo briefing. O vocabulário militar-industrial é a marca lexical dominante dos livros monográficos solo (Latour 1987, 1999); recua quando Latour escreve metateoricamente para pares STS, e o vocabulário têxtil-topológico ocupa esse lugar. A coautoria com Woolgar em *Laboratory Life* 1986 apresenta densidade militar bruta (3,69/10k) em patamar próximo ao dos artigos, fato que merece registro etnográfico para o capítulo 2: a inflexão militar-industrial parece consolidar-se com Latour solo a partir de 1987.
+
+### Limitações declaradas
+
+1. A cobertura do *Recalling* é parcial (1.241 palavras de corpo, cerca de 80% do artigo), com as páginas 15 e 25 do volume excluídas por falha de OCR.
+2. As contagens dos campos `textil` e `topologia` carregam polissemia. A validação amostral semântica da Etapa 2.6 (A/B/C) vai estabelecer a taxa de uso figural por campo e por obra.
+3. A subtração por categoria de desambiguação dos livros está restrita à coluna `war`/`wars` (Etapa 1). As demais categorias (descritivo-bibliográfica, metalinguística, polêmica conceitual) não foram aferidas para os livros nesta etapa; foram aplicadas apenas aos artigos.
+4. A janela de cocorrência apresentada como principal é a proporcional (2% do texto). A janela 200 está disponível como controle metodológico. A decisão final cabe à pesquisadora; ambas as versões estão geradas e versionadas.
+
+### Outputs finais da Etapa 2 (resumo)
+
+- `outputs/etapa2_artigos/tabela_comparativa_5_obras.{csv,tex}` (Etapa 2.1).
+- `outputs/etapa2_artigos/tabela_comparativa_5_obras_n.csv` e `_freq.csv` (Etapa 2.1, granular).
+- `outputs/etapa2_artigos/militar_classificacao_automatica.csv` (Etapa 2.2).
+- `outputs/etapa2_artigos/tabela_militar_refinada_5_obras.tex` (Etapa 2.2, enxuta).
+- `outputs/etapa2_artigos/tabela_militar_refinado_5_obras.csv` (Etapa 2.5, CSV detalhado).
+- `outputs/etapa2_artigos/tabela_militar_refinado_5_obras_detalhada.tex` (Etapa 2.5, detalhada).
+- `outputs/etapa2_artigos/tabela_textil_topologico_5_obras.{csv,tex}` (Etapa 2.5).
+- `outputs/etapa2_artigos/cocorrencia_comparacao.md` (Etapa 2.4).
+- `outputs/<artigo>/{csv,figuras,relatorios}/` (rotina por obra).
+- `outputs/etapa2_artigos/relatorio_etapa2.md` (este arquivo, consolidado das cinco subetapas).
+
+## Próximos passos (Gate 2.5 pendente)
+
+A pesquisadora aprova as três tabelas e o relatório consolidado para incorporação ao capítulo 2 da tese. Pendências subsequentes:
+
+- **Etapa 2.6**: validação amostral semântica A/B/C análoga à da Etapa 1, aplicada aos trechos figurativos dos artigos. A amostra dos artigos é menor em volume absoluto (n total = 24 no *Recalling*, n total = 279 no *Clarifications*), mas o protocolo é idêntico ao da Etapa 1.
+- **Pendência aberta para Etapa 2-bis**: caso a pesquisadora obtenha PDF nativo do *Recalling*, reanálise pode estender a cobertura para o artigo integral e oferecer contagem mais robusta. A contagem atual cobre 80% do artigo, com a passagem-chave dos pp. 19-20 sobre a contaminação do vocabulário integralmente incluída.
