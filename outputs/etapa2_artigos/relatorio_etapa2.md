@@ -203,9 +203,61 @@ Esses três resultados sustentam a hipótese de divisão de trabalho metafórico
 - `outputs/<artigo>/{csv,figuras,relatorios}/` (rotina por obra).
 - `outputs/etapa2_artigos/relatorio_etapa2.md` (este arquivo, consolidado das cinco subetapas).
 
-## Próximos passos (Gate 2.5 pendente)
+## Etapa 2.6: validação amostral semântica A/B/C (planilhas geradas, aguardando preenchimento)
 
-A pesquisadora aprova as três tabelas e o relatório consolidado para incorporação ao capítulo 2 da tese. Pendências subsequentes:
+Data da execução: 15 de maio de 2026, sequencial ao Gate 2.5 confirmado pela pesquisadora.
 
-- **Etapa 2.6**: validação amostral semântica A/B/C análoga à da Etapa 1, aplicada aos trechos figurativos dos artigos. A amostra dos artigos é menor em volume absoluto (n total = 24 no *Recalling*, n total = 279 no *Clarifications*), mas o protocolo é idêntico ao da Etapa 1.
+### Protocolo aplicado
+
+O briefing § 3.6 indica três camadas (A/B/C) sem detalhar o protocolo. Defini o seguinte, documentado em `docs/decisoes_metodologicas.md` § Etapa 2 § 11:
+
+- **Camada A — top-densidade**: cinco ocorrências por campo com a janela KWIC mais densa em termos do mesmo campo lexical. Captura passagens centrais (candidatas a citação na tese).
+- **Camada B — aleatória**: cinco ocorrências aleatórias por campo, com `seed=42`.
+- **Camada C — variantes raras**: cinco ocorrências por campo cuja variante exata é das menos frequentes (mais suspeitas de polissemia).
+
+Quando o campo tem menos de 15 ocorrências, a amostra é exaustiva, com camada rotulada como `exaustiva`.
+
+Campos validados: `textil`, `topologia`, `network`, `actor_network`. O campo `militar` está fora (100% desambiguado na Etapa 2.2).
+
+### Distribuição da amostra gerada
+
+| Obra | Campo | Camada | n |
+|---|---|---|---:|
+| *Clarifications* 1996 | actor_network | A_top_densidade | 5 |
+| *Clarifications* 1996 | actor_network | B_aleatoria | 5 |
+| *Clarifications* 1996 | actor_network | C_variantes_raras | 5 |
+| *Clarifications* 1996 | network | A_top_densidade | 5 |
+| *Clarifications* 1996 | network | B_aleatoria | 5 |
+| *Clarifications* 1996 | network | C_variantes_raras | 5 |
+| *Clarifications* 1996 | textil | A_top_densidade | 5 |
+| *Clarifications* 1996 | textil | B_aleatoria | 5 |
+| *Clarifications* 1996 | textil | C_variantes_raras | 5 |
+| *Clarifications* 1996 | topologia | A_top_densidade | 5 |
+| *Clarifications* 1996 | topologia | B_aleatoria | 5 |
+| *Clarifications* 1996 | topologia | C_variantes_raras | 5 |
+| *Recalling* 1999 | actor_network | exaustiva | 2 |
+| *Recalling* 1999 | network | exaustiva | 7 |
+| *Recalling* 1999 | topologia | exaustiva | 13 |
+
+Total: 82 ocorrências para classificação manual (60 em *Clarifications*, 22 em *Recalling*).
+
+A camada A do `textil` em *Clarifications* recuperou exatamente a sequência canônica `fibrous, thread-like, wiry, stringy, ropy, capillary` na primeira página do artigo. A camada A do `topologia` recuperou o trecho de definição topológica com `disconnected, proximity, surfaces`.
+
+### Outputs da Etapa 2.6
+
+- `outputs/<artigo>/csv/validacao_amostral_semantica.csv` (60 linhas em *Clarifications*, 22 em *Recalling*).
+- `outputs/etapa2_artigos/validacao_amostral_semantica.csv` (consolidado, 82 linhas).
+- `outputs/etapa2_artigos/validacao_amostral_instrucoes.md` (instruções de preenchimento).
+
+Colunas em branco para a pesquisadora: `uso_figural` (`sim`/`parcial`/`nao`), `subcategoria` (sugestões: `tecnico`, `polissemia`, `descritivo`, `metalinguistico`), `comentario` (registro etnográfico).
+
+## Próximos passos (Gate 2.6 pendente)
+
+A pesquisadora preenche as colunas em branco da planilha consolidada (`outputs/etapa2_artigos/validacao_amostral_semantica.csv`) e me devolve. Em seguida, gero:
+
+- `outputs/etapa2_artigos/validacao_amostral_resultados.md`: taxa de uso figural por campo e por camada (precisão estimada), mapa de polissemia (subcategorias mais frequentes).
+- `outputs/etapa2_artigos/tabela_textil_topologico_refinada.tex`: densidade refinada figural para `textil` e `topologia` (bruta × taxa de figuralidade aferida).
+- Atualização final deste relatório com os resultados da validação.
+
+Após esses outputs, o pacote da Etapa 2 fecha como insumo para a subseção `subsec:figuracao_militar_evidencia` do capítulo 2 da tese.
 - **Pendência aberta para Etapa 2-bis**: caso a pesquisadora obtenha PDF nativo do *Recalling*, reanálise pode estender a cobertura para o artigo integral e oferecer contagem mais robusta. A contagem atual cobre 80% do artigo, com a passagem-chave dos pp. 19-20 sobre a contaminação do vocabulário integralmente incluída.

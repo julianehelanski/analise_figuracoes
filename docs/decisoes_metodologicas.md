@@ -406,7 +406,31 @@ Os outputs finais para incorporação ao capítulo 2 da tese estão em `outputs/
 
 A leitura sintética dos contrastes está em `outputs/etapa2_artigos/relatorio_etapa2.md`. A redação da subseção do capítulo 2 que mobiliza esses resultados é responsabilidade da pesquisadora.
 
-### 11. Estado da Etapa 2 ao final da Etapa 2.5
+### 11. Protocolo A/B/C da validação amostral semântica (Etapa 2.6)
+
+O briefing § 3.6 indica que a Etapa 2.6 aplica "a mesma validação amostral" em três camadas (A/B/C) usada na Etapa 1, mas a Etapa 1 do repositório não tinha implementação prévia desse protocolo (o `scripts/08_validate_sample.py` valida classificação de página, não classificação semântica de ocorrências figurativas). Defino aqui o protocolo aplicado à Etapa 2.6:
+
+- **Camada A — top-densidade**: cinco ocorrências por campo cuja janela KWIC tem o maior número de termos do mesmo campo lexical na vizinhança imediata. Heurística: passagens onde o campo aparece de modo concentrado são candidatas a uso central e a citação na tese. Em *Clarifications*, a camada A do campo `textil` recuperou a sequência canônica `fibrous, thread-like, wiry, stringy, ropy, capillary` na primeira página.
+- **Camada B — aleatória**: cinco ocorrências aleatórias por campo, com `seed=42`. Representa o "fundo" do campo, sem viés de densidade.
+- **Camada C — variantes raras**: cinco ocorrências por campo cuja variante (`termo_encontrado`) é das menos frequentes no campo. Heurística: ocorrências em variantes raras são as mais suspeitas de polissemia ou uso periférico (`tie` como verbo em vez de laço, `net` como rede de computadores em vez de tessitura, etc.).
+
+Quando o campo tem menos de 15 ocorrências, a amostra é exaustiva, com a camada rotulada como `exaustiva`. Caso do *Recalling* (22 ocorrências totais nos campos validados: 13 `topologia` + 7 `network` + 2 `actor_network` + 0 `textil`).
+
+Campos validados: `textil`, `topologia`, `network`, `actor_network`. São os quatro campos centrais do argumento têxtil-topológico da Etapa 2. O campo `militar` está fora desta amostra porque já foi 100% desambiguado na Etapa 2.2 (cobertura 4/4).
+
+Implementação em `scripts/18_etapa2_validacao_amostral.py`. Outputs:
+
+- `outputs/<artigo>/csv/validacao_amostral_semantica.csv` (60 linhas em *Clarifications*, 22 em *Recalling*).
+- `outputs/etapa2_artigos/validacao_amostral_semantica.csv` (consolidado, 82 linhas).
+- `outputs/etapa2_artigos/validacao_amostral_instrucoes.md` (instruções de preenchimento para a pesquisadora).
+
+A planilha tem colunas pré-preenchidas (`obra`, `campo`, `camada`, `id_kwic`, `pagina`, `termo_encontrado`, `contexto_antes`, `trecho_central`, `contexto_depois`) e colunas em branco para preenchimento manual: `uso_figural` (`sim`/`parcial`/`nao`), `subcategoria` (texto livre, sugestões: `tecnico`, `polissemia`, `descritivo`, `metalinguistico`), `comentario` (texto livre, registro etnográfico).
+
+Após o preenchimento, gero `outputs/etapa2_artigos/validacao_amostral_resultados.md` com taxa de uso figural por campo e por camada, mapa de polissemia, e densidade refinada figural para `textil` e `topologia` (bruta × taxa de figuralidade aferida).
+
+Pendência: a Etapa 1 prevê a mesma validação A/B/C para os livros (passo 2 do refinamento mencionado no `CLAUDE.md`). Quando essa validação for executada, a Etapa 2 pode rodar comparação cruzada de figuralidade entre livros e artigos no mesmo protocolo. Esta etapa fica fora do escopo da 2.6.
+
+### 12. Estado da Etapa 2 ao final da Etapa 2.5
 
 Cinco subetapas concluídas em sequência, com gates de revisão confirmados pela pesquisadora entre cada uma:
 
