@@ -1,0 +1,494 @@
+On recalling ANT
+
+
+
+
+Bruno Latour
+Abstract
+
+   The paper explores one after the other the four difficulties of actor-
+   network theory, that is the words 'actor', 'network' and 'theory'—without
+   forgetting the hyphen. It tries to refocus the originality of what is more a
+   method to deploy the actor's own world building activities than an alter-
+   native social theory. Finally, it sketches some of its remaining potential.
+
+I will start by saying that there are four things that do not work
+with actor-network theory; the word actor, the word network, the
+word theory and the hyphen! Four nails in the coffin.
+   The first nail in the coffin is I guess the word 'network', as John
+Law indicates in his paper in this volume. This is the great danger of
+using a technical metaphor slightly ahead of everyone's common
+use. Now that the World Wide Web exists, everyone believes they
+understand what a network is. While twenty years ago there was still
+some freshness in the term as a critical tool against notions as
+diverse as institution, society, nation-state and, more generally, any
+flat surface, it has lost any cutting edge and is now the pet notion of
+all those who want to modernize modernization. 'Down with rigid
+institutions,' they all say, 'long live flexible networks.'
+   What is the difference between the older and the new usage? At
+the time, the word network, like Deleuze's and Guattari's term rhi-
+zome, clearly meant a series of transformations—translations, trans-
+ductions—which could not be captured by any of the traditional
+terms of social theory. With the new popularization of the word net-
+work, it now means transport without deformation, an instanta-
+neous, unmediated access to every piece of information. That is
+exactly the opposite of what we meant. What I would like to call
+'double click information' has killed the last bit of the critical
+O The Editorial Board of The Sociological Review 1999. Published by Blackwell Publishers,
+108 Cowley Road. Oxford OX4 1JF, UK and 350 Main Street, Maiden, MA 02148, USA.
+Bruno Latour
+ cutting edge of the notion of network. I don't think we should use it
+ anymore at least not to mean the type of transformations and trans-
+ lations that we want now to explore.
+    The second nail that I'd like to hammer into the coffin is the word
+ 'actor' in its hyphenated connection with the notion of 'network'.
+ From day one, I objected to the hyphen because inevitably it would
+ remind sociologists of the agency/structure cliche, or, as we say in
+ French, of the 'pont aux ones' of social theory. Most of the misun-
+ derstandings about ANT have come from this coupling of terms,
+ one that is much too similar to the traditional divides of social
+ theory.
+    The managerial, engineering, Machiavellian, demiurgic character
+ of ANT has been criticised many times. More exactly, critiques have
+ alternated, quite predictably, between the two hyphenated poles:
+ one type of critique has turned around the actor, the other turned
+ around the network. The first line of criticism has insisted on the
+ Schumpeterian, male-like, hairy gorilla-like character of ANT; the
+ second line of criticism has focused instead on the dissolution of
+humanity proposed by ANT into a field of forces where morality,
+humanity, psychology was absent. Thus, the actor-network was split
+into two: demiurgy on one side; 'death of Man' on the other.
+    No matter how prepared I am to criticise the theory, I still think
+that these two symmetrical critiques are off target even though the
+very expression of 'actor-network' invites this reaction. The original
+idea was not to occupy a position in the agency/structure debate,
+not even to overcome this contradiction. Contradictions, most of the
+time and especially when they are related to the modernist predica-
+ment, should not be overcome, but simply ignored or bypassed. But
+I agree that the hyphenated term made it impossible to see clearly
+the bypass operation that had been attempted.
+    Let me try to refocus the argument. Let us abandon the words
+'actor' and 'network' for a moment and pay some attention to two
+operations, one offraming (see the chapter in this volume by Michel
+Callon) and one of summing up.
+   It is not exactly true that social sciences have always alternated
+between actor and system, or agency and structure. It might be
+more productive to say that they have alternated between two types
+of equally powerful dissatisfactions: when social scientists concen-
+trate on what could be called the micro level, that is face to face
+interactions, local sites, they quickly realize that many of elements
+necessary to make sense of the situation are already in place or are
+coming from far away; hence, this urge to look for something else,
+
+16                           © The Editorial Board of The Sociological Review 1999
+                                                        On recalling ANT
+
+ some other level, and to concentrate on what is not directly visible
+ in the situation but has made the situation what it is. This is why so
+ much work has been dedicated to notions such as society, norms,
+ values, culture, structure, social context, all terms that aim at desig-
+ nating what gives shape to micro interaction. But then, once this
+ new level has been reached, a second type of dissatisfaction begins.
+ Social scientists now feel that something is missing, that the abstrac-
+ tion of terms like culture and structure, norms and values, seems
+ too great, and that one needs to reconnect, through an opposite
+move, back to the flesh-and-blood local situations from which they
+had started. Once back to the local sites, however, the same uneasi-
+ness that pushed them in the direction of a search for social struc-
+ture quickly sets in. Social scientists soon realize that the local
+situation is exactly as abstract as the so called 'macro' one from
+which they came and they now want to leave it again for what holds
+the situation together. And so on ad infinitum.
+    It seems to me that ANT is simply a way of paying attention to
+these two dissatisfactions, not again to overcome them or to solve
+the problem, but to follow them elsewhere and to try to explore the
+very conditions that make these two opposite disappointments pos-
+sible. By topicalizing the social sciences' own controversies. ANT
+might have hit on one of the very phenomena of the social order:
+may be the social possesses the bizarre property of not being made
+of agency and structure at all, but rather of being a circulating
+entity. The double dissatisfaction that has triggered so much of the
+conceptual agitation of the social sciences in the past would thus be
+an artefact: the result of trying to picture a trajectory, a movement,
+by using oppositions between two notions, micro and macro, indi-
+vidual and structure, which have nothing to do with it.
+    If this bypassing strategy is accepted then perhaps a few things
+are clarified: ANT concentrates attention on a movement—a move-
+ment well demonstrated by the successive shifts of attention of the
+dissatisfied social scientist. This movement has many peculiar fea-
+tures. The first one is the redescription of what was earlier perceived
+as having to do with the macro-social. As it has been understood
+even, I think, by the harshest critics of ANT, the network pole of
+actor-network does not aim at all at designating a Society, the Big
+Animal that makes sense of local interactions. Neither does it desig-
+nate an anonymous field of forces. Instead it refers to something
+entirely different which is the summing up of interactions through
+various kinds of devices, inscriptions, forms and formulae, into a
+very local, very practical, very tiny locus. This is now well known
+
+O The Editorial Board of The Sociological Review 1999                17
+Bruno Latour
+
+ through the study of accounting, managerial practice (Power, 1995),
+ organization studies (Czamiawska, 1997), some sociolinguistics
+ (Taylor, 1993), panoptica (or what I now call 'oligoptica', Latour
+ and Hermant, 1998), economics, the anthropology of markets, and
+ so on. Big does not mean 'really' big or 'overall', or 'overarching',
+ but connected, blind, local, mediated, related. This is already an
+ important contribution of ANT since it means that when one
+ explores the structures of the social, one is not led away from the
+ local sites—as it was the case with the dissatisfied social scientist—
+ but closer to them.
+    The second consequence is less well developed but equally impor-
+ tant: actantiality is not what an actor does—with its consequence
+ for the demiurgic version of ANT—but what provides actants with
+ their actions, with their subjectivity, with their intentionality, with
+ their morality. When you hook up with this circulating entity, then
+ you are partially provided with consciousness, subjectivity, actorial-
+ ity, etc. There is no reason to alternate between a conception of
+ social order as made of a Society and another one obtained from
+ the stochastic composition of individual atoms. To become an actor
+ is as much a local achievement as obtaining a 'total' structure. I will
+ come back to this aspect in a moment, but the consequence is
+ already important: there is nothing especially local, and nothing
+ especially human, in a local intersubjective encounter. I have pro-
+ posed 'interobjectivity' as a way of phrasing the new position of the
+ actor (Latour, 1996).
+    The third and very puzzling consequence is that, by following the
+movement allowed by ANT, we are never led to study social order,
+in a displacement that would allow an observer to zoom from the
+global to the local and back. In the social domain there is no
+change of scale. It is so to speak always flat and folded and this is
+especially true of the natural sciences that are said to provide the
+context, the frame, the global environment in which society is sup-
+posed to be located. Contexts too flow locally through networks, be
+these geography, medicine, statistics, economics, or even sociology.
+This is where ANT has used the insights of sociology of science—
+including of course the sociology of the social sciences—as much as
+possible: economies emerge out of economics; societies out of soci-
+ologies; cultures out of anthropologies; etc. The topology of the
+social, John Law is right, is rather bizarre, but I don't think it is
+fractal. Each locus can be seen as framing and summing up. 'Actor'
+is not here to play the role of agency and 'network' to play the role
+of society. Actor and network—if we want to still use those terms—
+
+18                            O The Editorial Board of The Sociological Review 1999
+                                                        On recalling ANT
+
+  designates two faces of the same phenomenon, like waves and parti-
+  cles, the slow realization that the social is a certain type of circula-
+  tion that can travel endlessly without ever encountering either the
+  micro-level—there is never an interaction that is not framed—or the
+ macro-level—there are only local summing up which produce either
+  local totalities ('oligoptica') or total localities (agencies).
+     To have transformed the social from what was a surface, a terri-
+ tory, a province of reality, into a circulation, is what I think has
+ been the most useful contribution of ANT. It is, I agree, a largely
+ negative contribution, because it has simply rendered us sensitive to
+ a fourth consequence which is also the most bizarre: if there is no
+ zoom going from macro structure to micro interactions, if both
+ micro and macro are local effects of hooking up to circulating enti-
+ ties, if contexts flow inside narrow conduits, it means that there is
+ plenty of 'space' in between the tiny trajectories of what could be
+called the local productions of 'phusigenics', 'sociogenics' and
+ 'psychogenics'.
+     'Nature', 'Society', 'Subjectivity' do not define what the world is
+like, but what circulates locally and to which one 'subscribes' much
+as we subscribe to cable TV and sewers—including of course the
+subscription that allows us to say 'we' and 'one'. This empty space
+'in between' the networks, those terra incognita are the most exciting
+aspects of ANT because they show the extent of our ignorance and
+the immense reserve that is open for change. But the benefit that can
+be drawn from this vast empty space 'in between' network trajecto-
+ries is not clear yet because of a third difficulty that I now have to
+tackle.
+    The third nail in the coffin is the word theory. As Mike Lynch
+said some time ago, ANT should really be called 'actant-rhizome
+ontology'. But who would have cared for such a horrible mouthful
+of words—not to mention the acronym 'ARO'? Yet, Lynch has a
+point. If it is a theory, of what it is a theory?
+    It was never a theory of what the social is made of, contrary to
+the reading of many sociologists who believed it was one more
+school trying to explain the behaviour of social actors. For us, ANT
+was simply another way of being faithful to the insights of eth-
+nomethodology: actors know what they do and we have to learn
+from them not only what they do, but how and why they do it. It is
+us, the social scientists, who lack knowledge of what they do, and
+not they who are missing the explanation of why they are unwit-
+tingly manipulated by forces exterior to themselves and known to
+the social scientist's powerful gaze and methods. ANT is a way of
+
+O The Editorial Board of The Sociological Review 1999                19
+Bruno Latour
+delegitimating the incredible pretensions of sociologists who, to use
+Bauman's forceful expression (Bauman, 1992), want to act as legis­
+lators and to open yet another space for interpretive sociology. Far
+from being a theory of the social or even worse an explanation of
+what makes society exert pressure on actors, it always was, and this
+from its very inception (Callon and Latour, 1981), a very crude
+method to learn from the actors without imposing on them an a
+priori definition of their world-building capacities. The ridiculous
+poverty of the ANT vocabulary—association, translation, alliance,
+obligatory passage point, etc.—was a clear signal that none of these
+words could replace the rich vocabulary of the actor's practice, but
+was simply a way to systematically avoid replacing their sociology,
+their metaphysics and their ontology with those of the social scien­
+tists who were connecting with them through some research proto­
+col—I use this cumbersome circumlocution to avoid the loaded
+term 'studying', because ANT researchers cannot exactly be said to
+'study' the other social actors.
+   I agree that we have not always been true to the original task, and
+that a great deal of our own vocabulary has contaminated our abil­
+ity to let the actors build their own space, as many critiques have
+charitably shown (Chateauraynaud, 1991; Lee and Brown, 1994).
+This weakness on our part does not mean, however, that our
+vocabulary was too poor, but that, on the contrary, it was not poor
+enough and that designing a space for the actors to deploy their
+own categories is a much harder task than we thought at first—and
+this applies of course to this notion of deployment itself. From the
+very beginning, ANT has been sliding in a sort of race to overcome
+its limits and to drop from the list of its methodological terms any
+which would make it impossible for new actors (actants in fact) to
+define the world in their own terms, using their own dimensions and
+touchstones. John Law and Annemarie Mol have used the word
+fluid (Mol and Law, 1994), Adrian Cussins, the word trails (Cussins,
+1992), Charis Cussins, the word choreography (Cussins, 1996). All
+of these words designate in my view what the theory should be and
+what the excessive diffusion of 'double-click' networks has rendered
+irretrievable: it is a theory that says that by following circulations we
+can get more than by defining entities, essence or provinces. In that
+sense, ANT is merely one of the many anti-essentialist movements
+that seems to characterize the end of the century. But it is also, like
+ethnomethodology, simply a way for the social scientists to access
+sites, a method and not a theory, a way to travel from one spot to
+the next, from one field site to the next, not an interpretation of
+
+20                            O The Editorial Board of The Sociological Review 1999
+                                                       On recalling ANT
+
+what actors do simply glossed in a different more palatable and
+more universalist language.
+    I have often compared it to perspective drawing (Latour, 1997),
+ because of this peculiar relation between an empty construction
+ that is nonetheless strictly determined but which has no other aim
+ than disappearing once the picture is left to deploy its own space. I
+ am well aware of the limits of this metaphor since there is hardly a
+more constraining method than three dimensional perspectival
+drawing! Yet the image has its advantage: ANT does not tell anyone
+the shape that is to be drawn—circles or cubes or lines—but only
+how to go about systematically recording the world-building abili-
+ties of the sites to be documented and registered. In that sense, the
+potentialities of ANT are still largely untapped, especially the politi-
+cal implications of a social theory that would not claim to explain
+the actors' behaviour and reasons, but only to find the procedures
+which render actors able to negotiate their ways through one
+another's world-building activity.
+   The fourth and last nail in the coffin is the hyphen that relates
+and distinguishes the two words 'actor' and 'network'. As I have
+indicated above, it is an unfortunate reminder of the debate between
+agency and structure into which we never wanted to enter. But it is
+also a place holder for a much bigger problem, one that we have
+become aware of only very slowly, and whose impact will be very
+much felt in the future. By dealing simultaneously with human and
+non-human agencies, we happened to fall into an empty space
+between the four major concerns of the modernist way of thinking.
+We were not conscious of this coherence at first, but learned it the
+hard way when we began to understand that those who should have
+been most interested in our work, that is social scientists, including
+those of SSK (the Sociology of Scientific Knowledge), turned out to
+be its harshest critics (Collins and Yearley, 1992; Bloor, 1998). Their
+social explanation did not seem to us to hold water: the very defini-
+tion of society was part of the problem not part of the solution.
+How could that be possible, and how could sociology of science
+trigger such entirely different research programs?
+   ANT slowly drifted from a sociology of science and technology,
+from a social theory, into another enquiry of modernity—some-
+times called comparative, symmetrical, or monist anthropology
+(Descola and Palsson, 1996). The difference between ANT and the
+masses of reflection on modernity and post-, hyper-, pre- and anti-
+modernity, was simply that it took to task all of the components of
+what could be called the modernist predicament simultaneously.
+
+OThe Editorial Board of The Sociological Review 1999                21
+Bruno Latour
+
+ The reason why it could not stick to a theory of social order is that
+ the whole theory of society soon appeared to be enmeshed in a
+ much more complex struggle to define an epistemological settle-
+ ment about: (a) what the world is like outside without human inter-
+ vention; (b) a psychology inside—an isolated subjectivity still able
+ to also comprehend the word out there; (c) a political theory of how
+ to keep the crowds at bay without them intervening with their
+ unruly passions and ruining the social order; and finally (d) a rather
+ repressed but very present theology that is the only way to guaran-
+ tee the differences and the connections between those three other
+ domains of reality. There is not one problem of deciding what soci-
+ ety is, a second of explaining why there is a psychology, a third of
+ defining politics, and a fourth of accounting for the deletion of the-
+ ological interests. Instead there is only one single predicament
+ which, no matter how entangled, has to be tackled at once. To sum
+ it up in one simple formula: 'out there' nature, 'in there' psychology,
+ 'down there' politics, 'up there' theology. It is this whole package
+ that by happenstance ANT called into question at once.
+    There is no room here to review the whole question—I have done
+ so elsewhere (Latour, 1999)—but only to indicate the consequences
+ for one possible future of ANT. ANT is not a theory of the social,
+ any more than it is a theory of the subject, or a theory of God, or a
+ theory of nature. It is a theory of the space or fluids circulating in a
+ non-modern situation. What type of connection can be established
+ between those terms, other than the systematic modernist solution?
+This is, I think, clearly the direction of what is 'after' ANT and
+what would begin to solve a number of the worries expressed in the
+contributions to this book.
+    Let us not forget that the first thing we made circulate is nature
+and reference, that is the 'out there' box. I was struck to see that
+none of the writers, in this book or at the conference from which it
+derived, mentioned social constructivism and the recent Science
+Wars. Clearly the treatment of the collective of scientific reality as a
+circulation of transformations—is it even necessary to say again
+that reference is real, social and narrative at once?—is now, if not
+taken for granted, at least clearly articulated. If ANT can be credited
+with something, it is to have developed a science studies that entirely
+bypasses the question of 'social construction' and the 'realist/
+relativist debate'. It is not, it never was, a pertinent question, even
+though it still amuses many people who are not familiar with either
+science studies or ANT. Social theory is now allowed to have as
+many points of contact, as many correspondences, with a bountiful
+
+22                            O The Editorial Board of The Sociological Review 1999
+                                                        On recalling ANT
+
+ reality as there are circulating references. ANT can gorge itself on
+ realities without having to spend a single moment excusing itself for
+ not believing in an 'outside' reality. On the contrary, it is now able
+ to explain why on earth the modernist had the bizarre idea of mak-
+ ing reality 'outside'.
+    What I call the 'second wave' of science studies has offered (is
+ offering) the same sort of treatment to the other sphere—'in there'.
+ Subjectivity, corporeality, is no more a property of humans, of indi-
+ viduals, of intentional subjects, than being an outside reality is a
+ property of nature. This new tack is so well represented in the
+ papers in this book that there is no need to develop the point here
+ (see the chapter by Annemarie Mol). Subjectivity seems also to be a
+circulating capacity, something that is partially gained or lost by
+ hooking up to certain bodies of practice. Madeleine Akrich's work,
+the chapter by Emilie Gomart and Antoine Hennion for this book,
+the work I am doing on ethnopsychiatry (Latour, 1996), the work of
+Charis Cussins, the new book by Marc Berg and Annemarie Mol
+(Berg and Mol, 1998), all have the character of, so to speak, redis-
+tributing subjective quality outside—but of course, it is a totally dif-
+ferent 'outside' now that epistemology has been turned into a
+circulating reference. The two movements—the first and the second
+wave, one on objectivity, the other on subjectivity—are closely
+related: the more we have 'socialized' so to speak 'outside' nature,
+the more 'outside' objectivity the content of our subjectivity can
+gain. There is plenty of room now for both.
+   What is next? Clearly the 'down there' aspect of the modernist
+predicament, namely political theory as indicated by a small but
+growing body of work (see work by Dick Pels). Not a single feature
+of our definition of political practice escapes the pressure of episte-
+mology ('out there') and psychology ('in there'). If we could elicit
+the specificity of a certain type of circulation that is turning the
+Body Politic into one, that is, some type of circulation that 'collects'
+the collective, we would have made an immense step forward. We
+would have at last freed politics from science—or more exactly from
+epistemology (Latour, 1997)—a result that would be quite a feat for
+people who are still often accused to have politicized science beyond
+repair! From the recent work in political ecology, or in what Isabelle
+Stengers call 'cosmopolitics' (Stengers, 1996; Stengers, 1997), I am
+rather confident that this will soon come to fruition. The political
+relevance that academics always search for, somewhat desperately,
+cannot be obtained without a relocation of the extraordinary origi-
+nality of political circulation.
+
+O The Editorial Board of The Sociological Review 1999               23
+Bruno Latour
+
+   What about the half hidden sphere above, that has been used as a
+guarantee for the rest of the modernist systems? I know this is a
+very risky territory since if there is anything worse than dabbling
+with non-humans, it is to take theology seriously. This line of work
+is not represented at all, I agree, in this book. Yet, I think that it is
+in theology that the notion of circulation is the most rewarding, pre-
+cisely because it quickly rejuvenates a tissue of absurdities (what has
+become a tissue of absurdities) because of the shadow cast by the
+notion of a Science and by the notion of Society. Morality that
+seems totally absent from the engineering dreams of ANT, may be
+very abundant if we care to take it also for a certain type of circula-
+tion.
+   The point on which I want to conclude is somewhat different
+from that of John Law. In his chapter, he asks us to limit ANT and
+to tackle complexity and locality seriously and modestly. As with
+several of us, he is somewhat terrified by the monster that we have
+begot. But you cannot do to ideas what auto manufacturers do with
+badly conceived cars: you cannot recall them all by sending adver-
+tisements to the owners, retrofitting them with improved engines or
+parts, and sending them back again, all for free. Once launched in
+this unplanned and uncharted experiment in collective philosophy
+there is no way to retract and once again be modest. The only solu-
+tion is to do what Victor Frankenstein did not do, that is, not to
+abandon the creature to its fate but continue all the way in develop-
+ing its strange potential.
+   Yes, I think there is life after ANT. Once we have strongly pushed
+a stake into the heart of the creature safely buried in its coffin—thus
+abandoning what is so wrong with ANT, that is 'actor', 'network',
+'theory' without forgetting the hyphen!—some other creature might
+emerge, light and beautiful: our future collective achievement.
+
+
+References
+Bauman, Z. (1992), Intimations ofPostmodernity. London: Routledge.
+Berg, M. and A. Mol (1998) (eds), Differences in Medicine: Unravelling Practices,
+  Techniques and Bodies, Durham, North Carolina: Duke University Press.
+Bloor, D. (1998), 'Anti-Latour.' Studies in History and Philosophy of Science.
+Callon, M. and B. Latour (1981), 'Unscrewing the Big Leviathan: How Do Actors
+  Macrostmcture Reality'. Advances in Social Theory and Methodology. Toward an
+  Integration of Micro and Macro Sociologies. K. Knorr and A. Cicourel. London:
+  Routledge, 277-303.
+Chateauraynaud, F. (1991), 'Forces et faiblesses de la nouvelle anthropologie des sci­
+  ences.' Critique (529-530): 458-478.
+
+
+24                                  C The Editorial Board of The Sociological Review 1999
+                                                                 On recalling ANT
+
+Collins, H. and S. Yearley (1992), 'Epistemological Chicken'. Science as Practice and
+   Culture. A. Pickering. Chicago: Chicago University Press, 301-326.
+Cussins, A. (1992), 'Content, Embodiment and Objectivity: The Theory of Cognitive
+   Trails' Mind 101(404): 651-688.
+Cussins, C. (1996), 'Ontological Choreography: Agency for Women Patients in an
+   Infertility Clinic' Pages 166-201 in M. Berg and A. Mol, Differences in Medicine,
+   Durham, N. Carolina: Duke University Press.
+Czarniarwska, B. (1997), Narrating the Organization, Chicago: The University of
+   Chicago Press.
+Descola, P. and G. Palsson (eds) (1996), Nature and Society. Anthropological
+   Perspectives. London: Routledge.
+Latour, B. (1996), 'On Interobjectivity—with discussion by Marc Berg, Michael
+   Lynch and Yrjo Engelström.' Mind, Culture and Activity 3(4): 228-245.
+Latour, B. (1996), Petite riflexion sur le culte moderne des dieux Faitiches. Paris, Les
+   Empecheurs de penser en rond.
+Latour, B. (1997), 'Socrates' and Callicles' Settlement or the Invention of the
+   Impossible Body Politic' Configurations Spring(2): 189-240.
+Latour, B. (1997), "The Trouble with Actor Network Theory.' Soziale Welt 47:
+   369-381.
+Latour, B. (1999), Pandora's Hope. Essays on the reality of science studies.
+   Cambridge, Mass.: Harvard University Press.
+Latour, B. and E. Hermant (1998), Paris ville invisible. Paris, La Decouverte-Les
+   Empecheurs de penser en rond.
+Lee, N. and S. Brown (1994), 'Otherness and the Actor-Network: the Undiscovered
+  Continent.' American Behavioral Scientist 37(6): 772-790.
+Mol, A. and J. Law (1994), 'Regions, Networks, and Fluids: Anaemia and Social
+  Topology.' Social Studies of Science 24(4): 641-672.
+Power, M. (ed.) (1995), Accounting and Science: National Inquiry and Commercial
+  Reason. Cambridge: Cambridge University Press.
+Stengers, I. (1996), Cosmopolitiques—Tome 1: la guerre des sciences. Paris, La decou-
+  verte and Les Empecheurs de penser en rond.
+Stengers, I. (1997), Power and Invention. Minneapolis: University of Minnesota Press.
+Taylor, J.R. (1993), Rethinking the Theory of Organizational Communication: How to
+  Read an Organization. Norwood, New Jersey: Ablex Publishing.
+
+
+
+
+O The Editorial Board of The Sociological Review 1999                               25
+

@@ -1,0 +1,25 @@
+# Hashes e estatísticas dos .txt do Recalling ANT (Etapa 2-bis, Passo 0)
+
+Data de geração: 2026-05-15.
+
+## Arquivo novo (fornecido pela pesquisadora, .txt nativo integral)
+
+- Path: `corpus/txt_fornecido/latour_1999_recalling_nativo.txt`
+- SHA-256: `b1d99454821b4291e6bec31b1b09435e3adaad7573267654c63cc5dabd059c5a`
+- Bytes: 30.773
+- Linhas: 494
+- Palavras (convenção `split`): 4.857
+- Palavras de corpo (excluindo linhas iniciadas por `#`; não há cabeçalho `#` neste arquivo): 4.857
+
+## Arquivo antigo (Etapa 2 original, .txt normalizado a partir do zip de OCR)
+
+- Path: `corpus/txt_norm/latour_1999_recalling_en.txt`
+- SHA-256: `eac86c0fdf52b80d832af843135318acea5a73d4730ed3d2830287fcf23b0367`
+- Bytes: 9.504
+- Linhas: 24
+- Palavras (todo o arquivo, `split`): 1.397
+- Palavras de corpo (excluindo cabeçalho `#`): 1.229
+
+## Comentário
+
+A contagem registrada em `corpus/qualidade_extracao.csv` para o `latour_1999_recalling_en` da Etapa 2 original é de 1.241 palavras de corpo. O recálculo agora dá 1.229; a diferença marginal (12 palavras) decorre de uma diferença na inclusão de linhas-marcador de página (`l 6`, `t8`, `I 999`) que o pipeline de geração do `qualidade_extracao.csv` contou como tokens isolados na convenção `split` aplicada sobre o `.txt` cru, ao passo que a contagem reaplicada aqui sobre o mesmo `.txt` separando cabeçalho dá 1.229. A diferença é irrelevante para o argumento; registro para auditoria.
