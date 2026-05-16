@@ -1,7 +1,15 @@
 % Legendas LaTeX das tres figuras de AIME (Latour 2013), Etapa 3.
-% Os arquivos PNG estao em outputs/latour_2013_aime_en/figuras/.
-% Apos copiar os PNG para o diretorio de figuras da tese, ajuste o path
-% em \includegraphics.
+% Arquivos PNG em outputs/latour_2013_aime_en/figuras/. Apos copiar os
+% PNG para o diretorio de figuras da tese, ajuste o path em
+% \includegraphics. O \autoref{sec:aime-tres-camadas} na figura 2 remete
+% a uma secao do capitulo 2 que pode ser rotulada conforme a estrutura
+% que adotar.
+% Estilo das legendas: primeira pessoa do singular, sem economia de
+% ressalvas, sem desenvolver interpretacao que exceda o que a contagem
+% mostra. As pistas que aparecem nas legendas (registro deslocado do
+% militar, articulacao topologia+trajetoria_passe, distribuicao
+% homogenea de \texttt{Moderns} ao longo do livro) estao todas
+% documentadas no \texttt{outputs/etapa3_aime/relatorio_etapa3.md}.
 
 % =====================================================================
 % Figura 1: frequencia dos 26 campos figurativos com ocorrencias.
@@ -11,18 +19,32 @@
 \centering
 \includegraphics[width=\linewidth]{figuras/aime_frequencia_grupos.png}
 \caption[Frequencia dos campos figurativos em \emph{AIME}]{
-Frequencia absoluta dos 26 campos figurativos com ocorrencias em
-\emph{An Inquiry into Modes of Existence} (Latour, 2013). Barras
-coloridas por proveniencia do catalogo: em azul, os campos do catalogo
-estabelecido nas Etapas 1 e 2 da analise (19 campos, dos quais 14 com
-ocorrencias em \emph{AIME}); em laranja, os 12 campos novos do
-catalogo especifico da Etapa 3, identificados a partir da leitura
-qualitativa do livro. Total: 1.343 ocorrencias do catalogo antigo
-mais 2.214 do catalogo novo, somando 3.557 ocorrencias em 194.454
-palavras de corpo. Fonte: \texttt{outputs/latour\_2013\_aime\_en/
-csv/kwic\_catalogo\_antigo.csv} e \texttt{kwic\_catalogo\_aime.csv},
-gerados por \texttt{scripts/22\_etapa3\_aime\_pipeline.py}. Figura
-gerada por \texttt{scripts/23\_etapa3\_aime\_visualizacoes.py}.}
+Frequencia absoluta dos vinte e seis campos figurativos com
+ocorrencias em \emph{An Inquiry into Modes of Existence} (Latour,
+2013), o livro com que Latour declara estar completando a teoria
+ator-rede (capitulo 12: \enquote*{the actor-network theory, which the
+present inquiry seeks to complete}). A coloracao separa os campos por
+proveniencia do catalogo lexical do meu projeto. Em azul, os campos do
+catalogo estabelecido nas Etapas 1 e 2 da analise computacional, que
+rastreiam o vocabulario teorico de Latour entre 1986 e 1999: dos
+dezenove campos do catalogo, quatorze aparecem em \emph{AIME}, com
+destaque para \texttt{topologia} (514 ocorrencias) e \texttt{network}
+(255), em densidades comparaveis as dos livros monograficos anteriores.
+Em laranja, os doze campos novos do catalogo especifico que construi
+para esta Etapa 3, identificados a partir da leitura qualitativa do
+livro e da literatura sobre a guinada latouriana posterior a 2007:
+\texttt{trajetoria\_passe} (433 ocorrencias) e \texttt{modernos} (397)
+lideram, sinalizando que o vocabulario figurativo novo que \emph{AIME}
+introduz e tao denso quanto o vocabulario antigo persistente. A
+operacao teorica do livro nao e deslocamento total nem continuidade
+simples: e justaposicao. Soma de 3.557 ocorrencias em 194.454 palavras
+de corpo. Sem validacao amostral semantica nesta etapa; os campos de
+alta polissemia (\texttt{experiencia}, \texttt{categorias\_dominio})
+carregam ruido nao estimado, conforme registro em
+\texttt{outputs/etapa3\_aime/relatorio\_etapa3.md} secao 8. Figura
+gerada por \texttt{scripts/23\_etapa3\_aime\_visualizacoes.py} a partir
+de \texttt{outputs/latour\_2013\_aime\_en/csv/kwic\_catalogo\_antigo.csv}
+e \texttt{kwic\_catalogo\_aime.csv}.}
 \label{fig:aime-frequencia-grupos}
 \end{figure}
 
@@ -34,25 +56,39 @@ gerada por \texttt{scripts/23\_etapa3\_aime\_visualizacoes.py}.}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{figuras/aime_densidade_top12.png}
-\caption[Densidade dos 12 campos mais frequentes ao longo de
-\emph{AIME}]{Distribuicao das ocorrencias dos 12 campos figurativos
+\caption[Densidade dos doze campos mais frequentes ao longo de
+\emph{AIME}]{Distribuicao das ocorrencias dos doze campos figurativos
 mais frequentes ao longo de \emph{An Inquiry into Modes of Existence}
-(Latour, 2013). Histograma empilhado em 30 bins, com o eixo horizontal
-representando a posicao relativa de cada ocorrencia no texto (0 no
-inicio, 1 no fim). Os campos sao, em ordem decrescente de densidade
-absoluta: \texttt{topologia} (514), \texttt{trajetoria\_passe} (433),
-\texttt{modernos} (397), \texttt{categorias\_dominio} (281),
-\texttt{experiencia} (276), \texttt{network} (255), \texttt{instituicao}
-(227), \texttt{textil} (201), \texttt{modos\_existencia} (167),
-\texttt{militar} (129), \texttt{alteracao} (112) e \texttt{felicidade}
-(92). A alternancia entre campos do catalogo antigo (\texttt{topologia},
-\texttt{network}, \texttt{textil}, \texttt{militar}) e campos do
-catalogo novo da Etapa 3 (demais oito) reforca a leitura de
-\emph{AIME} como livro de tres camadas figurativas
-(\autoref{sec:aime-tres-camadas}). Paleta tab20 do matplotlib; semente
-fixa para reprodutibilidade. Fonte: \texttt{kwic\_catalogo\_antigo.csv}
-e \texttt{kwic\_catalogo\_aime.csv} (campo \texttt{posicao\_no\_texto}
-de cada ocorrencia). Figura gerada por
+(Latour, 2013), em histograma empilhado de trinta bins. O eixo
+horizontal representa a posicao relativa de cada ocorrencia no texto
+(zero no inicio, um no fim). A leitura visual mostra tres coisas que
+importam ao meu argumento sobre a trajetoria latouriana 1986--2013. A
+primeira: \texttt{modernos} e \texttt{Moderns} (em laranja-claro,
+laranja-medio na paleta) aparecem em densidade alta e de modo
+relativamente homogeneo ao longo de todo o livro, sustentando a
+designacao central da \enquote{antropologia dos modernos} que da
+subtitulo a obra. A segunda: \texttt{topologia} e
+\texttt{trajetoria\_passe} concentram densidade muito alta na primeira
+metade do livro, onde Latour expoe o aparato conceitual dos modos de
+existencia. A terceira: \texttt{militar} (decimo na densidade
+absoluta, com 129 ocorrencias) aparece distribuido ao longo do texto
+sem concentracao em capitulo especifico, em contraste com o pico
+inicial que esse mesmo campo apresentou em \emph{Science in Action}
+1987 e em \emph{Pandora's Hope} 1999, e em registro deslocado para o
+horizonte cosmopolitico-diplomatico, conforme detalhamento da secao 5
+do relatorio da Etapa 3. A alternancia entre campos do catalogo antigo
+(\texttt{topologia}, \texttt{network}, \texttt{textil},
+\texttt{militar}) e campos do catalogo novo da Etapa 3
+(\texttt{trajetoria\_passe}, \texttt{modernos},
+\texttt{categorias\_dominio}, \texttt{experiencia},
+\texttt{instituicao}, \texttt{modos\_existencia}, \texttt{alteracao},
+\texttt{felicidade}) reforca a leitura de \emph{AIME} como livro de
+tres camadas figurativas: vocabulario antigo persistente, vocabulario
+novo especifico, e articulacao entre os dois evidenciada pela
+cocorrencia (vide \autoref{sec:aime-tres-camadas}). Paleta tab20 do
+matplotlib. Fonte: \texttt{kwic\_catalogo\_antigo.csv} e
+\texttt{kwic\_catalogo\_aime.csv} (coluna \texttt{posicao\_no\_texto}
+em offsets de caractere). Figura gerada por
 \texttt{scripts/23\_etapa3\_aime\_visualizacoes.py}.}
 \label{fig:aime-densidade-top12}
 \end{figure}
@@ -66,16 +102,30 @@ de cada ocorrencia). Figura gerada por
 \centering
 \includegraphics[width=\linewidth]{figuras/aime_densidade_todos.png}
 \caption[Densidade de todos os campos figurativos ao longo de
-\emph{AIME}]{Distribuicao das ocorrencias dos 26 campos figurativos
-com presenca em \emph{An Inquiry into Modes of Existence} (Latour,
-2013), em histograma empilhado de 30 bins. Versao completa da
-\autoref{fig:aime-densidade-top12}, mantida para auditoria. Posicao
-relativa no eixo horizontal (0 no inicio, 1 no fim). Os campos do
-catalogo antigo das Etapas 1 e 2 sem ocorrencias em \emph{AIME}
-(\texttt{centre\_of\_calculation}, \texttt{trial\_of\_strength},
-\texttt{factish}, \texttt{circulating\_reference}, \texttt{spokesperson})
-nao aparecem aqui. Fonte: \texttt{kwic\_catalogo\_antigo.csv} e
-\texttt{kwic\_catalogo\_aime.csv}. Figura gerada por
+\emph{AIME}]{Distribuicao das ocorrencias dos vinte e seis campos
+figurativos com presenca em \emph{An Inquiry into Modes of Existence}
+(Latour, 2013), em histograma empilhado de trinta bins, com posicao
+relativa no eixo horizontal (zero no inicio, um no fim). Versao
+auditavel da \autoref{fig:aime-densidade-top12}, em que mantenho todos
+os campos com ocorrencia maior que zero (incluindo os menos densos:
+\texttt{diplomacia} com 84 ocorrencias, \texttt{preposicao} com 71,
+\texttt{gaia} com 52, \texttt{construction} com 74, e demais).
+Importante para a leitura: cinco campos do catalogo antigo das Etapas
+1 e 2 zeram em \emph{AIME} (\texttt{centre\_of\_calculation},
+\texttt{trial\_of\_strength}, \texttt{factish},
+\texttt{circulating\_reference}, \texttt{spokesperson}) e por isso nao
+aparecem aqui. O \texttt{factish} e o \texttt{circulating\_reference},
+em particular, sao vocabulario caracteristico de \emph{Pandora's Hope}
+1999 (4,14 e 1,41 por dez mil palavras) que \emph{AIME} abandona; o
+\texttt{trial\_of\_strength}, vocabulario agonistico de
+\emph{Science in Action} 1987, tambem desaparece. Esse abandono
+silencioso de vocabulario anterior, somado a reorganizacao das
+variantes top do \texttt{topologia} (que em \emph{AIME} sao
+\texttt{path} e \texttt{trajectory}, articuladas com
+\texttt{trajetoria\_passe}), e parte do que a Etapa 3 documenta sobre
+o trabalho que \emph{AIME} faz com seu proprio passado. Fonte:
+\texttt{kwic\_catalogo\_antigo.csv} e \texttt{kwic\_catalogo\_aime.csv}.
+Figura gerada por
 \texttt{scripts/23\_etapa3\_aime\_visualizacoes.py}.}
 \label{fig:aime-densidade-todos}
 \end{figure}
